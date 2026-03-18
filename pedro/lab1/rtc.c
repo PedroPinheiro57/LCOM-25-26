@@ -21,16 +21,19 @@ int rtc_read_date(rtc_date *date) {
     uint32_t reg_a, reg_b, day, month, year;
 
     // 1. Wait for UIP to be cleared
-    while (reg_a & RTC_UIP_MSK) {
-		if (sys_outb(RTC_ADDR_REG, RTC_REG_A) != 0) return 1;
+    do {
+        if (sys_outb(RTC_ADDR_REG, RTC_REG_A) != 0) return 1;
         if (sys_inb(RTC_DATA_REG, &reg_a) != 0) return 1;
-		tickdelay(micros_to_ticks(200));
-	}
-    
+
+        if (reg_a & RTC_UIP_MSK) {
+            tickdelay(micros_to_ticks(244)); 
+        }
+    } while (reg_a & RTC_UIP_MSK);
+        
     // 2. Read the Date Registers
     // Read Day
-    sys_outb(RTC_ADDR_REG, RTC_REG_DAY);
-    sys_inb(RTC_DATA_REG, &day);
+    sys_outb(RTC_ADDR_REG, RTC_REG_DAY); // write 0x07 to port 0x70
+    sys_inb(RTC_DATA_REG, &day);         // read a byte to day from port 0x71
     
     // Read Month
     sys_outb(RTC_ADDR_REG, RTC_REG_MONTH);

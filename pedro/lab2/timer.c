@@ -5,11 +5,61 @@
 
 #include "i8254.h"
 
-int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
 
-  return 1;
+// TEST: lcom_run lab2 "time <timer no.> <frequency> -t 0"
+// lcom_run lab2 "time 0 60 -t 0"
+int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
+  // Prevent division by zero and invalid frequencies
+  // max number represented with 16 bits: 65535
+  // TIMER_FREQ / 65535 = 18.2. ROUND UP
+  if (freq > TIMER_FREQ || freq < 19) return 1; 
+
+  uint8_t st;
+  // 1. Read the current timer configuration
+  if (timer_get_conf(timer, &st) != 0) return 1;
+
+  // 2. Build the new Control Word
+  // Keep the 4 least significant bits intact (Operating mode and BCD)
+  st = st & 0x0F; 
+
+  // Add the LSB followed by MSB initialization mode
+  st |= TIMER_LSB_MSB;
+
+  // Add the correct timer selection and determine the output port
+  int port;
+  switch (timer) {
+    case 0:
+      st |= TIMER_SEL0;
+      port = TIMER_0;
+      break;
+    case 1:
+      st |= TIMER_SEL1;
+      port = TIMER_1;
+      break;
+    case 2:
+      st |= TIMER_SEL2;
+      port = TIMER_2;
+      break;
+    default:
+      return 1; // Invalid timer
+  }
+
+  // Write the configured Control Word to the Control Register
+  if (sys_outb(TIMER_CTRL, st) != 0) return 1;
+
+  // 3. Write the "divider" initial value to the selected timer's port
+  uint16_t divider = TIMER_FREQ / freq;
+  uint8_t lsb, msb;
+  
+  // Extract LSB and MSB
+  if (util_get_LSB(divider, &lsb) != 0) return 1;
+  if (util_get_MSB(divider, &msb) != 0) return 1;
+
+  // Write the LSB first, then the MSB
+  if (sys_outb(port, lsb) != 0) return 1;
+  if (sys_outb(port, msb) != 0) return 1;
+
+  return 0;
 }
 
 int (timer_subscribe_int)(uint8_t *bit_no) {
@@ -31,6 +81,9 @@ void (timer_int_handler)() {
   printf("%s is not yet implemented!\n", __func__);
 }
 
+
+// NORMAL TESTS: lcom_run lab2 "config X all -t Y", X = timer selection =  [0,1,2], Y = tests =  [1,2,3]
+// RANDOMIZED TEST: lcom_run lab2 "config X all -t 0"
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
 
   // Read-Back Command (i8254):

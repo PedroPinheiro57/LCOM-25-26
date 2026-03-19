@@ -62,23 +62,35 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
   return 0;
 }
 
-int (timer_subscribe_int)(uint8_t *bit_no) {
-    /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
 
-  return 1;
+
+int hook_id = 0; // Value passed to the kernel to identify the interrupt
+int timer_counter = 0; // Tracks the number of timer interrupts
+
+int (timer_subscribe_int)(uint8_t *bit_no) {
+  if (bit_no == NULL) return 1;
+  
+  // The kernel will send notifications with the bit corresponding to the initial hook_id
+  *bit_no = hook_id; 
+  
+  // Subscribe to Timer 0 interrupts
+  if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id) != 0) {
+    return 1;
+  }
+  
+  return 0;
 }
 
 int (timer_unsubscribe_int)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  // Remove the policy using the modified hook_id
+  if (sys_irqrmpolicy(&hook_id) != 0) {
+    return 1;
+  }
+  return 0;
 }
 
 void (timer_int_handler)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  timer_counter++;
 }
 
 

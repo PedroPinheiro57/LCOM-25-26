@@ -45,32 +45,31 @@ int (timer_test_int)(uint8_t time) {
   int ipc_status;
   message msg;
   
+  extern uint32_t timer_counter;
+  timer_counter = 0;
+
   if (timer_subscribe_int(&bit_no) != 0) return 1;
 
   uint32_t irq_set = BIT(bit_no);
   
-  extern uint32_t timer_counter; 
-  
   while (timer_counter < (uint32_t)time * 60) {
     int r;
     if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
-      printf("driver_receive failed with: %d", r);
       continue;
     }
 
     if (is_ipc_notify(ipc_status)) {
       switch (_ENDPOINT_P(msg.m_source)) {
-        case HARDWARE: 
-          if (msg.m_notify.interrupts & irq_set) { 
-            timer_int_handler(); 
+        case HARDWARE:
+          if (msg.m_notify.interrupts & irq_set) {
+            timer_int_handler();
             
             if (timer_counter % 60 == 0) {
               timer_print_elapsed_time();
             }
           }
           break;
-        default:
-          break;
+        default: break;
       }
     }
   }

@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
   uint8_t st;
   if (timer_get_conf(timer, &st) != 0) return 1;
-  
+
   return timer_display_conf(timer, st, field);
 }
 
@@ -40,9 +40,42 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
   return timer_set_frequency(timer, freq);
 }
 
-int(timer_test_int)(uint8_t time) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+int (timer_test_int)(uint8_t time) {
+  uint8_t bit_no;
+  int ipc_status;
+  message msg;
+  
+  if (timer_subscribe_int(&bit_no) != 0) return 1;
 
-  return 1;
+  uint32_t irq_set = BIT(bit_no);
+  
+  extern uint32_t timer_counter; 
+  
+  while (timer_counter < (uint32_t)time * 60) {
+    int r;
+    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
+      printf("driver_receive failed with: %d", r);
+      continue;
+    }
+
+    if (is_ipc_notify(ipc_status)) {
+      switch (_ENDPOINT_P(msg.m_source)) {
+        case HARDWARE: 
+          if (msg.m_notify.interrupts & irq_set) { 
+            timer_int_handler(); 
+            
+            if (timer_counter % 60 == 0) {
+              timer_print_elapsed_time();
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  if (timer_unsubscribe_int() != 0) return 1;
+
+  return 0;
 }

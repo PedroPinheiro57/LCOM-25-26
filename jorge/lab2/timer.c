@@ -5,6 +5,9 @@
 
 #include "i8254.h"
 
+uint32_t timer_counter = 0; 
+static int hook_id = TIMER0_IRQ; 
+
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
   if (timer > 2 || freq < 19 || freq > TIMER_FREQ) return 1;
 
@@ -29,22 +32,26 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
 }
 
 int (timer_subscribe_int)(uint8_t *bit_no) {
-    /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  if (bit_no == NULL) return 1;
+  
+  *bit_no = (uint8_t) hook_id; 
 
-  return 1;
+  if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id) != 0) {
+    return 1;
+  }
+  
+  return 0;
 }
 
 int (timer_unsubscribe_int)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  if (sys_irqrmpolicy(&hook_id) != 0) {
+    return 1;
+  }
+  return 0;
 }
 
 void (timer_int_handler)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  timer_counter++;
 }
 
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
@@ -53,7 +60,7 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
   uint8_t rb_cmd = TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(timer);
 
   if (sys_outb(TIMER_CTRL, rb_cmd) != 0) return 1;
-  
+
   return util_sys_inb(TIMER_0 + timer, st);
 }
 

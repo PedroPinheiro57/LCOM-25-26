@@ -48,7 +48,8 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
   if (sys_outb(TIMER_CTRL, st) != 0) return 1;
 
   // 3. Write the "divider" initial value to the selected timer's port
-  uint16_t divider = TIMER_FREQ / freq;
+  // Because Hardware doesnt have notion of time, only ticks/divider, so instead of default       TIMER_FREQ, adjust
+  uint16_t divider = (uint16_t)TIMER_FREQ / freq;
   uint8_t lsb, msb;
   
   // Extract LSB and MSB
@@ -81,6 +82,8 @@ int (timer_subscribe_int)(uint8_t *bit_no) {
   return 0;
 }
 
+
+
 int (timer_unsubscribe_int)() {
   // Remove the policy using the modified hook_id
   if (sys_irqrmpolicy(&hook_id) != 0) {
@@ -89,9 +92,12 @@ int (timer_unsubscribe_int)() {
   return 0;
 }
 
+
+
 void (timer_int_handler)() {
   timer_counter++;
 }
+
 
 
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {

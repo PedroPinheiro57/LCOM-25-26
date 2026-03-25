@@ -29,6 +29,10 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+
+
+
+// lcom_run lab2 "config <timer no.> <all|init|mode|base> -t <test no.>"
 int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
   uint8_t conf;
 
@@ -47,6 +51,11 @@ int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
   return 0;
 }
 
+
+
+
+
+// lcom_run lab2 "time <timer no.> <frequency> -t <test no.>"
 int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
 
   if (timer_set_frequency(timer, freq) != 0) {
@@ -56,6 +65,9 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
   
   return 0;
 }
+
+
+
 
 extern int timer_counter; // Import the global counter from timer.c
 

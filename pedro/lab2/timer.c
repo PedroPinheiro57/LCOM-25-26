@@ -94,8 +94,6 @@ void (timer_int_handler)() {
 }
 
 
-// NORMAL TESTS: lcom_run lab2 "config X all -t Y", X = timer selection =  [0,1,2], Y = tests =  [1,2,3]
-// RANDOMIZED TEST: lcom_run lab2 "config X all -t 0"
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
 
   // Read-Back Command (i8254):
@@ -105,7 +103,7 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
   // C (bit 5) → 0 = latch count, 1 = don't latch count
   // S (bit 4) → 0 = latch status, 1 = don't latch status
   // T2,T1,T0 → select timer(s) (1 = selected)
-  // bit 0 → unused (don't care)
+  // bit 0 → unused 
 
 
   // Status byte (i8254):
@@ -171,6 +169,7 @@ int (timer_display_conf)(uint8_t timer, uint8_t st, enum timer_status_field fiel
       // counting mode
       case tsf_mode:
           value.count_mode = (st >> 1) & 0x07; // bits 3,2,1
+          //remap if needed ????????
           if (value.count_mode == 6) value.count_mode = 2; // mode 2
           else if (value.count_mode == 7) value.count_mode = 3; // mode 3
           break;

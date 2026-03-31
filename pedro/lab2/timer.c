@@ -6,57 +6,53 @@
 #include "i8254.h"
 
 
-// TEST: lcom_run lab2 "time <timer no.> <frequency> -t 0"
-// lcom_run lab2 "time 0 60 -t 0"
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
-  // Prevent division by zero and invalid frequencies
-  // max number represented with 16 bits: 65535
-  // TIMER_FREQ / 65535 = 18.2. ROUND UP
-  if (freq > TIMER_FREQ || freq < 19) return 1; 
+  // 1. Boundary Check: The 8254 divider is 16 bits. 
+  // Max divider is 65535. Min freq = TIMER_FREQ / 65535 ≈ 19 Hz.
+  if (freq < 19 || freq > TIMER_FREQ) return 1;
 
+  // 2. Get current configuration to preserve Mode and BCD
   uint8_t st;
-  // 1. Read the current timer configuration
   if (timer_get_conf(timer, &st) != 0) return 1;
 
-  // 2. Build the new Control Word
-  // Keep the 4 least significant bits intact (Operating mode and BCD)
-  st = st & 0x0F; 
+  // 3. Build the Control Word
+  // We MUST mask the status: keep only the 4 LSBs (Operating Mode and BCD)
+  // Bits 3, 2, 1 are Mode; Bit 0 is BCD.
+  uint8_t control_word = (st & 0x0F);
 
-  // Add the LSB followed by MSB initialization mode
-  st |= TIMER_LSB_MSB;
+  // 4. Set Access Mode (Bits 5, 4) to LSB followed by MSB (0x30)
+  control_word |= TIMER_LSB_MSB;
 
-  // Add the correct timer selection and determine the output port
+  // 5. Set Timer Selection (Bits 7, 6) and identify the data port
   int port;
   switch (timer) {
     case 0:
-      st |= TIMER_SEL0;
+      control_word |= TIMER_SEL0;
       port = TIMER_0;
       break;
     case 1:
-      st |= TIMER_SEL1;
+      control_word |= TIMER_SEL1;
       port = TIMER_1;
       break;
     case 2:
-      st |= TIMER_SEL2;
+      control_word |= TIMER_SEL2;
       port = TIMER_2;
       break;
     default:
-      return 1; // Invalid timer
+      return 1;
   }
 
-  // Write the configured Control Word to the Control Register
-  if (sys_outb(TIMER_CTRL, st) != 0) return 1;
+  // 6. Write the Control Word to the Control Register (0x43)
+  if (sys_outb(TIMER_CTRL, control_word) != 0) return 1;
 
-  // 3. Write the "divider" initial value to the selected timer's port
-  // Because Hardware doesnt have notion of time, only ticks/divider, so instead of default       TIMER_FREQ, adjust
-  uint16_t divider = (uint16_t)TIMER_FREQ / freq;
+  // 7. Calculate and write the divider
+  uint16_t divider = (uint16_t) (TIMER_FREQ / freq);
   uint8_t lsb, msb;
   
-  // Extract LSB and MSB
-  if (util_get_LSB(divider, &lsb) != 0) return 1;
-  if (util_get_MSB(divider, &msb) != 0) return 1;
+  util_get_LSB(divider, &lsb);
+  util_get_MSB(divider, &msb);
 
-  // Write the LSB first, then the MSB
+  // Write LSB first, then MSB to the specific timer port
   if (sys_outb(port, lsb) != 0) return 1;
   if (sys_outb(port, msb) != 0) return 1;
 

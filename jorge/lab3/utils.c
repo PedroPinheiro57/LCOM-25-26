@@ -13,10 +13,16 @@ int (util_get_MSB)(uint16_t val, uint8_t *msb) {
   return 0;
 }
 
+int sys_inb_counter = 0;
+
 int (util_sys_inb)(int port, uint8_t *value) {
   if (value == NULL) return 1;
   uint32_t val32; 
+  
   if (sys_inb(port, &val32) != 0) return 1;
+  
+  sys_inb_counter++;
+
   *value = (uint8_t) val32;
   return 0;
 }

@@ -1,10 +1,13 @@
 #include <lcom/lcf.h>
 #include <lcom/lab3.h>
+#include <lcom/timer.h>
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "kbc.h"
 #include "i8042.h"
+
+extern int sys_inb_counter;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -32,8 +35,10 @@ int main(int argc, char *argv[]) {
 
 
 
+int foo();
 
 int(kbd_test_scan)() {
+  foo();
   int ipc_status;
   message msg;
   uint8_t bit_no;
@@ -94,6 +99,8 @@ int(kbd_test_scan)() {
     return 1;
   }
 
+  kbd_print_no_sysinb(sys_inb_counter);
+
   return 0;
 }
 
@@ -131,12 +138,87 @@ int(kbd_test_poll)() {
     return 1;
   }
 
+  kbd_print_no_sysinb(sys_inb_counter);
+
   return 0;
 }
 
-int(kbd_test_timed_scan)(uint8_t n) {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
 
-  return 1;
+
+
+
+int(kbd_test_timed_scan)(uint8_t n) {
+  int ipc_status;
+  message msg;
+  
+  uint8_t kbd_bit_no;
+  uint8_t timer_bit_no;
+
+  // 1. Subscribe Keyboard interrupts
+  if (kbd_subscribe_int(&kbd_bit_no) != 0) return 1;
+  
+  // 2. Subscribe Timer interrupts
+  if (timer_subscribe_int(&timer_bit_no) != 0) return 1;
+
+  uint32_t kbd_irq_set = BIT(kbd_bit_no);
+  uint32_t timer_irq_set = BIT(timer_bit_no);
+
+  uint8_t bytes[2];
+  uint8_t size = 0;
+  bool make = false;
+  
+  int ticks = 0; 
+  int freq = sys_hz(); 
+
+  // 3. Main loop
+  while (kbd_get_scancode() != ESC_BREAKCODE && ticks < (n * freq)) {
+    
+    if (driver_receive(ANY, &msg, &ipc_status) != 0) {
+      continue;
+    }
+
+    if (is_ipc_notify(ipc_status)) {
+      switch (_ENDPOINT_P(msg.m_source)) {
+        case HARDWARE:
+          
+          // --- TIMER INTERRUPT HANDLING ---
+          if (msg.m_notify.interrupts & timer_irq_set) {
+            timer_int_handler(); 
+            ticks++;             
+          }
+          
+          // --- KEYBOARD INTERRUPT HANDLING ---
+          if (msg.m_notify.interrupts & kbd_irq_set) {
+            kbc_ih(); // Read scancode
+
+            if (kbd_has_error()) continue; 
+
+            uint8_t current_scancode = kbd_get_scancode(); 
+
+            bytes[size] = current_scancode;
+            size++;
+
+            if (current_scancode == TWO_BYTE_PREFIX) {
+              continue; 
+            }
+
+            make = !(current_scancode & BIT(7)); 
+            kbd_print_scancode(make, size, bytes);
+            
+            size = 0;
+            ticks = 0;  
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  if (timer_unsubscribe_int() != 0) return 1;
+  if (kbd_unsubscribe_int() != 0) return 1;
+
+  kbd_print_no_sysinb(sys_inb_counter);
+
+  return 0;
 }

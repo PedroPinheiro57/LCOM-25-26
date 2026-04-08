@@ -15,4 +15,10 @@ uint8_t kbd_get_scancode();
 
 bool kbd_has_error();
 
+int kbc_read_data_poll(uint8_t *data);
+
+int kbc_write_command(uint8_t port, uint8_t cmd);
+
+int kbc_restore_keyboard_interrupts();
+
 #endif /* _LCOM_KBC_H_ */

@@ -101,10 +101,37 @@ int(kbd_test_scan)() {
 
 
 int(kbd_test_poll)() {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  uint8_t bytes[2];
+  uint8_t size = 0;
+  bool make = false;
+  uint8_t current_scancode = 0;
 
-  return 1;
+  while (current_scancode != ESC_BREAKCODE) {
+    
+    if (kbc_read_data_poll(&current_scancode) != 0) {
+      continue; 
+    }
+
+    bytes[size] = current_scancode;
+    size++;
+
+    if (current_scancode == TWO_BYTE_PREFIX) {
+      continue; 
+    }
+
+    make = !(current_scancode & BIT(7)); 
+    
+    kbd_print_scancode(make, size, bytes);
+    
+    size = 0; 
+  }
+
+  if (kbc_restore_keyboard_interrupts() != 0) {
+    printf("Error restoring keyboard interrupts.\n");
+    return 1;
+  }
+
+  return 0;
 }
 
 int(kbd_test_timed_scan)(uint8_t n) {

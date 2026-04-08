@@ -12,8 +12,6 @@
 
 
 
-
-
 /* ------------------------------------------------------------------
  * Timer functions from lab2's libtimer.a
  * We declare them here directly - no .h file needed, the linker
@@ -84,7 +82,9 @@ static bool process_byte(uint8_t byte) {
  *    buffer. process_byte() assembles and prints complete scancodes.
  * 4. Exit when ESC breakcode detected. Unsubscribe before returning.
  * ------------------------------------------------------------------ */
+int foo();
 int(kbd_test_scan)() {
+  foo();
   uint8_t kbd_bit;
   if (kbc_subscribe_int(&kbd_bit) != 0) return 1;
 

@@ -1,0 +1,17 @@
+# Object files
+*.o
+
+# Dependency files
+*.d
+.depend
+.gdbinit
+
+# Binaries
+*.out
+*.exe
+*.bin
+*.elf
+
+# (Optional but common for C/C++)
+*.a
+*.so

@@ -22,9 +22,7 @@ void (timer_int_handler)(void);
 int  (timer_subscribe_int)(uint8_t *bit_no);
 int  (timer_unsubscribe_int)(void);
 
-/* ------------------------------------------------------------------
- * main - provided, do not modify
- * ------------------------------------------------------------------ */
+
 int main(int argc, char *argv[]) {
   lcf_set_language("EN-US");
   lcf_trace_calls("/home/lcom/labs/lab3/trace.txt");
@@ -76,11 +74,9 @@ static bool process_byte(uint8_t byte) {
  *
  * 1. Subscribe KBC interrupts on IRQ 1 with IRQ_EXCLUSIVE so Minix's
  *    own keyboard driver doesn't consume our bytes.
- * 2. Enter the standard LCOM event loop (driver_receive blocks the
- *    CPU until an interrupt notification arrives).
- * 3. On each KBC interrupt: kbc_ih() reads one byte from the output
+ * 2. On each KBC interrupt: kbc_ih() reads one byte from the output
  *    buffer. process_byte() assembles and prints complete scancodes.
- * 4. Exit when ESC breakcode detected. Unsubscribe before returning.
+ * 3. Exit when ESC breakcode detected. Unsubscribe before returning.
  * ------------------------------------------------------------------ */
 int foo();
 int(kbd_test_scan)() {

@@ -142,7 +142,7 @@ int(kbd_test_poll)() {
   }
 
 #ifdef LAB3
-  kbd_print_no_sysinb(kbc_get_sysinb_count());
+  printf("No sys_inb calls: %u\n", kbc_get_sysinb_count());
 #endif
 
   if (kbc_enable_int() != 0) return 1;

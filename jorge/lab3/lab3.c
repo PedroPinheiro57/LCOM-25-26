@@ -1,13 +1,11 @@
 #include <lcom/lcf.h>
 #include <lcom/lab3.h>
-#include <lcom/timer.h>
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "kbc.h"
 #include "i8042.h"
 
-extern int sys_inb_counter;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -99,7 +97,6 @@ int(kbd_test_scan)() {
     return 1;
   }
 
-  kbd_print_no_sysinb(sys_inb_counter);
 
   return 0;
 }
@@ -112,6 +109,10 @@ int(kbd_test_poll)() {
   uint8_t size = 0;
   bool make = false;
   uint8_t current_scancode = 0;
+
+#ifdef LAB3
+  kbc_reset_sysinb_count();
+#endif
 
   while (current_scancode != ESC_BREAKCODE) {
     
@@ -133,12 +134,14 @@ int(kbd_test_poll)() {
     size = 0; 
   }
 
+#ifdef LAB3
+  kbd_print_no_sysinb(kbc_get_sysinb_count());
+#endif
+
   if (kbc_restore_keyboard_interrupts() != 0) {
     printf("Error restoring keyboard interrupts.\n");
     return 1;
   }
-
-  kbd_print_no_sysinb(sys_inb_counter);
 
   return 0;
 }
@@ -217,8 +220,6 @@ int(kbd_test_timed_scan)(uint8_t n) {
 
   if (timer_unsubscribe_int() != 0) return 1;
   if (kbd_unsubscribe_int() != 0) return 1;
-
-  kbd_print_no_sysinb(sys_inb_counter);
 
   return 0;
 }

@@ -51,14 +51,27 @@ bool kbd_has_error() {
   return error_kbc;
 }
 
+#ifdef LAB3
+static uint32_t sysinb_count = 0;
+void kbc_reset_sysinb_count(void) { sysinb_count = 0; }
+uint32_t kbc_get_sysinb_count(void) { return sysinb_count; }
+#endif
+
 int kbc_read_data_poll(uint8_t *data) {
     uint8_t status;
     int tries = 10;
 
     while (tries > 0) {
+
+#ifdef LAB3
+  sysinb_count++;
+#endif
         if (util_sys_inb(KBC_ST_REG, &status) != 0) return 1;
 
         if (status & OBF) {
+#ifdef LAB3
+  sysinb_count++;
+#endif
             if (util_sys_inb(KBC_OUT_BUF, data) != 0) return 1;
 
             if ((status & (PARITY_ERR | TIMEOUT_ERR)) == 0) {

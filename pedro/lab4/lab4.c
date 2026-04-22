@@ -81,7 +81,6 @@ static void parse_packet(uint8_t bytes[3], struct packet *pp) {
  * 5. After cnt packets: disable data reporting, unsubscribe, return.
  * ------------------------------------------------------------------ */
 int (mouse_test_packet)(uint32_t cnt) {
-  /* Best-effort disable before subscribing; ignore failure (may already be off) */
   mouse_disable_data_reporting();
 
   uint8_t mouse_bit;
@@ -154,15 +153,8 @@ int (mouse_test_packet)(uint32_t cnt) {
  *   increment idle_ticks first, then immediately reset it to 0 if
  *   a packet completes in the same round. This avoids spurious
  *   early exits caused by batched IRQ delivery.
- *
- * Note: this function implements enable/disable itself via
- * mouse_enable_data_reporting() (LCF macro) and
- * mouse_disable_data_reporting() (our implementation), satisfying
- * the lab requirement that mouse_test_async not rely on the provided
- * mouse_enable_data_reporting helper.
  * ------------------------------------------------------------------ */
 int (mouse_test_async)(uint8_t idle_time) {
-  /* Best-effort disable before subscribing; ignore failure */
   mouse_disable_data_reporting();
 
   uint8_t mouse_bit, timer_bit;

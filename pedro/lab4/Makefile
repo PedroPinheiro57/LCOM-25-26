@@ -3,9 +3,8 @@ PROG = lab4
 SRCS = lab4.c
  
 CFLAGS += -pedantic
-CFLAGS += -I../lab3   # picks up kbc.h and mouse.h from here if co-located
-                      # adjust path if kbc.h lives elsewhere
- 
+CFLAGS += -I../lab3  
+                      
 # --- libmouse (built here) ---
 MOUSE_LIB      = libmouse.a
 MOUSE_LIB_SRCS = mouse.c

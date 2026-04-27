@@ -14,11 +14,11 @@ int video_map_vram(uint16_t mode) {
   }
 
   unsigned int vram_base = vmi.PhysBasePtr;
-  unsigned int vram_size = vmi.XResolution * vmi.YResolution
-                           * ((vmi.BitsPerPixel + 7) / 8);
+  unsigned int vram_size = vmi.XResolution * vmi.YResolution * ((vmi.BitsPerPixel + 7) / 8);
 
   bytes_per_pixel = (vmi.BitsPerPixel + 7) / 8;
 
+  /* Grant memory mapping permissions */
   struct minix_mem_range mr;
   mr.mr_base  = (phys_bytes) vram_base;
   mr.mr_limit = mr.mr_base + vram_size;
@@ -29,6 +29,7 @@ int video_map_vram(uint16_t mode) {
     return 1;
   }
 
+  /* Map memory */
   video_mem = vm_map_phys(SELF, (void *) mr.mr_base, vram_size);
   if (video_mem == MAP_FAILED) {
     panic("couldn't map video memory");
@@ -38,8 +39,9 @@ int video_map_vram(uint16_t mode) {
   return 0;
 }
 
+// Switches the graphics card into a given video mode (like 0x105) using BIOS interrupt 0x10.
 int video_set_mode(uint16_t mode) {
-  reg86_t reg;
+  reg86_t reg; // reg86_t is a struct that represents CPU registers for a BIOS interrupt call
   memset(&reg, 0, sizeof(reg));
 
   reg.intno = 0x10;
@@ -47,6 +49,7 @@ int video_set_mode(uint16_t mode) {
   reg.al    = 0x02;
   reg.bx    = mode | BIT(14);
 
+  // Call BIOS interrupt; executes the int 0x10 "syscall"
   if (sys_int86(&reg) != OK) {
     printf("video_set_mode: sys_int86() failed\n");
     return 1;

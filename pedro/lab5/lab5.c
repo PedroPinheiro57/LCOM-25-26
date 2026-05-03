@@ -34,21 +34,6 @@ int main(int argc, char *argv[]) {
 }
 
 
-int(vg_draw_rectangle)(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color) {
-  for (uint16_t row = 0; row < height; row++) {
-    if (vg_draw_hline(x, y + row, width, color) != 0) return 1;
-  }
-  return 0;
-}
-
-int(vg_draw_hline)(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {
-  for (uint16_t i = 0; i < len; i++) {
-    if (vg_draw_pixel(x + i, y, color) != 0) return 1;
-  }
-  return 0;
-}
-
-
 // 1.
 // lcom_run lab5 "init <mode> <delay>"
 // lcom_run lab5 "init 0x105 9"
@@ -94,6 +79,7 @@ int(video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y,
     return 1;
   }
 
+  // Keyboard interrupt
   uint8_t kbd_bit;
   if (kbc_subscribe_int(&kbd_bit) != 0) {
     vg_exit();
@@ -128,7 +114,7 @@ int(video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y,
 int(video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y) {
   uint16_t mode = 0x105;
 
-  /* Step 1: map VRAM before switching mode (LCF requirement) */
+  /* Step 1: map VRAM before switching mode */
   if (video_map_vram(mode) != 0) return 1;
 
   /* Step 2: switch to graphics mode */

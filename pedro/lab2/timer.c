@@ -62,7 +62,20 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
 
 
 int hook_id = 0; // Value passed to the kernel to identify the interrupt
-int timer_counter = 0; // Tracks the number of timer interrupts
+static int timer_counter = 0; // Tracks the number of timer interrupts
+
+uint32_t timer_get_counter() {
+  return timer_counter;
+}
+
+void timer_reset_counter() {
+  timer_counter = 0;
+}
+
+void (timer_int_handler)() {
+  timer_counter++;
+}
+
 
 int (timer_subscribe_int)(uint8_t *bit_no) {
   if (bit_no == NULL) return 1;
@@ -86,12 +99,6 @@ int (timer_unsubscribe_int)() {
     return 1;
   }
   return 0;
-}
-
-
-
-void (timer_int_handler)() {
-  timer_counter++;
 }
 
 

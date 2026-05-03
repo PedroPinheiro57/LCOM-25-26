@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+uint32_t timer_get_counter();
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -68,9 +69,6 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
 
 
 
-
-extern int timer_counter; // Import the global counter from timer.c
-
 // TEST: minix$ lcom_run lab2 "int 3 -t 0"
 int(timer_test_int)(uint8_t time) {
   uint8_t bit_no;
@@ -99,7 +97,7 @@ int(timer_test_int)(uint8_t time) {
                 if (msg.m_notify.interrupts & irq_set) { /* subscribed interrupt */
                     
                     timer_int_handler(); // Increment the counter
-                    
+                    uint32_t timer_counter = timer_get_counter();
                     // Minix default timer frequency is 60Hz (60 ticks per second)
                     if (timer_counter % 60 == 0) { 
                         timer_print_elapsed_time();

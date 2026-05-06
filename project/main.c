@@ -1,21 +1,28 @@
 #include <lcom/lcf.h>
-#include "../pedro/lab5/video.h"
-#include "../pedro/lab3/kbc.h"
 #include <lcom/timer.h>
+#include "../pedro/lab3/kbc.h"
+#include "../pedro/lab4/mouse.h"
+#include "../pedro/lab5/video.h"
 #include "devices/timer.h"
 #include "devices/keyboard.h"
-
+#include "devices/mouse.h"
 
 extern int foo(void);
+
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();
-  uint8_t kbd_bit, timer_bit;
 
+  uint8_t timer_bit, kbd_bit, mouse_bit;
   if (timer_subscribe_int(&timer_bit) != 0) return 1;
-  if (kbc_subscribe_int(&kbd_bit) != 0) {
-    timer_unsubscribe_int();
-    return 1;
-  }
+  if (kbc_subscribe_int(&kbd_bit) != 0) { timer_unsubscribe_int(); return 1; }
+  if (mouse_subscribe_int(&mouse_bit) != 0) { kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1; }
+  if (mouse_enable_data_reporting() != 0) { mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1; }
+
+  mouse_state_t ms;
+  mouse_state_init(&ms, 400, 300);   /* start at center of 800x600 */
+
+  uint8_t mouse_buf[3];
+  uint8_t mouse_idx = 0;
 
   bool done = false;
   int r, ipc_status;
@@ -36,14 +43,30 @@ int(proj_main_loop)(int argc, char *argv[]) {
       kbc_ih();
       if (!kbc_has_error()) {
         uint8_t sc = kbc_get_scancode_byte();
-        if (key_is_make(sc))
-          printf("key: 0x%02X\n", key_get_code(sc));
         if (key_get_code(sc) == KEY_ESC && !key_is_make(sc))
           done = true;
       }
     }
+
+    if (irqs & BIT(mouse_bit)) {
+      mouse_ih();
+      if (!mouse_has_error()) {
+        uint8_t byte = mouse_get_byte();
+        if (mouse_idx == 0 && !(byte & BIT(3))) { /* no sync, skip */ }
+        else {
+          mouse_buf[mouse_idx++] = byte;
+          if (mouse_idx == 3) {
+            mouse_state_update(&ms, mouse_buf, 800, 600);
+            printf("x=%d y=%d lb=%d\n", ms.x, ms.y, ms.lb);
+            mouse_idx = 0;
+          }
+        }
+      }
+    }
   }
 
+  mouse_disable_data_reporting();
+  mouse_unsubscribe_int();
   kbc_unsubscribe_int();
   timer_unsubscribe_int();
   return 0;

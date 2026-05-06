@@ -17,3 +17,5 @@
 *.so
 
 proj
+output.txt
+trace.txt

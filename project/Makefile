@@ -1,11 +1,12 @@
 PROG = proj
 
-SRCS = main.c
+SRCS = main.c keyboard.c
 
 CFLAGS += -pedantic
 CFLAGS += -I../pedro/lab3
 CFLAGS += -I../pedro/lab4
 CFLAGS += -I../pedro/lab5
+CFLAGS += -I.
 
 MOUSE_LIB = ../pedro/lab4/libmouse.a
 KBC_LIB   = ../pedro/lab3/libkbc.a

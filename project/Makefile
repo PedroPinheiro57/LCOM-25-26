@@ -1,6 +1,6 @@
 PROG = proj
 
-SRCS = main.c keyboard.c mouse.c
+SRCS = main.c keyboard.c mouse.c rtc.c
 
 CFLAGS += -pedantic
 CFLAGS += -I../pedro/lab3

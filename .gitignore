@@ -15,3 +15,5 @@
 # (Optional but common for C/C++)
 *.a
 *.so
+
+proj

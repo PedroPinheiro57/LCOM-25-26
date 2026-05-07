@@ -47,19 +47,9 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     uint32_t irqs = msg.m_notify.interrupts;
 
-    if (irqs & BIT(timer_bit)) {
-      timer_int_handler();
-    }
+    bool mouse_packet_ready = false;
 
-    if (irqs & BIT(kbd_bit)) {
-      kbc_ih();
-      if (!kbc_has_error()) {
-        uint8_t sc = kbc_get_scancode_byte();
-        if (key_get_code(sc) == KEY_ESC && !key_is_make(sc))
-          done = true;
-      }
-    }
-
+    /* in mouse IRQ block */
     if (irqs & BIT(mouse_bit)) {
       mouse_ih();
       if (!mouse_has_error()) {
@@ -68,14 +58,34 @@ int(proj_main_loop)(int argc, char *argv[]) {
         else {
           mouse_buf[mouse_idx++] = byte;
           if (mouse_idx == 3) {
-            mouse_state_update(&ms, mouse_buf, 800, 600);
-            cursor_erase(prev_x, prev_y);
-            cursor_draw(ms.x, ms.y);
-            prev_x = ms.x;
-            prev_y = ms.y;
+            mouse_packet_ready = true;
             mouse_idx = 0;
           }
         }
+      }
+    }
+
+    /* in timer IRQ block — only use latest packet */
+    if (irqs & BIT(timer_bit)) {
+      timer_int_handler();
+
+      if (mouse_packet_ready) {
+        mouse_state_update(&ms, mouse_buf, 800, 600);
+        mouse_packet_ready = false;
+      }
+
+      cursor_erase(prev_x, prev_y);
+      cursor_draw(ms.x, ms.y);
+      prev_x = ms.x;
+      prev_y = ms.y;
+    }
+
+    if (irqs & BIT(kbd_bit)) {
+      kbc_ih();
+      if (!kbc_has_error()) {
+        uint8_t sc = kbc_get_scancode_byte();
+        if (key_get_code(sc) == KEY_ESC && !key_is_make(sc))
+          done = true;
       }
     }
   }

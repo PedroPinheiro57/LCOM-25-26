@@ -6,40 +6,28 @@
 #include "devices/timer.h"
 #include "devices/keyboard.h"
 #include "devices/mouse.h"
-# include "devices/rtc.h"
+#include "devices/rtc.h"
 
 extern int foo(void);
 
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();
 
-  // RTC TEST
-  rtc_time_t t;
-  rtc_date_t d;
+  /* init video */
+  if (video_map_vram(0x115) != 0) return 1;
+  if (video_set_mode(0x115) != 0) return 1;
 
-  if (rtc_read_time(&t) == 0)
-    printf("Time: %02d:%02d:%02d\n", t.hours, t.minutes, t.seconds);
-  if (rtc_read_date(&d) == 0)
-    printf("Date: %02d/%02d/%02d\n", d.day, d.month, d.year);
+  video_clear_screen(0x1a1a2e);   /* dark navy background */
 
-  // SUBSCRIBE DEVICES
+  /* subscribe devices */
   uint8_t timer_bit, kbd_bit, mouse_bit;
-  if (timer_subscribe_int(&timer_bit) != 0) return 1;
-  if (kbc_subscribe_int(&kbd_bit) != 0) { 
-    timer_unsubscribe_int();
-     return 1; 
-  }
-  if (mouse_subscribe_int(&mouse_bit) != 0) { 
-    kbc_unsubscribe_int(); timer_unsubscribe_int(); 
-    return 1; 
-  }
-  if (mouse_enable_data_reporting() != 0) { 
-    mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); 
-    return 1; 
-  }
+  if (timer_subscribe_int(&timer_bit) != 0) { vg_exit(); return 1; }
+  if (kbc_subscribe_int(&kbd_bit) != 0) { timer_unsubscribe_int(); vg_exit(); return 1; }
+  if (mouse_subscribe_int(&mouse_bit) != 0) { kbc_unsubscribe_int(); timer_unsubscribe_int(); vg_exit(); return 1; }
+  if (mouse_enable_data_reporting() != 0) { mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); vg_exit(); return 1; }
 
   mouse_state_t ms;
-  mouse_state_init(&ms, 400, 300);   /* start at center of 800x600 */
+  mouse_state_init(&ms, 400, 300);
 
   uint8_t mouse_buf[3];
   uint8_t mouse_idx = 0;
@@ -72,12 +60,11 @@ int(proj_main_loop)(int argc, char *argv[]) {
       mouse_ih();
       if (!mouse_has_error()) {
         uint8_t byte = mouse_get_byte();
-        if (mouse_idx == 0 && !(byte & BIT(3))) { /* no sync, skip */ }
+        if (mouse_idx == 0 && !(byte & BIT(3))) { /* no sync */ }
         else {
           mouse_buf[mouse_idx++] = byte;
           if (mouse_idx == 3) {
             mouse_state_update(&ms, mouse_buf, 800, 600);
-            printf("x=%d y=%d lb=%d\n", ms.x, ms.y, ms.lb);
             mouse_idx = 0;
           }
         }
@@ -85,11 +72,11 @@ int(proj_main_loop)(int argc, char *argv[]) {
     }
   }
 
-  // UNSUBSCRIBE DEVICES
   mouse_disable_data_reporting();
   mouse_unsubscribe_int();
   kbc_unsubscribe_int();
   timer_unsubscribe_int();
+  vg_exit();
   return 0;
 }
 

@@ -6,17 +6,37 @@
 #include "devices/timer.h"
 #include "devices/keyboard.h"
 #include "devices/mouse.h"
+# include "devices/rtc.h"
 
 extern int foo(void);
 
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();
 
+  // RTC TEST
+  rtc_time_t t;
+  rtc_date_t d;
+
+  if (rtc_read_time(&t) == 0)
+    printf("Time: %02d:%02d:%02d\n", t.hours, t.minutes, t.seconds);
+  if (rtc_read_date(&d) == 0)
+    printf("Date: %02d/%02d/%02d\n", d.day, d.month, d.year);
+
+  // SUBSCRIBE DEVICES
   uint8_t timer_bit, kbd_bit, mouse_bit;
   if (timer_subscribe_int(&timer_bit) != 0) return 1;
-  if (kbc_subscribe_int(&kbd_bit) != 0) { timer_unsubscribe_int(); return 1; }
-  if (mouse_subscribe_int(&mouse_bit) != 0) { kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1; }
-  if (mouse_enable_data_reporting() != 0) { mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1; }
+  if (kbc_subscribe_int(&kbd_bit) != 0) { 
+    timer_unsubscribe_int();
+     return 1; 
+  }
+  if (mouse_subscribe_int(&mouse_bit) != 0) { 
+    kbc_unsubscribe_int(); timer_unsubscribe_int(); 
+    return 1; 
+  }
+  if (mouse_enable_data_reporting() != 0) { 
+    mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); 
+    return 1; 
+  }
 
   mouse_state_t ms;
   mouse_state_init(&ms, 400, 300);   /* start at center of 800x600 */
@@ -65,6 +85,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
     }
   }
 
+  // UNSUBSCRIBE DEVICES
   mouse_disable_data_reporting();
   mouse_unsubscribe_int();
   kbc_unsubscribe_int();

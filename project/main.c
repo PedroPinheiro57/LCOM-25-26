@@ -4,97 +4,89 @@
 #include "../pedro/lab4/mouse.h"
 #include "../pedro/lab5/video.h"
 #include "devices/timer.h"
-#include "devices/keyboard.h"
 #include "devices/mouse.h"
-#include "devices/rtc.h"
-#include "video/sprites.h" 
+#include "handlers/handlers.h"
+#include "game/game.h"
+#include "main.h"
 
 extern int foo(void);
+
+static mouse_state_t ms;
+static uint8_t  mouse_buf[3];
+static uint8_t  mouse_idx         = 0;
+static bool     mouse_packet_ready = false;
+static uint16_t prev_x            = 400;
+static uint16_t prev_y            = 300;
+
+static uint8_t timer_bit, kbd_bit, mouse_bit;
+
+/* getters */
+mouse_state_t *get_mouse_state(void)       { return &ms; }
+uint8_t       *get_mouse_buf(void)         { return mouse_buf; }
+uint8_t        get_mouse_idx(void)         { return mouse_idx; }
+bool           get_mouse_packet_ready(void){ return mouse_packet_ready; }
+uint16_t       get_prev_x(void)            { return prev_x; }
+uint16_t       get_prev_y(void)            { return prev_y; }
+
+/* setters */
+void set_mouse_idx(uint8_t val)          { mouse_idx = val; }
+void set_mouse_packet_ready(bool val)    { mouse_packet_ready = val; }
+void set_prev_x(uint16_t val)            { prev_x = val; }
+void set_prev_y(uint16_t val)            { prev_y = val; }
+
+static int devices_init(void) {
+  if (video_map_vram(0x115) != 0) return 1;
+  if (video_set_mode(0x115) != 0) return 1;
+
+  if (timer_subscribe_int(&timer_bit) != 0) return 1;
+  if (kbc_subscribe_int(&kbd_bit) != 0) {
+    timer_unsubscribe_int(); return 1;
+  }
+  if (mouse_subscribe_int(&mouse_bit) != 0) {
+    kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1;
+  }
+  if (mouse_enable_data_reporting() != 0) {
+    mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1;
+  }
+
+  mouse_state_init(&ms, 400, 300);
+  return 0;
+}
+
+static void devices_cleanup(void) {
+  mouse_disable_data_reporting();
+  mouse_unsubscribe_int();
+  kbc_unsubscribe_int();
+  timer_unsubscribe_int();
+  vg_exit();
+}
 
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();
 
-  /* init video */
-  if (video_map_vram(0x115) != 0) return 1;
-  if (video_set_mode(0x115) != 0) return 1;
+  if (devices_init() != 0) return 1;
 
-  video_clear_screen(0x1a1a2e);   /* dark navy background */
+  video_clear_screen(0x1a1a2e);
+  game_init();
 
-  /* subscribe devices */
-  uint8_t timer_bit, kbd_bit, mouse_bit;
-  if (timer_subscribe_int(&timer_bit) != 0) { vg_exit(); return 1; }
-  if (kbc_subscribe_int(&kbd_bit) != 0) { timer_unsubscribe_int(); vg_exit(); return 1; }
-  if (mouse_subscribe_int(&mouse_bit) != 0) { kbc_unsubscribe_int(); timer_unsubscribe_int(); vg_exit(); return 1; }
-  if (mouse_enable_data_reporting() != 0) { mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); vg_exit(); return 1; }
-
-  mouse_state_t ms;
-  mouse_state_init(&ms, 400, 300);
-
-  uint8_t mouse_buf[3];
-  uint8_t mouse_idx = 0;
-
-  bool done = false;
   int r, ipc_status;
   message msg;
 
-  uint16_t prev_x = 400;
-  uint16_t prev_y = 300;
-
-  while (!done) {
+  while (!game_is_over()) {
     if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) continue;
     if (!is_ipc_notify(ipc_status)) continue;
     if (_ENDPOINT_P(msg.m_source) != HARDWARE) continue;
 
     uint32_t irqs = msg.m_notify.interrupts;
 
-    bool mouse_packet_ready = false;
+    if (irqs & BIT(timer_bit)) handle_timer();
+    if (irqs & BIT(kbd_bit))   handle_keyboard();
+    if (irqs & BIT(mouse_bit)) handle_mouse();
 
-    /* in mouse IRQ block */
-    if (irqs & BIT(mouse_bit)) {
-      mouse_ih();
-      if (!mouse_has_error()) {
-        uint8_t byte = mouse_get_byte();
-        if (mouse_idx == 0 && !(byte & BIT(3))) { /* no sync */ }
-        else {
-          mouse_buf[mouse_idx++] = byte;
-          if (mouse_idx == 3) {
-            mouse_packet_ready = true;
-            mouse_idx = 0;
-          }
-        }
-      }
-    }
-
-    /* in timer IRQ block — only use latest packet */
-    if (irqs & BIT(timer_bit)) {
-      timer_int_handler();
-
-      if (mouse_packet_ready) {
-        mouse_state_update(&ms, mouse_buf, 800, 600);
-        mouse_packet_ready = false;
-      }
-
-      cursor_erase(prev_x, prev_y);
-      cursor_draw(ms.x, ms.y);
-      prev_x = ms.x;
-      prev_y = ms.y;
-    }
-
-    if (irqs & BIT(kbd_bit)) {
-      kbc_ih();
-      if (!kbc_has_error()) {
-        uint8_t sc = kbc_get_scancode_byte();
-        if (key_get_code(sc) == KEY_ESC && !key_is_make(sc))
-          done = true;
-      }
-    }
+    game_draw();
   }
 
-  mouse_disable_data_reporting();
-  mouse_unsubscribe_int();
-  kbc_unsubscribe_int();
-  timer_unsubscribe_int();
-  vg_exit();
+  devices_cleanup();
   return 0;
 }
 

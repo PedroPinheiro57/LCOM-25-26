@@ -1,6 +1,8 @@
 PROG = proj
 
-SRCS = main.c keyboard.c mouse.c rtc.c
+.PATH: devices video game
+
+SRCS = main.c keyboard.c mouse.c rtc.c sprites.c
 
 CFLAGS += -pedantic
 CFLAGS += -I../pedro/lab3

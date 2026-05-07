@@ -7,6 +7,7 @@
 #include "devices/keyboard.h"
 #include "devices/mouse.h"
 #include "devices/rtc.h"
+#include "video/sprites.h" 
 
 extern int foo(void);
 
@@ -35,6 +36,9 @@ int(proj_main_loop)(int argc, char *argv[]) {
   bool done = false;
   int r, ipc_status;
   message msg;
+
+  uint16_t prev_x = 400;
+  uint16_t prev_y = 300;
 
   while (!done) {
     if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) continue;
@@ -65,6 +69,10 @@ int(proj_main_loop)(int argc, char *argv[]) {
           mouse_buf[mouse_idx++] = byte;
           if (mouse_idx == 3) {
             mouse_state_update(&ms, mouse_buf, 800, 600);
+            cursor_erase(prev_x, prev_y);
+            cursor_draw(ms.x, ms.y);
+            prev_x = ms.x;
+            prev_y = ms.y;
             mouse_idx = 0;
           }
         }

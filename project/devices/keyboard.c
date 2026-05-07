@@ -1,4 +1,4 @@
-#include "devices/keyboard.h"
+#include "keyboard.h"
 
 bool key_is_make(uint8_t sc) {
   return !(sc & 0x80);

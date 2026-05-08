@@ -11,6 +11,8 @@
 
 extern int foo(void);
 
+
+/* DEFAULT VALUES FOR MOUSE*/
 static mouse_state_t ms;
 static uint8_t  mouse_buf[3];
 static uint8_t  mouse_idx         = 0;
@@ -19,6 +21,7 @@ static uint16_t prev_x            = 400;
 static uint16_t prev_y            = 300;
 
 static uint8_t timer_bit, kbd_bit, mouse_bit;
+
 
 /* getters */
 mouse_state_t *get_mouse_state(void)       { return &ms; }
@@ -34,6 +37,8 @@ void set_mouse_packet_ready(bool val)    { mouse_packet_ready = val; }
 void set_prev_x(uint16_t val)            { prev_x = val; }
 void set_prev_y(uint16_t val)            { prev_y = val; }
 
+
+/* SUBSCRIBE DEVICES*/
 static int devices_init(void) {
   if (video_map_vram(0x115) != 0) return 1;
   if (video_set_mode(0x115) != 0) return 1;
@@ -53,6 +58,7 @@ static int devices_init(void) {
   return 0;
 }
 
+/* UNSUBSCRIBE DEVICES*/
 static void devices_cleanup(void) {
   mouse_disable_data_reporting();
   mouse_unsubscribe_int();
@@ -60,6 +66,8 @@ static void devices_cleanup(void) {
   timer_unsubscribe_int();
   vg_exit();
 }
+
+
 
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();

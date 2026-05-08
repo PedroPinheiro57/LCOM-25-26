@@ -1,8 +1,8 @@
 PROG = proj
 
-.PATH: devices video game handlers
+.PATH: devices video game handlers assets
 
-SRCS = main.c keyboard.c mouse.c rtc.c sprites.c game.c handlers.c
+SRCS = main.c keyboard.c mouse.c rtc.c sprites.c game.c handlers.c 
 
 CFLAGS += -pedantic
 CFLAGS += -I../pedro/lab3

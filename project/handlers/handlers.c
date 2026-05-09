@@ -1,5 +1,5 @@
 #include "handlers.h"
-#include "../main.h"
+#include "../devices/mouse.h"
 #include <lcom/lcf.h>
 #include "../../pedro/lab3/kbc.h"
 #include "../../pedro/lab4/mouse.h"

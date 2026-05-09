@@ -17,7 +17,6 @@
  * We declare them here directly - no .h file needed, the linker
  * will find them in libtimer.a.
  * ------------------------------------------------------------------ */
-extern int timer_counter;
 void (timer_int_handler)(void);
 int  (timer_subscribe_int)(uint8_t *bit_no);
 int  (timer_unsubscribe_int)(void);

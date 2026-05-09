@@ -79,3 +79,15 @@ int vg_draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
   memcpy(pixel, &color, bytes_per_pixel);
   return 0;
 }
+
+
+
+// PROJECT
+void video_clear_screen(uint32_t color) {
+  for (uint16_t y = 0; y < vmi.YResolution; y++)
+    for (uint16_t x = 0; x < vmi.XResolution; x++)
+      vg_draw_pixel(x, y, color);
+}
+
+uint16_t video_get_hres(void) { return vmi.XResolution; }
+uint16_t video_get_vres(void) { return vmi.YResolution; }

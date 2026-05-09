@@ -16,6 +16,9 @@
 *.a
 *.so
 
+pedro/
+jorge/
+
 proj
 output.txt
 trace.txt

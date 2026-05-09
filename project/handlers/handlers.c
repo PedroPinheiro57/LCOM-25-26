@@ -17,11 +17,6 @@ void handle_timer(void) {
     set_mouse_packet_ready(false);
   }
 
-  cursor_erase(get_prev_x(), get_prev_y());
-  cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
-  set_prev_x(get_mouse_state()->x);
-  set_prev_y(get_mouse_state()->y);
-
   game_handle_timer();
 }
 

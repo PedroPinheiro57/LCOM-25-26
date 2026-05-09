@@ -1,33 +1,26 @@
 #include "game.h"
 #include <lcom/lcf.h>
 #include "../video/sprites.h"
-
-static xpm_row_t const test_sprite[] = {
-  "8 8 3 1",
-  ". c #FFFFFE",
-  "R c #FF0000",
-  "W c #FFFFFF",
-  "RRRRRRRR",
-  "RWWWWWWR",
-  "RWRRRWWR",
-  "RWWWWWWR",
-  "RWRRRWWR",
-  "RWWWWWWR",
-  "RWWWWWWR",
-  "RRRRRRRR"
-};
-
-static sprite_t *test_sp = NULL;
+#include "../video/font.h"
+#include "../devices/keyboard.h"
 
 void game_init(void) {
-  test_sp = sprite_load((xpm_map_t) test_sprite);
+  font_init();
 }
 
 void game_handle_timer(void) {}
-void game_handle_keyboard(uint8_t scancode) { (void)scancode; }
+static bool over = false;
+
+void game_handle_keyboard(uint8_t scancode) {
+  if (key_get_code(scancode) == KEY_ESC && !key_is_make(scancode))
+    over = true;
+}
+
+bool game_is_over(void) { return over; }
 void game_handle_mouse(mouse_state_t *ms) { (void)ms; }
-bool game_is_over(void) { return false; }
+
 
 void game_draw(void) {
-  if (test_sp) sprite_draw(test_sp, 100, 100);
+  printf("font loaded: %d\n", font_is_loaded());
+  draw_string("BATTLESHIP", 200, 50, 0xFFFFFF, 3);
 }

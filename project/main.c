@@ -8,6 +8,7 @@
 #include "handlers/handlers.h"
 #include "game/game.h"
 #include "main.h"
+#include "video/sprites.h"
 
 extern int foo(void);
 
@@ -72,11 +73,16 @@ static void devices_cleanup(void) {
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();
 
+  /*subscribe devices*/
   if (devices_init() != 0) return 1;
 
+  /*initialize screen with RGB color*/
   video_clear_screen(0x1a1a2e);
+
+  /*draw initial screen entities*/
   game_init();
 
+  
   int r, ipc_status;
   message msg;
 
@@ -87,7 +93,16 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     uint32_t irqs = msg.m_notify.interrupts;
 
-    if (irqs & BIT(timer_bit)) handle_timer();
+    if (irqs & BIT(timer_bit)) {
+      handle_timer();
+      
+      /* only redraw every 2 ticks to reduce flicker */
+      if (timer_get_counter() % 2 == 0) {
+        video_clear_screen(0x1a1a2e);
+        game_draw();
+        cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
+      }
+    }
     if (irqs & BIT(kbd_bit))   handle_keyboard();
     if (irqs & BIT(mouse_bit)) handle_mouse();
 

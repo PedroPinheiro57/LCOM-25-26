@@ -2,13 +2,16 @@ PROG = proj
 
 .PATH: devices video game handlers assets
 
-SRCS = main.c keyboard.c mouse.c rtc.c sprites.c game.c handlers.c 
+SRCS = main.c keyboard.c mouse.c rtc.c sprites.c game.c handlers.c font.c font_assets.c
 
 CFLAGS += -pedantic
 CFLAGS += -I../pedro/lab3
 CFLAGS += -I../pedro/lab4
 CFLAGS += -I../pedro/lab5
 CFLAGS += -I.
+
+CFLAGS += -O0
+
 
 MOUSE_LIB = ../pedro/lab4/libmouse.a
 KBC_LIB   = ../pedro/lab3/libkbc.a

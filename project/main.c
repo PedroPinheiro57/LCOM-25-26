@@ -7,40 +7,14 @@
 #include "devices/mouse.h"
 #include "handlers/handlers.h"
 #include "game/game.h"
-#include "main.h"
 #include "video/sprites.h"
 
-extern int foo(void);
-
-
-/* DEFAULT VALUES FOR MOUSE*/
-static mouse_state_t ms;
-static uint8_t  mouse_buf[3];
-static uint8_t  mouse_idx         = 0;
-static bool     mouse_packet_ready = false;
-static uint16_t prev_x            = 400;
-static uint16_t prev_y            = 300;
+extern int foo();
 
 static uint8_t timer_bit, kbd_bit, mouse_bit;
 
-
-/* getters */
-mouse_state_t *get_mouse_state(void)       { return &ms; }
-uint8_t       *get_mouse_buf(void)         { return mouse_buf; }
-uint8_t        get_mouse_idx(void)         { return mouse_idx; }
-bool           get_mouse_packet_ready(void){ return mouse_packet_ready; }
-uint16_t       get_prev_x(void)            { return prev_x; }
-uint16_t       get_prev_y(void)            { return prev_y; }
-
-/* setters */
-void set_mouse_idx(uint8_t val)          { mouse_idx = val; }
-void set_mouse_packet_ready(bool val)    { mouse_packet_ready = val; }
-void set_prev_x(uint16_t val)            { prev_x = val; }
-void set_prev_y(uint16_t val)            { prev_y = val; }
-
-
-/* SUBSCRIBE DEVICES*/
-static int devices_init(void) {
+/*SUBSCRIBE DEVICES*/
+static int devices_init() {
   if (video_map_vram(0x115) != 0) return 1;
   if (video_set_mode(0x115) != 0) return 1;
 
@@ -55,12 +29,12 @@ static int devices_init(void) {
     mouse_unsubscribe_int(); kbc_unsubscribe_int(); timer_unsubscribe_int(); return 1;
   }
 
-  mouse_state_init(&ms, 400, 300);
+  mouse_state_init(get_mouse_state(), 400, 300);
   return 0;
 }
 
 /* UNSUBSCRIBE DEVICES*/
-static void devices_cleanup(void) {
+static void devices_cleanup() {
   mouse_disable_data_reporting();
   mouse_unsubscribe_int();
   kbc_unsubscribe_int();

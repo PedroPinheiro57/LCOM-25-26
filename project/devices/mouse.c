@@ -52,3 +52,15 @@ void mouse_state_update(mouse_state_t *ms, uint8_t buf[3], uint16_t hres, uint16
 
   ms->moved = (dx != 0 || dy != 0);
 }
+
+static mouse_state_t ms;
+static uint8_t  mouse_buf[3];
+static uint8_t  mouse_idx          = 0;
+static bool     mouse_packet_ready = false;
+
+mouse_state_t *get_mouse_state(void)        { return &ms; }
+uint8_t       *get_mouse_buf(void)          { return mouse_buf; }
+uint8_t        get_mouse_idx(void)          { return mouse_idx; }
+bool           get_mouse_packet_ready(void) { return mouse_packet_ready; }
+void           set_mouse_idx(uint8_t val)          { mouse_idx = val; }
+void           set_mouse_packet_ready(bool val)    { mouse_packet_ready = val; }

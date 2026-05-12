@@ -3,8 +3,8 @@ PROG = lab4
 SRCS = lab4.c
  
 CFLAGS += -pedantic
-CFLAGS += -I../lab3 
- 
+CFLAGS += -I../lab3  
+                      
 # --- libmouse (built here) ---
 MOUSE_LIB      = libmouse.a
 MOUSE_LIB_SRCS = mouse.c

@@ -72,19 +72,19 @@ int(video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y,
   if (video_map_vram(mode) != 0) return 1;
   if (video_set_mode(mode) != 0) return 1;
 
-  /* Use LCF's vg_draw_rectangle directly — it's a macro that also
-     handles test interception */
+  /*Draw the rectangle*/
   if (vg_draw_rectangle(x, y, width, height, color) != 0) {
     vg_exit();
     return 1;
   }
 
-  // Keyboard interrupt
+  // Keyboard interrupt - Wait for ESC 
   uint8_t kbd_bit;
   if (kbc_subscribe_int(&kbd_bit) != 0) {
     vg_exit();
     return 1;
   }
+
 
   int r, ipc_status;
   message msg;

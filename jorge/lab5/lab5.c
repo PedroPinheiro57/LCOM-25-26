@@ -7,8 +7,8 @@
 #include <stdio.h>
 
 #include "video.h"
+#include "kbc.h"
 
-// Any header files included below this line should have been created by you
 
 int main(int argc, char *argv[]) {
     lcf_set_language("EN-US");
@@ -24,7 +24,6 @@ int main(int argc, char *argv[]) {
 }
 
 int(video_test_init)(uint16_t mode, uint8_t delay) {
-
   if (video_set_mode(mode) != 0) return 1;
 
   tickdelay(micros_to_ticks((uint32_t)delay * 1000000u));
@@ -36,17 +35,105 @@ int(video_test_init)(uint16_t mode, uint8_t delay) {
 }
 
 int(video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y,
-                          uint16_t width, uint16_t height, uint32_t color) {
-    /* To be completed */
-    printf("%s(0x%03X, %u, %u, %u, %u, 0x%08x): under construction\n",
-            __func__, mode, x, y, width, height, color);
+                           uint16_t width, uint16_t height, uint32_t color) {
+  if (video_map_vram(mode) != 0) return 1;
+  if (video_set_mode(mode) != 0) return 1;
 
+  /* Use LCF's vg_draw_rectangle directly — it's a macro that also
+     handles test interception */
+  if (vg_draw_rectangle(x, y, width, height, color) != 0) {
+    vg_exit();
     return 1;
+  }
+
+  // Keyboard interrupt
+  uint8_t kbd_bit;
+  if (kbc_subscribe_int(&kbd_bit) != 0) {
+    vg_exit();
+    return 1;
+  }
+
+  int r, ipc_status;
+  message msg;
+  bool done = false;
+
+  while (!done) {
+    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
+      printf("driver_receive failed: %d\n", r);
+      continue;
+    }
+    if (!is_ipc_notify(ipc_status))                continue;
+    if (_ENDPOINT_P(msg.m_source) != HARDWARE)     continue;
+    if (!(msg.m_notify.interrupts & BIT(kbd_bit))) continue;
+
+    kbc_ih();
+    if (kbc_has_error()) continue;
+
+    if (kbc_get_scancode_byte() == ESC_BREAKCODE)
+      done = true;
+  }
+
+  kbc_unsubscribe_int();
+  if (vg_exit() != 0) return 1;
+  return 0;
 }
 
 int(video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y) {
-    /* To be completed */
-    printf("%s(%8p, %u, %u): under construction\n", __func__, xpm, x, y);
+  uint16_t mode = 0x105;
 
+  /* Step 1: map VRAM before switching mode */
+  if (video_map_vram(mode) != 0) return 1;
+
+  /* Step 2: switch to graphics mode */
+  if (video_set_mode(mode) != 0) return 1;
+
+  /* Step 3: load XPM into a pixmap */
+  xpm_image_t img;
+  uint8_t *pixmap = xpm_load(xpm, XPM_INDEXED, &img);
+  if (pixmap == NULL) {
+    vg_exit();
     return 1;
+  }
+
+  /* Step 4: draw each pixel from the pixmap to VRAM */
+  for (uint16_t row = 0; row < img.height; row++) {
+    for (uint16_t col = 0; col < img.width; col++) {
+      uint8_t color = pixmap[row * img.width + col];
+      if (vg_draw_pixel(x + col, y + row, color) != 0) {
+        vg_exit();
+        return 1;
+      }
+    }
+  }
+
+  /* Step 5: wait for ESC breakcode */
+  uint8_t kbd_bit;
+  if (kbc_subscribe_int(&kbd_bit) != 0) {
+    vg_exit();
+    return 1;
+  }
+
+  int r, ipc_status;
+  message msg;
+  bool done = false;
+
+  while (!done) {
+    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
+      printf("driver_receive failed: %d\n", r);
+      continue;
+    }
+    if (!is_ipc_notify(ipc_status))                continue;
+    if (_ENDPOINT_P(msg.m_source) != HARDWARE)     continue;
+    if (!(msg.m_notify.interrupts & BIT(kbd_bit))) continue;
+
+    kbc_ih();
+    if (kbc_has_error()) continue;
+
+    if (kbc_get_scancode_byte() == ESC_BREAKCODE)
+      done = true;
+  }
+
+  kbc_unsubscribe_int();
+  if (vg_exit() != 0) return 1;
+  return 0;
 }

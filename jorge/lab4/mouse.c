@@ -44,10 +44,6 @@ int mouse_unsubscribe_int(void) {
  *      KBC will never raise the next interrupt.
  *   3. If parity or timeout error flags are set, mark error and discard.
  *   4. Otherwise store the byte for the caller.
- *
- * NOTE: We do NOT check the AUX bit here. In the LCF test environment
- * the injected bytes may not have AUX set, and checking it would cause
- * every injected byte to be silently dropped.
  * ------------------------------------------------------------------ */
 void (mouse_ih)(void) {
   uint8_t st;

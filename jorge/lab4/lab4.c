@@ -11,12 +11,12 @@
 // lcom_run lab4 "packet <N> -t <0-5>"
 // lcom_run lab4 "async <T> -t <0-5>"
 
-
 /* Timer functions from lab2's libtimer.a */
-extern int timer_counter;
 void (timer_int_handler)(void);
 int  (timer_subscribe_int)(uint8_t *bit_no);
 int  (timer_unsubscribe_int)(void);
+uint32_t timer_get_counter();
+void timer_reset_counter();
 
 int main(int argc, char *argv[]) {
   lcf_set_language("EN-US");
@@ -81,7 +81,6 @@ static void parse_packet(uint8_t bytes[3], struct packet *pp) {
  * 5. After cnt packets: disable data reporting, unsubscribe, return.
  * ------------------------------------------------------------------ */
 int (mouse_test_packet)(uint32_t cnt) {
-  /* Best-effort disable before subscribing; ignore failure (may already be off) */
   mouse_disable_data_reporting();
 
   uint8_t mouse_bit;
@@ -154,15 +153,8 @@ int (mouse_test_packet)(uint32_t cnt) {
  *   increment idle_ticks first, then immediately reset it to 0 if
  *   a packet completes in the same round. This avoids spurious
  *   early exits caused by batched IRQ delivery.
- *
- * Note: this function implements enable/disable itself via
- * mouse_enable_data_reporting() (LCF macro) and
- * mouse_disable_data_reporting() (our implementation), satisfying
- * the lab requirement that mouse_test_async not rely on the provided
- * mouse_enable_data_reporting helper.
  * ------------------------------------------------------------------ */
 int (mouse_test_async)(uint8_t idle_time) {
-  /* Best-effort disable before subscribing; ignore failure */
   mouse_disable_data_reporting();
 
   uint8_t mouse_bit, timer_bit;
@@ -185,7 +177,6 @@ int (mouse_test_async)(uint8_t idle_time) {
 
   uint8_t  pkt_buf[3];
   uint8_t  pkt_idx    = 0;
-  uint32_t idle_ticks = 0;
   bool     done       = false;
   int      r, ipc_status;
   message  msg;
@@ -203,7 +194,7 @@ int (mouse_test_async)(uint8_t idle_time) {
     /* --- Timer 0 interrupt (check first so mouse can reset it below) --- */
     if (irqs & BIT(timer_bit)) {
       timer_int_handler();
-      idle_ticks++;
+      uint32_t idle_ticks = timer_get_counter();
       if (idle_ticks >= (uint32_t) idle_time * freq)
         done = true;
     }
@@ -225,7 +216,7 @@ int (mouse_test_async)(uint8_t idle_time) {
             parse_packet(pkt_buf, &pp);
             mouse_print_packet(&pp);
             pkt_idx    = 0;
-            idle_ticks = 0;   /* reset idle counter on every complete packet */
+            timer_reset_counter();   /* reset idle counter on every complete packet */
           }
         }
       }

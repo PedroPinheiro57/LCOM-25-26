@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+uint32_t timer_get_counter();
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -11,11 +12,11 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/grupo_2leic01_5/jorge/lab2/trace.txt");
+  lcf_trace_calls("/home/lcom/labs/lab2/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/grupo_2leic01_5/jorge/lab2/output.txt");
+  lcf_log_output("/home/lcom/labs/lab2/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]
@@ -29,52 +30,92 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+
+
+
+// lcom_run lab2 "config <timer no.> <all|init|mode|base> -t <test no.>"
 int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
-  uint8_t st;
-  if (timer_get_conf(timer, &st) != 0) return 1;
+  uint8_t conf;
 
-  return timer_display_conf(timer, st, field);
-}
-
-int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
-  return timer_set_frequency(timer, freq);
-}
-
-int (timer_test_int)(uint8_t time) {
-  uint8_t bit_no;
-  int ipc_status;
-  message msg;
+  // read timer configuration
+  if (timer_get_conf(timer, &conf) != 0) {
+      printf("Error reading timer %d configuration\n", timer);
+      return 1;
+  }
   
-  extern uint32_t timer_counter;
-  timer_counter = 0;
-
-  if (timer_subscribe_int(&bit_no) != 0) return 1;
-
-  uint32_t irq_set = BIT(bit_no);
-  
-  while (timer_counter < (uint32_t)time * 60) {
-    int r;
-    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
-      continue;
-    }
-
-    if (is_ipc_notify(ipc_status)) {
-      switch (_ENDPOINT_P(msg.m_source)) {
-        case HARDWARE:
-          if (msg.m_notify.interrupts & irq_set) {
-            timer_int_handler();
-            
-            if (timer_counter % 60 == 0) {
-              timer_print_elapsed_time();
-            }
-          }
-          break;
-        default: break;
-      }
-    }
+  // display requested field
+  if (timer_display_conf(timer, conf, field) != 0) {
+      printf("Error displaying timer %d configuration\n", timer);
+      return 1;
   }
 
-  if (timer_unsubscribe_int() != 0) return 1;
+  return 0;
+}
+
+
+
+
+
+// lcom_run lab2 "time <timer no.> <frequency> -t <test no.>"
+int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
+
+  if (timer_set_frequency(timer, freq) != 0) {
+      printf("Failed to set timer %d frequency to %d Hz\n", timer, freq);
+      return 1;
+  }
+  
+  return 0;
+}
+
+
+
+// TEST: minix$ lcom_run lab2 "int 3 -t 0"
+int(timer_test_int)(uint8_t time) {
+  uint8_t bit_no;
+  
+  // 1. Subscribe to Timer 0 interrupts
+  if (timer_subscribe_int(&bit_no) != 0) {
+    printf("Failed to subscribe to timer interrupts.\n");
+    return 1;
+  }
+
+  uint32_t irq_set = BIT(bit_no); // Create the bitmask for testing the message
+  int ipc_status, r;
+  message msg;
+
+  // 2. Interrupt loop
+  while (time > 0) { 
+    // Get a request message.
+    if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { 
+        printf("driver_receive failed with: %d", r);
+        continue;
+    }
+    
+    if (is_ipc_notify(ipc_status)) { /* received notification */
+        switch (_ENDPOINT_P(msg.m_source)) {
+            case HARDWARE: /* hardware interrupt notification */				
+                if (msg.m_notify.interrupts & irq_set) { /* subscribed interrupt */
+                    
+                    timer_int_handler(); // Increment the counter
+                    uint32_t timer_counter = timer_get_counter();
+                    // Minix default timer frequency is 60Hz (60 ticks per second)
+                    if (timer_counter % 60 == 0) { 
+                        timer_print_elapsed_time();
+                        time--; // Decrement the seconds remaining
+                    }
+                }
+                break;
+            default:
+                break; /* no other notifications expected: do nothing */	
+        }
+    } 
+  }
+
+  // 3. Unsubscribe from Timer 0 interrupts
+  if (timer_unsubscribe_int() != 0) {
+    printf("Failed to unsubscribe from timer interrupts.\n");
+    return 1;
+  }
 
   return 0;
 }

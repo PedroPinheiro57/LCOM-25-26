@@ -39,7 +39,3 @@ void sprite_destroy(sprite_t *sp) {
 void cursor_draw(uint16_t x, uint16_t y) {
   vg_draw_rectangle(x, y, CURSOR_SIZE, CURSOR_SIZE, CURSOR_COLOR);
 }
-
-void cursor_erase(uint16_t x, uint16_t y) {
-  vg_draw_rectangle(x, y, CURSOR_SIZE, CURSOR_SIZE, CURSOR_BG);
-}

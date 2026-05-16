@@ -3,7 +3,6 @@
 #include <lcom/lcf.h>
 #include "../../pedro/lab3/kbc.h"
 #include "../../pedro/lab4/mouse.h"
-#include "../../pedro/lab5/video.h"
 #include "../devices/keyboard.h"
 #include "../devices/mouse.h"
 #include "../video/sprites.h"
@@ -34,7 +33,7 @@ void handle_mouse(void) {
   uint8_t byte = mouse_get_byte();
   uint8_t idx  = get_mouse_idx();
 
-  if (idx == 0 && !(byte & BIT(3))) return;
+  if (idx == 0 && !(byte & MOUSE_SYNC_BIT)) return;
 
   get_mouse_buf()[idx++] = byte;
   set_mouse_idx(idx);

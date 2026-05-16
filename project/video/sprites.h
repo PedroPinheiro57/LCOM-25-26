@@ -15,4 +15,3 @@ void      sprite_draw(sprite_t *sp, uint16_t x, uint16_t y);
 void      sprite_destroy(sprite_t *sp);
 
 void cursor_draw(uint16_t x, uint16_t y);
-void cursor_erase(uint16_t x, uint16_t y);

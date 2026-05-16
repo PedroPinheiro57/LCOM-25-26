@@ -27,10 +27,6 @@ void draw_char(char c, uint16_t x, uint16_t y, uint32_t color, uint8_t scale) {
     for (uint16_t col = 0; col < FONT_CHAR_W; col++) {
       uint32_t pixel = font_sprite->colors[(src_y + row) * font_sprite->width + (src_x + col)];
       
-      /* print what we're getting */
-      if (row == 0 && col == 0)
-        printf("char '%c' pixel[0,0] = 0x%08X\n", c, pixel);
-      
       /* skip transparent and black, draw everything else */
       if (pixel == TRANSPARENT) continue;
       if ((pixel & 0x00FFFFFF) == 0) continue;  /* skip black */

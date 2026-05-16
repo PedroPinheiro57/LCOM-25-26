@@ -67,20 +67,15 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     uint32_t irqs = msg.m_notify.interrupts;
 
+    if (irqs & BIT(mouse_bit)) handle_mouse();
+    if (irqs & BIT(kbd_bit))   handle_keyboard();
+
     if (irqs & BIT(timer_bit)) {
       handle_timer();
-      
-      /* only redraw every 2 ticks to reduce flicker */
-      if (timer_get_counter() % 2 == 0) {
-        video_clear_screen(0x1a1a2e);
-        game_draw();
-        cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
-      }
+      video_clear_screen(0x1a1a2e);
+      game_draw();
+      cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
     }
-    if (irqs & BIT(kbd_bit))   handle_keyboard();
-    if (irqs & BIT(mouse_bit)) handle_mouse();
-
-    game_draw();
   }
 
   devices_cleanup();

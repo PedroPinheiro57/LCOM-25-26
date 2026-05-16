@@ -17,9 +17,31 @@ typedef enum {
 } game_state_t;
 
 typedef struct {
-  game_state_t state;
-  game_state_t prev_state;   /* for pause/resume */
-  int          menu_selected; /* 0=Play, 1=Instructions, 2=Exit */
+  game_state_t tag;
+  game_state_t prev;    /* for pause/resume */
+  union {
+    struct {
+      int selected;     /* 0=Play, 1=Instructions, 2=Exit */
+    } menu;
+    struct {
+      int player;       /* 1 or 2 — whose turn to place */
+      int ship_idx;     /* which ship being placed 0-4 */
+      int orient;       /* 0=horizontal, 1=vertical */
+      int cursor_col;
+      int cursor_row;
+    } place;
+    struct {
+      int player;       /* 1 or 2 — whose turn to attack */
+      int cursor_col;
+      int cursor_row;
+    } turn;
+    struct {
+      int selected;     /* 0=Resume, 1=Quit */
+    } pause;
+    struct {
+      int winner;       /* 1 or 2 */
+    } game_over;
+  } data;
 } game_t;
 
 void game_init(void);

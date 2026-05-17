@@ -56,6 +56,7 @@ void (mouse_ih)(void) {
   if (util_sys_inb(KBC_OUT_BUF, &data) != 0) { mouse_error = true; return; }
 
   if (st & (KBC_PARITY | KBC_TIMEOUT)) { mouse_error = true; return; }
+  if (!(st & KBC_AUX))                 { mouse_error = true; return; }  // ← this
 
   mouse_byte = data;
 }

@@ -18,20 +18,20 @@ typedef enum {
 
 typedef struct {
   game_state_t tag;
-  game_state_t prev;    /* for pause/resume */
+  game_state_t prev;
   union {
     struct {
       int selected;     /* 0=Play, 1=Instructions, 2=Exit */
     } menu;
     struct {
-      int player;       /* 1 or 2 — whose turn to place */
-      int ship_idx;     /* which ship being placed 0-4 */
+      int player;
+      int ship_idx;
       int orient;       /* 0=horizontal, 1=vertical */
       int cursor_col;
       int cursor_row;
     } place;
     struct {
-      int player;       /* 1 or 2 — whose turn to attack */
+      int player;
       int cursor_col;
       int cursor_row;
     } turn;
@@ -49,4 +49,6 @@ void game_handle_timer(void);
 void game_handle_keyboard(uint8_t scancode);
 void game_handle_mouse(mouse_state_t *ms);
 void game_draw(void);
+void game_erase_cursor(void);
+void game_save_cursor(int16_t x, int16_t y);
 bool game_is_over(void);

@@ -2,10 +2,17 @@
 #include "menu.h"
 #include <lcom/lcf.h>
 #include "../video/font.h"
+#include "../video/sprites.h"
 #include "../devices/keyboard.h"
+#include "../devices/video.h"
 
-static game_t g;
-static bool   over = false;
+#define CURSOR_SIZE 10
+
+static game_t  g;
+static bool    over    = false;
+static bool    dirty   = true;
+static int16_t prev_cx = 0;
+static int16_t prev_cy = 0;
 
 void game_init(void) {
   g = (game_t) {
@@ -14,11 +21,15 @@ void game_init(void) {
     .data.menu    = { .selected = 0 }
   };
   font_init();
+  dirty   = true;
+  prev_cx = 400;
+  prev_cy = 300;
 }
 
 static void transition(game_state_t next) {
   g.prev = g.tag;
   g.tag  = next;
+  dirty  = true;
 }
 
 void game_handle_keyboard(uint8_t scancode) {
@@ -28,10 +39,14 @@ void game_handle_keyboard(uint8_t scancode) {
   switch (g.tag) {
 
     case STATE_MAIN_MENU:
-      if (make && code == KEY_UP)
+      if (make && code == KEY_UP) {
         g.data.menu.selected = (g.data.menu.selected + 2) % 3;
-      if (make && code == KEY_DOWN)
+        dirty = true;
+      }
+      if (make && code == KEY_DOWN) {
         g.data.menu.selected = (g.data.menu.selected + 1) % 3;
+        dirty = true;
+      }
       if (!make && code == KEY_ESC)
         over = true;
       if (make && code == KEY_ENTER) {
@@ -45,8 +60,10 @@ void game_handle_keyboard(uint8_t scancode) {
 
     case STATE_PLACE_SHIPS_P1:
     case STATE_PLACE_SHIPS_P2:
-      if (make && code == KEY_R)
-        g.data.place.orient ^= 1;   /* toggle orientation */
+      if (make && code == KEY_R) {
+        g.data.place.orient ^= 1;
+        dirty = true;
+      }
       if (!make && code == KEY_ESC)
         transition(STATE_PAUSED);
       break;
@@ -58,13 +75,17 @@ void game_handle_keyboard(uint8_t scancode) {
       break;
 
     case STATE_PAUSED:
-      if (make && code == KEY_UP)
+      if (make && code == KEY_UP) {
         g.data.pause.selected = (g.data.pause.selected + 1) % 2;
-      if (make && code == KEY_DOWN)
+        dirty = true;
+      }
+      if (make && code == KEY_DOWN) {
         g.data.pause.selected = (g.data.pause.selected + 1) % 2;
+        dirty = true;
+      }
       if (make && code == KEY_ENTER) {
-        if (g.data.pause.selected == 0) transition(g.prev); /* resume */
-        if (g.data.pause.selected == 1) over = true;        /* quit */
+        if (g.data.pause.selected == 0) transition(g.prev);
+        if (g.data.pause.selected == 1) over = true;
       }
       break;
 
@@ -78,14 +99,15 @@ void game_handle_mouse(mouse_state_t *ms) {
 
     case STATE_MAIN_MENU: {
       int hover = menu_mouse_hover(ms->x, ms->y);
-      if (hover >= 0) {
+      if (hover >= 0 && hover != g.data.menu.selected) {
         g.data.menu.selected = hover;
-        if (ms->clicked) {
-          switch (hover) {
-            case 0: transition(STATE_PLACE_SHIPS_P1); break;
-            case 1: /* instructions */ break;
-            case 2: over = true; break;
-          }
+        dirty = true;
+      }
+      if (ms->clicked && hover >= 0) {
+        switch (hover) {
+          case 0: transition(STATE_PLACE_SHIPS_P1); break;
+          case 1: /* instructions */ break;
+          case 2: over = true; break;
         }
       }
       break;
@@ -94,11 +116,43 @@ void game_handle_mouse(mouse_state_t *ms) {
     default:
       break;
   }
+
+  if (ms->moved) dirty = true;
 }
 
 void game_handle_timer(void) {}
 
+/*
+ * game_erase_cursor
+ * Paints a black rectangle over the previous cursor position.
+ * Call this at the START of the timer tick, before game_draw(),
+ * so the ghost is erased regardless of whether a full redraw follows.
+ */
+void game_erase_cursor(void) {
+  vg_draw_rectangle(prev_cx, prev_cy, CURSOR_SIZE + 1, CURSOR_SIZE + 1, 0x000000);
+}
+
+/*
+ * game_save_cursor
+ * Records where the cursor was drawn this frame so the next frame
+ * can erase it.  Call this AFTER cursor_draw().
+ */
+void game_save_cursor(int16_t x, int16_t y) {
+  prev_cx = x;
+  prev_cy = y;
+}
+
+/*
+ * game_draw
+ * Full clear + redraw only when dirty.
+ * Does NOT touch the cursor — caller owns that.
+ */
 void game_draw(void) {
+  if (!dirty) return;
+  dirty = false;
+
+  video_clear_screen(0x000000);
+
   switch (g.tag) {
     case STATE_MAIN_MENU:
       menu_draw_main(g.data.menu.selected);

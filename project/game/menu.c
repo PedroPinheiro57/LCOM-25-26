@@ -1,6 +1,6 @@
 #include "menu.h"
 #include "../video/font.h"
-#include "../../pedro/lab5/video.h"
+#include "../devices/video.h"
 
 static const char *options[] = { "PLAY", "INSTRUCTIONS", "EXIT" };
 #define NUM_OPTIONS 3

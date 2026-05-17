@@ -1,5 +1,5 @@
 #include "sprites.h"
-#include "../../pedro/lab5/video.h"
+#include "../devices/video.h"
 #include <stdlib.h>
 
 #define CURSOR_SIZE  10

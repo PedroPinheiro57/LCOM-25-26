@@ -2,9 +2,9 @@
 #include <lcom/timer.h>
 #include "../pedro/lab3/kbc.h"
 #include "../pedro/lab4/mouse.h"
-#include "../pedro/lab5/video.h"
 #include "devices/timer.h"
 #include "devices/mouse.h"
+#include "devices/video.h"
 #include "handlers/handlers.h"
 #include "game/game.h"
 #include "video/sprites.h"
@@ -13,10 +13,10 @@ extern int foo();
 
 static uint8_t timer_bit, kbd_bit, mouse_bit;
 
-/*SUBSCRIBE DEVICES*/
-static int devices_init() {
-  if (video_map_vram(0x115) != 0) return 1;
-  if (video_set_mode(0x115) != 0) return 1;
+static int devices_init(void) {
+  if (video_init(0x115) != 0) return 1;
+
+  if (timer_set_frequency(0, 30) != 0) return 1;
 
   if (timer_subscribe_int(&timer_bit) != 0) return 1;
   if (kbc_subscribe_int(&kbd_bit) != 0) {
@@ -33,8 +33,7 @@ static int devices_init() {
   return 0;
 }
 
-/* UNSUBSCRIBE DEVICES*/
-static void devices_cleanup() {
+static void devices_cleanup(void) {
   mouse_disable_data_reporting();
   mouse_unsubscribe_int();
   kbc_unsubscribe_int();
@@ -42,21 +41,13 @@ static void devices_cleanup() {
   vg_exit();
 }
 
-
-
 int(proj_main_loop)(int argc, char *argv[]) {
   foo();
 
-  /*subscribe devices*/
   if (devices_init() != 0) return 1;
 
-  /*initialize screen with RGB color*/
-  video_clear_screen(0x1a1a2e);
-
-  /*draw initial screen entities*/
   game_init();
 
-  
   int r, ipc_status;
   message msg;
 
@@ -67,20 +58,28 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     uint32_t irqs = msg.m_notify.interrupts;
 
+    if (irqs & BIT(mouse_bit)) handle_mouse();
+    if (irqs & BIT(kbd_bit))   handle_keyboard();
+
     if (irqs & BIT(timer_bit)) {
       handle_timer();
-      
-      /* only redraw every 2 ticks to reduce flicker */
-      if (timer_get_counter() % 2 == 0) {
-        video_clear_screen(0x1a1a2e);
-        game_draw();
-        cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
-      }
-    }
-    if (irqs & BIT(kbd_bit))   handle_keyboard();
-    if (irqs & BIT(mouse_bit)) handle_mouse();
 
-    game_draw();
+      /*
+       * Frame render order:
+       *   1. Erase the cursor from where it was last frame (small black rect)
+       *   2. Redraw background + UI only if dirty (expensive, skipped most frames)
+       *   3. Draw cursor at new position
+       *   4. Save cursor position for next frame's erase
+       *   5. Flip to VRAM
+       */
+      mouse_state_t *ms = get_mouse_state();
+
+      game_erase_cursor();
+      game_draw();
+      cursor_draw(ms->x, ms->y);
+      game_save_cursor(ms->x, ms->y);
+      video_swap_buffers();
+    }
   }
 
   devices_cleanup();

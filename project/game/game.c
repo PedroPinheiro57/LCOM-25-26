@@ -148,9 +148,6 @@ void game_save_cursor(int16_t x, int16_t y) {
  * Does NOT touch the cursor — caller owns that.
  */
 void game_draw(void) {
-  if (!dirty) return;
-  dirty = false;
-
   video_clear_screen(0x000000);
 
   switch (g.tag) {

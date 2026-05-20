@@ -63,21 +63,9 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     if (irqs & BIT(timer_bit)) {
       handle_timer();
-
-      /*
-       * Frame render order:
-       *   1. Erase the cursor from where it was last frame (small black rect)
-       *   2. Redraw background + UI only if dirty (expensive, skipped most frames)
-       *   3. Draw cursor at new position
-       *   4. Save cursor position for next frame's erase
-       *   5. Flip to VRAM
-       */
-      mouse_state_t *ms = get_mouse_state();
-
-      game_erase_cursor();
+      video_clear_screen(0x000000);
       game_draw();
-      cursor_draw(ms->x, ms->y);
-      game_save_cursor(ms->x, ms->y);
+      cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
       video_swap_buffers();
     }
   }

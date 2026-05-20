@@ -1,14 +1,16 @@
 #include <lcom/lcf.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "video.h"
 
-static uint8_t        *img_buffer  = NULL;
-static uint8_t        *vram        = NULL;
+#define NUM_BUFFERS 2
+
+static uint8_t        *vram = NULL;
 static vbe_mode_info_t vmi;
 static unsigned        bytes_per_pixel;
 static unsigned        buffer_size;
+static int             current_view_buffer  = 0;
+static int             current_draw_buffer  = 1;
 
 int video_init(uint16_t mode) {
   if (vbe_get_mode_info(mode, &vmi) != 0) {
@@ -21,7 +23,7 @@ int video_init(uint16_t mode) {
 
   struct minix_mem_range mr;
   mr.mr_base  = (phys_bytes) vmi.PhysBasePtr;
-  mr.mr_limit = mr.mr_base + buffer_size;
+  mr.mr_limit = mr.mr_base + buffer_size * NUM_BUFFERS;
 
   int r;
   if (OK != (r = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr))) {
@@ -29,18 +31,11 @@ int video_init(uint16_t mode) {
     return 1;
   }
 
-  vram = vm_map_phys(SELF, (void *) mr.mr_base, buffer_size);
+  vram = vm_map_phys(SELF, (void *) mr.mr_base, buffer_size * NUM_BUFFERS);
   if (vram == MAP_FAILED) {
     panic("couldn't map video memory");
     return 1;
   }
-
-  img_buffer = malloc(buffer_size);
-  if (img_buffer == NULL) {
-    panic("couldn't allocate image buffer");
-    return 1;
-  }
-  memset(img_buffer, 0, buffer_size);
 
   reg86_t reg;
   memset(&reg, 0, sizeof(reg));
@@ -53,25 +48,43 @@ int video_init(uint16_t mode) {
     return 1;
   }
 
+  current_view_buffer = 0;
+  current_draw_buffer = 1;
+
   return 0;
 }
 
+static void set_display_buffer(int buffer_index) {
+  reg86_t r;
+  memset(&r, 0, sizeof(r));
+  r.ax    = 0x4F07;                              /* VBE function 07h */
+  r.bx    = 0x0080;                              /* wait for vertical retrace */
+  r.cx    = 0;                                   /* X offset */
+  r.dx    = buffer_index * vmi.YResolution;      /* Y offset determines buffer */
+  r.intno = 0x10;
+  sys_int86(&r);
+}
+
 int video_swap_buffers(void) {
-  memcpy(vram, img_buffer, buffer_size);
+  set_display_buffer(current_draw_buffer);
+  current_view_buffer = current_draw_buffer;
+  current_draw_buffer = (current_draw_buffer + 1) % NUM_BUFFERS;
   return 0;
 }
 
 /* --- internal fast helpers --- */
 
-/* Write one pixel directly — no bounds check, caller must ensure validity. */
 static inline void _put_pixel(uint16_t x, uint16_t y, uint32_t color) {
-  uint8_t *dst = img_buffer + (vmi.XResolution * y + x) * bytes_per_pixel;
+  unsigned int buffer_offset = current_draw_buffer * buffer_size;
+  unsigned int index = buffer_offset + (vmi.XResolution * y + x) * bytes_per_pixel;
+  uint8_t *dst = vram + index;
   memcpy(dst, &color, bytes_per_pixel);
 }
 
-/* Fill a horizontal run of `len` pixels with `color` in one tight loop. */
 static void _fill_hrun(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {
-  uint8_t *dst = img_buffer + (vmi.XResolution * y + x) * bytes_per_pixel;
+  unsigned int buffer_offset = current_draw_buffer * buffer_size;
+  unsigned int index = buffer_offset + (vmi.XResolution * y + x) * bytes_per_pixel;
+  uint8_t *dst = vram + index;
   for (uint16_t i = 0; i < len; i++, dst += bytes_per_pixel)
     memcpy(dst, &color, bytes_per_pixel);
 }
@@ -84,12 +97,6 @@ int vg_draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
   return 0;
 }
 
-/*
- * vg_draw_pixel_fast — bounds-checked but inlined write.
- * Use this from font/sprite code instead of vg_draw_pixel so the
- * compiler can inline the bounds check and eliminate the function
- * call overhead from the inner loops.
- */
 void vg_draw_pixel_fast(uint16_t x, uint16_t y, uint32_t color) {
   if (x >= vmi.XResolution || y >= vmi.YResolution) return;
   _put_pixel(x, y, color);
@@ -113,8 +120,9 @@ int(vg_draw_rectangle)(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t 
 }
 
 void video_clear_screen(uint32_t color) {
-  (void) color;              /* color is ignored — always clear to black */
-  memset(img_buffer, 0, buffer_size);
+  (void) color;  /* always clear to black */
+  unsigned int buffer_offset = current_draw_buffer * buffer_size;
+  memset(vram + buffer_offset, 0, buffer_size);
 }
 
 uint16_t video_get_hres(void) { return vmi.XResolution; }

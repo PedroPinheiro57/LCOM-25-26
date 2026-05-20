@@ -2,9 +2,8 @@
 #include <lcom/timer.h>
 #include "../pedro/lab3/kbc.h"
 #include "../pedro/lab4/mouse.h"
-#include "devices/timer.h"
+#include "../pedro/lab5/video.h"
 #include "devices/mouse.h"
-#include "devices/video.h"
 #include "handlers/handlers.h"
 #include "game/game.h"
 #include "video/sprites.h"

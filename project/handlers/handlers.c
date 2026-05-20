@@ -5,7 +5,7 @@
 #include "../../pedro/lab4/mouse.h"
 #include "../devices/keyboard.h"
 #include "../devices/mouse.h"
-#include "../devices/video.h"
+#include "../../pedro/lab5/video.h"
 #include "../video/sprites.h"
 #include "../game/game.h"
 

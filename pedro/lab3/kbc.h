@@ -34,8 +34,8 @@
 #define KBC_MAX_TRIES  10
 
 /* Subscribe/unsubscribe KBC interrupts */
-int kbc_subscribe_int(uint8_t *bit_no);
-int kbc_unsubscribe_int(void);
+int(kbc_subscribe_int)(uint8_t *bit_no);
+int(kbc_unsubscribe_int)(void);
 
 /* Interrupt handler - reads one byte from KBC output buffer */
 void (kbc_ih)(void);
@@ -59,3 +59,21 @@ bool    kbc_has_error(void);
 /* sys_inb call counter (only active when LAB3 is defined) */
 void kbc_reset_sysinb_count(void);
 uint32_t kbc_get_sysinb_count(void);
+
+
+/* --------------------------------------- */
+/* PROJECT */
+/* --------------------------------------- */
+
+/* scancodes (makecodes) */
+#define KEY_ESC    0x01
+#define KEY_ENTER  0x1C
+#define KEY_UP     0x48
+#define KEY_DOWN   0x50
+#define KEY_LEFT   0x4B
+#define KEY_RIGHT  0x4D
+#define KEY_R      0x13
+#define KEY_SPACE  0x39
+
+bool    key_is_make(uint8_t scancode);
+uint8_t key_get_code(uint8_t scancode);

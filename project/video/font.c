@@ -1,5 +1,5 @@
 #include "font.h"
-#include "../devices/video.h"
+#include "../../pedro/lab5/video.h"
 #include "../assets/pixmaps.h"
 #include <lcom/lcf.h>
 #include "sprites.h"

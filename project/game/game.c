@@ -4,7 +4,8 @@
 #include "../video/font.h"
 #include "../video/sprites.h"
 #include "../devices/keyboard.h"
-#include "../devices/video.h"
+#include "../../pedro/lab5/video.h"
+#include "../../pedro/lab3/kbc.h"
 
 #define CURSOR_SIZE 10
 
@@ -132,7 +133,7 @@ void game_handle_timer(void) {}
  * so the ghost is erased regardless of whether a full redraw follows.
  */
 void game_erase_cursor(void) {
-  vg_draw_rectangle(prev_cx, prev_cy, CURSOR_SIZE + 1, CURSOR_SIZE + 1, 0x000000);
+  vg_draw_rectangle_project(prev_cx, prev_cy, CURSOR_SIZE + 1, CURSOR_SIZE + 1, 0x000000);
 }
 
 /*

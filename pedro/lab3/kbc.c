@@ -155,3 +155,18 @@ int kbc_enable_int(void) {
   if (kbc_write_arg(cmd_byte) != 0) return 1;
   return 0;
 }
+
+
+
+
+/* --------------------------------------- */
+/* PROJECT */
+/* --------------------------------------- */
+
+bool key_is_make(uint8_t sc) {
+  return !(sc & 0x80);
+}
+
+uint8_t key_get_code(uint8_t sc) {
+  return sc & 0x7F;
+}

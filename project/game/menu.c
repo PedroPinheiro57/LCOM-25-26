@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "../video/font.h"
-#include "../devices/video.h"
+#include "../../pedro/lab5/video.h"
+
 
 static const char *options[] = { "PLAY", "INSTRUCTIONS", "EXIT" };
 #define NUM_OPTIONS 3
@@ -11,7 +12,7 @@ void menu_draw_main(int selected) {
   for (int i = 0; i < NUM_OPTIONS; i++) {
     uint16_t oy  = OPT_Y_START + i * OPT_GAP;
     uint32_t col = (i == selected) ? COLOR_SELECTED : COLOR_UNSELECTED;
-    vg_draw_rectangle(OPT_X, oy, OPT_W, OPT_H, col);
+    vg_draw_rectangle_project(OPT_X, oy, OPT_W, OPT_H, col);
     draw_string(options[i], OPT_X + 10, oy + 15, COLOR_TEXT, 2);
   }
 }
@@ -20,9 +21,9 @@ void menu_draw_pause(int selected) {
   draw_string("PAUSED", 310, 180, COLOR_TITLE, 4);
   uint32_t col0 = (selected == 0) ? COLOR_SELECTED : COLOR_UNSELECTED;
   uint32_t col1 = (selected == 1) ? COLOR_SELECTED : COLOR_UNSELECTED;
-  vg_draw_rectangle(OPT_X, 300, OPT_W, OPT_H, col0);
+  vg_draw_rectangle_project(OPT_X, 300, OPT_W, OPT_H, col0);
   draw_string("RESUME", OPT_X + 10, 315, COLOR_TEXT, 2);
-  vg_draw_rectangle(OPT_X, 370, OPT_W, OPT_H, col1);
+  vg_draw_rectangle_project(OPT_X, 370, OPT_W, OPT_H, col1);
   draw_string("QUIT", OPT_X + 10, 385, COLOR_TEXT, 2);
 }
 

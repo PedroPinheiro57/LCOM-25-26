@@ -1,5 +1,5 @@
 #include "sprites.h"
-#include "../devices/video.h"
+#include "../../pedro/lab5/video.h"
 #include "../assets/pixmaps.h"
 #include <stdlib.h>
 
@@ -26,7 +26,7 @@ void sprite_draw(sprite_t *sp, uint16_t x, uint16_t y) {
     for (uint16_t col = 0; col < sp->width; col++) {
       uint32_t color = sp->colors[row * sp->width + col];
       if (color == TRANSPARENT) continue;
-      vg_draw_pixel(x + col, y + row, color);
+      vg_draw_pixel_project(x + col, y + row, color);
     }
   }
 }

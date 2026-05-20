@@ -21,6 +21,7 @@ void game_init(void) {
     .data.menu    = { .selected = 0 }
   };
   font_init();
+  cursor_init();   
   dirty   = true;
   prev_cx = 400;
   prev_cy = 300;
@@ -99,6 +100,7 @@ void game_handle_mouse(mouse_state_t *ms) {
 
     case STATE_MAIN_MENU: {
       int hover = menu_mouse_hover(ms->x, ms->y);
+      cursor_set_mode(hover >= 0 ? CURSOR_NORMAL : CURSOR_HOVER);
       if (hover >= 0 && hover != g.data.menu.selected) {
         g.data.menu.selected = hover;
         dirty = true;
@@ -114,6 +116,7 @@ void game_handle_mouse(mouse_state_t *ms) {
     }
 
     default:
+      cursor_set_mode(CURSOR_NORMAL);
       break;
   }
 

@@ -1,5 +1,6 @@
 #include "sprites.h"
 #include "../devices/video.h"
+#include "../assets/pixmaps.h"
 #include <stdlib.h>
 
 #define CURSOR_SIZE  10
@@ -36,6 +37,18 @@ void sprite_destroy(sprite_t *sp) {
   free(sp);
 }
 
-void cursor_draw(uint16_t x, uint16_t y) {
-  vg_draw_rectangle(x, y, CURSOR_SIZE, CURSOR_SIZE, CURSOR_COLOR);
+static sprite_t   *cursor_normal = NULL;
+static sprite_t   *cursor_hover  = NULL;
+static cursor_mode_t cursor_mode = CURSOR_NORMAL;
+
+void cursor_set_mode(cursor_mode_t mode) { cursor_mode = mode; }
+
+void cursor_init(void) {
+  cursor_normal = sprite_load((xpm_map_t) cursor_normal_xpm);
+  cursor_hover  = sprite_load((xpm_map_t) cursor_hover_xpm);
 }
+void cursor_draw(uint16_t x, uint16_t y) {
+  sprite_t *cur = (cursor_mode == CURSOR_HOVER) ? cursor_hover : cursor_normal;
+  if (cur) sprite_draw(cur, x, y);
+}
+

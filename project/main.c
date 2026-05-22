@@ -14,9 +14,7 @@ static uint8_t timer_bit, kbd_bit, mouse_bit;
 
 static int devices_init(void) {
   if (video_init(0x115) != 0) return 1;
-
   if (timer_set_frequency(0, 30) != 0) return 1;
-
   if (timer_subscribe_int(&timer_bit) != 0) return 1;
   if (kbc_subscribe_int(&kbd_bit) != 0) {
     timer_unsubscribe_int(); return 1;
@@ -33,9 +31,9 @@ static int devices_init(void) {
 }
 
 static void devices_cleanup(void) {
-  mouse_disable_data_reporting();
   mouse_unsubscribe_int();
   kbc_unsubscribe_int();
+  mouse_disable_data_reporting();
   timer_unsubscribe_int();
   vg_exit();
 }

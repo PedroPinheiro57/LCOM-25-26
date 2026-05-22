@@ -34,16 +34,8 @@ void handle_mouse(void) {
   set_mouse_idx(idx);
 
   if (idx == 3) {
-    /* Update mouse state immediately when the full 3-byte packet is ready,
-     * instead of deferring to the timer interrupt. This avoids up to one
-     * full timer tick (~33ms at 30Hz) of input lag and prevents the case
-     * where a packet arriving after the timer bit in the same IPC message
-     * would be silently dropped until the next frame. */
     mouse_state_update(get_mouse_state(), get_mouse_buf(),
                        video_get_hres(), video_get_vres());
     set_mouse_idx(0);
-
-    /* notify the game logic so it can react (e.g. button clicks) */
-    game_handle_mouse(get_mouse_state());
   }
 }

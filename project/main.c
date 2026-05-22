@@ -62,6 +62,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     if (irqs & BIT(timer_bit)) {
       handle_timer();
+      game_handle_mouse(get_mouse_state());
       video_clear_screen(0x000000);
       game_draw();
       cursor_draw(get_mouse_state()->x, get_mouse_state()->y);

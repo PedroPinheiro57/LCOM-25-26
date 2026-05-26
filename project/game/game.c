@@ -1,5 +1,6 @@
 #include "game.h"
 #include "menu.h"
+#include "renderer.h"
 #include <lcom/lcf.h>
 #include "../video/font.h"
 #include "../video/sprites.h"
@@ -16,16 +17,17 @@ static int16_t prev_cx = 0;
 static int16_t prev_cy = 0;
 
 void game_init(void) {
+  board_init(&g.p1_board);
+  board_init(&g.p2_board);
   g = (game_t) {
-    .tag          = STATE_MAIN_MENU,
-    .prev         = STATE_MAIN_MENU,
-    .data.menu    = { .selected = 0 }
+    .tag       = STATE_MAIN_MENU,
+    .prev      = STATE_MAIN_MENU,
+    .data.menu = { .selected = 0 }
   };
+  board_init(&g.p1_board);
+  board_init(&g.p2_board);
   font_init();
-  cursor_init();   
-  dirty   = true;
-  prev_cx = 400;
-  prev_cy = 300;
+  cursor_init();
 }
 
 static void transition(game_state_t next) {
@@ -41,19 +43,24 @@ void game_handle_keyboard(uint8_t scancode) {
   switch (g.tag) {
 
     case STATE_MAIN_MENU:
-      if (make && code == KEY_UP) {
+      if (make && code == KEY_UP)
         g.data.menu.selected = (g.data.menu.selected + 2) % 3;
-        dirty = true;
-      }
-      if (make && code == KEY_DOWN) {
+      if (make && code == KEY_DOWN)
         g.data.menu.selected = (g.data.menu.selected + 1) % 3;
-        dirty = true;
-      }
       if (!make && code == KEY_ESC)
         over = true;
       if (make && code == KEY_ENTER) {
         switch (g.data.menu.selected) {
-          case 0: transition(STATE_PLACE_SHIPS_P1); break;
+          case 0:
+            board_init(&g.p1_board);
+            board_init(&g.p2_board);
+            g.data.place.player     = 1;
+            g.data.place.ship_idx   = 0;
+            g.data.place.orient     = HORIZONTAL;
+            g.data.place.cursor_col = 0;
+            g.data.place.cursor_row = 0;
+            transition(STATE_PLACE_SHIPS_P1);
+            break;
           case 1: /* instructions — later */ break;
           case 2: over = true; break;
         }
@@ -62,12 +69,37 @@ void game_handle_keyboard(uint8_t scancode) {
 
     case STATE_PLACE_SHIPS_P1:
     case STATE_PLACE_SHIPS_P2:
-      if (make && code == KEY_R) {
+      if (make && code == KEY_R)
         g.data.place.orient ^= 1;
-        dirty = true;
-      }
       if (!make && code == KEY_ESC)
         transition(STATE_PAUSED);
+      break;
+
+    case STATE_HANDOVER_P1:
+      if (make && code == KEY_ENTER) {
+        if (g.data.turn.player == 1)
+          transition(STATE_TURN_P1);
+        else
+          transition(STATE_TURN_P2);
+      }
+      break;
+
+    case STATE_HANDOVER_P2:
+      if (make && code == KEY_ENTER) {
+        if (g.tag == STATE_HANDOVER_P2 && g.prev == STATE_PLACE_SHIPS_P1) {
+          /* after P1 placed ships, P2 places */
+          g.data.place.player     = 2;
+          g.data.place.ship_idx   = 0;
+          g.data.place.orient     = HORIZONTAL;
+          g.data.place.cursor_col = 0;
+          g.data.place.cursor_row = 0;
+          transition(STATE_PLACE_SHIPS_P2);
+        } else {
+          /* during game, it's P2's turn */
+          g.data.turn.player = 2;
+          transition(STATE_TURN_P2);
+        }
+      }
       break;
 
     case STATE_TURN_P1:
@@ -77,18 +109,27 @@ void game_handle_keyboard(uint8_t scancode) {
       break;
 
     case STATE_PAUSED:
-      if (make && code == KEY_UP) {
+      if (make && code == KEY_UP)
         g.data.pause.selected = (g.data.pause.selected + 1) % 2;
-        dirty = true;
-      }
-      if (make && code == KEY_DOWN) {
+      if (make && code == KEY_DOWN)
         g.data.pause.selected = (g.data.pause.selected + 1) % 2;
-        dirty = true;
-      }
       if (make && code == KEY_ENTER) {
         if (g.data.pause.selected == 0) transition(g.prev);
         if (g.data.pause.selected == 1) over = true;
       }
+      if (!make && code == KEY_ESC)
+        transition(g.prev);
+      break;
+
+    case STATE_GAME_OVER:
+      if (make && code == KEY_ENTER) {
+        board_init(&g.p1_board);
+        board_init(&g.p2_board);
+        g.data.menu.selected = 0;
+        transition(STATE_MAIN_MENU);
+      }
+      if (!make && code == KEY_ESC)
+        over = true;
       break;
 
     default:
@@ -96,61 +137,106 @@ void game_handle_keyboard(uint8_t scancode) {
   }
 }
 
-void game_handle_mouse(mouse_state_t *ms) {
-  switch (g.tag) {
 
+void game_handle_mouse(mouse_state_t *ms) {
+  int col, row;
+  board_pixel_to_cell(ms->x, ms->y, &col, &row);
+
+  switch (g.tag) {
     case STATE_MAIN_MENU: {
       int hover = menu_mouse_hover(ms->x, ms->y);
-      cursor_set_mode(hover >= 0 ? CURSOR_NORMAL : CURSOR_HOVER);
+      cursor_set_mode(hover >= 0 ? CURSOR_HOVER : CURSOR_NORMAL);
       if (hover >= 0 && hover != g.data.menu.selected) {
         g.data.menu.selected = hover;
-        dirty = true;
       }
       if (ms->clicked && hover >= 0) {
         switch (hover) {
-          case 0: transition(STATE_PLACE_SHIPS_P1); break;
-          case 1: /* instructions */ break;
+          case 0:
+            g.data.place.player     = 1;
+            g.data.place.ship_idx   = 0;
+            g.data.place.orient     = HORIZONTAL;
+            g.data.place.cursor_col = 0;
+            g.data.place.cursor_row = 0;
+            transition(STATE_PLACE_SHIPS_P1);
+            break;
+          case 1: break;
           case 2: over = true; break;
         }
       }
       break;
     }
 
+    case STATE_PLACE_SHIPS_P1:
+    case STATE_PLACE_SHIPS_P2: {
+      board_t *b = (g.tag == STATE_PLACE_SHIPS_P1) ? &g.p1_board : &g.p2_board;
+      g.data.place.cursor_col = col;
+      g.data.place.cursor_row = row;
+
+      if (ms->clicked && col >= 0 && col < BOARD_COLS &&
+                         row >= 0 && row < BOARD_ROWS) {
+        uint8_t size = SHIP_SIZES[g.data.place.ship_idx];
+        orientation_t orient = g.data.place.orient;
+        if (board_can_place(b, col, row, size, orient)) {
+          board_place_ship(b, col, row, size, orient);
+          g.data.place.ship_idx++;
+          if (g.data.place.ship_idx >= NUM_SHIPS) {
+            /* all ships placed */
+            if (g.tag == STATE_PLACE_SHIPS_P1)
+              transition(STATE_HANDOVER_P2);
+            else {
+              g.data.turn.player     = 1;
+              g.data.turn.cursor_col = 0;
+              g.data.turn.cursor_row = 0;
+              transition(STATE_HANDOVER_P1);
+            }
+          }
+        }
+      }
+      break;
+    }
+
+    case STATE_TURN_P1:
+    case STATE_TURN_P2: {
+      board_t *enemy = (g.tag == STATE_TURN_P1) ? &g.p2_board : &g.p1_board;
+      g.data.turn.cursor_col = col;
+      g.data.turn.cursor_row = row;
+
+      if (ms->clicked && col >= 0 && col < BOARD_COLS &&
+                         row >= 0 && row < BOARD_ROWS &&
+                         !board_already_attacked(enemy, col, row)) {
+        board_attack(enemy, col, row);
+        if (board_all_sunk(enemy)) {
+          g.data.game_over.winner = (g.tag == STATE_TURN_P1) ? 1 : 2;
+          transition(STATE_GAME_OVER);
+        } else {
+          if (g.tag == STATE_TURN_P1) {
+            g.data.turn.player = 2;
+            transition(STATE_HANDOVER_P1);
+          } else {
+            g.data.turn.player = 1;
+            transition(STATE_HANDOVER_P2);
+          }
+        }
+      }
+      break;
+    }
+
     default:
-      cursor_set_mode(CURSOR_NORMAL);
       break;
   }
-
-  if (ms->moved) dirty = true;
 }
 
 void game_handle_timer(void) {}
 
-/*
- * game_erase_cursor
- * Paints a black rectangle over the previous cursor position.
- * Call this at the START of the timer tick, before game_draw(),
- * so the ghost is erased regardless of whether a full redraw follows.
- */
 void game_erase_cursor(void) {
   vg_draw_rectangle_project(prev_cx, prev_cy, CURSOR_SIZE + 1, CURSOR_SIZE + 1, 0x000000);
 }
 
-/*
- * game_save_cursor
- * Records where the cursor was drawn this frame so the next frame
- * can erase it.  Call this AFTER cursor_draw().
- */
 void game_save_cursor(int16_t x, int16_t y) {
   prev_cx = x;
   prev_cy = y;
 }
 
-/*
- * game_draw
- * Full clear + redraw only when dirty.
- * Does NOT touch the cursor — caller owns that.
- */
 void game_draw(void) {
   video_clear_screen(0x000000);
 
@@ -158,12 +244,53 @@ void game_draw(void) {
     case STATE_MAIN_MENU:
       menu_draw_main(g.data.menu.selected);
       break;
+
+    case STATE_PLACE_SHIPS_P1:
+      board_draw(&g.p1_board, false);
+      board_draw_preview(&g.p1_board,
+        g.data.place.cursor_col, g.data.place.cursor_row,
+        SHIP_SIZES[g.data.place.ship_idx],
+        g.data.place.orient);
+      draw_hud_place(1, g.data.place.ship_idx);
+      break;
+
+    case STATE_PLACE_SHIPS_P2:
+      board_draw(&g.p2_board, false);
+      board_draw_preview(&g.p2_board,
+        g.data.place.cursor_col, g.data.place.cursor_row,
+        SHIP_SIZES[g.data.place.ship_idx],
+        g.data.place.orient);
+      draw_hud_place(2, g.data.place.ship_idx);
+      break;
+
+    case STATE_HANDOVER_P1:
+      menu_draw_handover(1);
+      break;
+
+    case STATE_HANDOVER_P2:
+      menu_draw_handover(2);
+      break;
+
+    case STATE_TURN_P1:
+      board_draw(&g.p2_board, true);
+      board_highlight_cell(g.data.turn.cursor_col, g.data.turn.cursor_row);
+      draw_hud_attack(1);
+      break;
+
+    case STATE_TURN_P2:
+      board_draw(&g.p1_board, true);
+      board_highlight_cell(g.data.turn.cursor_col, g.data.turn.cursor_row);
+      draw_hud_attack(2);
+      break;
+
     case STATE_PAUSED:
       menu_draw_pause(g.data.pause.selected);
       break;
+
     case STATE_GAME_OVER:
       menu_draw_game_over(g.data.game_over.winner);
       break;
+
     default:
       break;
   }

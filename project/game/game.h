@@ -16,17 +16,19 @@ typedef enum {
   STATE_EXIT
 } game_state_t;
 
+#include "board.h"
+
 typedef struct {
   game_state_t tag;
   game_state_t prev;
+  board_t      p1_board;
+  board_t      p2_board;
   union {
-    struct {
-      int selected;     /* 0=Play, 1=Instructions, 2=Exit */
-    } menu;
+    struct { int selected; } menu;
     struct {
       int player;
       int ship_idx;
-      int orient;       /* 0=horizontal, 1=vertical */
+      int orient;
       int cursor_col;
       int cursor_row;
     } place;
@@ -34,13 +36,10 @@ typedef struct {
       int player;
       int cursor_col;
       int cursor_row;
+      bool last_hit;
     } turn;
-    struct {
-      int selected;     /* 0=Resume, 1=Quit */
-    } pause;
-    struct {
-      int winner;       /* 1 or 2 */
-    } game_over;
+    struct { int selected; } pause;
+    struct { int winner; }   game_over;
   } data;
 } game_t;
 

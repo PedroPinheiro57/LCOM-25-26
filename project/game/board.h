@@ -42,11 +42,15 @@ static const char   *SHIP_NAMES[NUM_SHIPS] = {
   "CARRIER", "BATTLESHIP", "CRUISER", "SUBMARINE", "DESTROYER"
 };
 
-void board_init(board_t *b);
-bool board_can_place(board_t *b, uint8_t col, uint8_t row, uint8_t size, orientation_t orient);
-void board_place_ship(board_t *b, uint8_t col, uint8_t row, uint8_t size, orientation_t orient);
-bool board_attack(board_t *b, uint8_t col, uint8_t row);
-bool board_already_attacked(board_t *b, uint8_t col, uint8_t row);
-bool board_all_sunk(board_t *b);
-void board_pixel_to_cell(uint16_t px, uint16_t py, int *col, int *row);
-void board_cell_to_pixel(uint8_t col, uint8_t row, uint16_t *px, uint16_t *py);
+void    board_init(board_t *b);
+bool    board_can_place(board_t *b, uint8_t col, uint8_t row, uint8_t size, orientation_t orient);
+void    board_place_ship(board_t *b, uint8_t col, uint8_t row, uint8_t size, orientation_t orient);
+bool    board_attack(board_t *b, uint8_t col, uint8_t row);
+bool    board_already_attacked(board_t *b, uint8_t col, uint8_t row);
+bool    board_all_sunk(board_t *b);
+void    board_pixel_to_cell(uint16_t px, uint16_t py, int *col, int *row);
+void    board_cell_to_pixel(uint8_t col, uint8_t row, uint16_t *px, uint16_t *py);
+
+/* stat helpers for HUD counters */
+uint8_t board_count_hits(board_t *b);    /* CELL_HIT + CELL_SUNK cells */
+uint8_t board_count_misses(board_t *b);  /* CELL_MISS cells */

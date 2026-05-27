@@ -8,4 +8,4 @@ void board_draw_preview(board_t *b, int col, int row,
                         uint8_t size, orientation_t orient);
 void board_highlight_cell(int col, int row);
 void draw_hud_place(int player, int ship_idx);
-void draw_hud_attack(int player);
+void draw_hud_attack(int player, board_t *enemy); /* enemy board for counters */

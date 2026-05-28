@@ -7,6 +7,7 @@
 #include "handlers/handlers.h"
 #include "game/game.h"
 #include "video/sprites.h"
+#include "game/renderer.h"
 
 extern int foo();
 
@@ -35,6 +36,7 @@ static void devices_cleanup(void) {
   kbc_unsubscribe_int();
   mouse_disable_data_reporting();
   timer_unsubscribe_int();
+  destroy_game_sprites();
   vg_exit();
 }
 
@@ -60,6 +62,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
 
     if (irqs & BIT(timer_bit)) {
       handle_timer();
+      update_animations();
       game_handle_mouse(get_mouse_state());
       video_clear_screen(0x000000);
       game_draw();

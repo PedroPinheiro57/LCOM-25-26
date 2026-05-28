@@ -18,11 +18,33 @@ sprite_t *sprite_load(xpm_map_t xpm) {
 
 void sprite_draw(sprite_t *sp, uint16_t x, uint16_t y) {
   if (sp == NULL) return;
+  uint32_t trans_color = xpm_transparency_color(XPM_8_8_8_8); 
+
   for (uint16_t row = 0; row < sp->height; row++) {
     for (uint16_t col = 0; col < sp->width; col++) {
       uint32_t color = sp->colors[row * sp->width + col];
-      if (color == TRANSPARENT) continue;
+      
+      if (color == TRANSPARENT || color == trans_color) continue;
+      
       vg_draw_pixel_project(x + col, y + row, color);
+    }
+  }
+}
+
+void sprite_draw_rotated(sprite_t *sp, uint16_t x, uint16_t y, bool rotate) {
+  if (sp == NULL) return;
+  uint32_t trans_color = xpm_transparency_color(XPM_8_8_8_8);
+
+  for (uint16_t row = 0; row < sp->height; row++) {
+    for (uint16_t col = 0; col < sp->width; col++) {
+      uint32_t color = sp->colors[row * sp->width + col];
+      if (color == TRANSPARENT || color == trans_color) continue;
+      
+      if (!rotate) {
+          vg_draw_pixel_project(x + col, y + row, color);
+      } else {
+          vg_draw_pixel_project(x + (sp->height - 1 - row), y + col, color);
+      }
     }
   }
 }
@@ -52,3 +74,49 @@ void cursor_draw(uint16_t x, uint16_t y) {
   if (cur) sprite_draw(cur, x, y);
 }
 
+animated_sprite_t* anim_sprite_create(uint16_t x, uint16_t y, uint8_t no_pixmaps) {
+    animated_sprite_t *anim = (animated_sprite_t*) malloc(sizeof(animated_sprite_t));
+    if (anim == NULL) return NULL;
+    
+    anim->x = x;
+    anim->y = y;
+    anim->no_pixmaps = no_pixmaps;
+    anim->cur_pixmap = 0; 
+
+    for(int i = 0; i < 8; i++) {
+        anim->pixmaps[i] = NULL;
+    }
+    
+    return anim;
+}
+
+void anim_sprite_update(animated_sprite_t *anim) {
+    if (anim == NULL || anim->no_pixmaps == 0) return;
+    
+    anim->cur_pixmap++;
+    
+    if (anim->cur_pixmap >= anim->no_pixmaps) {
+        anim->cur_pixmap = 0;
+    }
+}
+
+void anim_sprite_draw(animated_sprite_t *anim) {
+    if (anim == NULL) return;
+    
+    sprite_t *current_frame = anim->pixmaps[anim->cur_pixmap];
+    
+    if (current_frame != NULL) {
+        sprite_draw(current_frame, anim->x, anim->y);
+    }
+}
+
+void anim_sprite_destroy(animated_sprite_t *anim) {
+    if (anim == NULL) return;
+    
+    for(int i = 0; i < anim->no_pixmaps; i++) {
+        if (anim->pixmaps[i] != NULL) {
+            sprite_destroy(anim->pixmaps[i]);
+        }
+    }
+    free(anim);
+}

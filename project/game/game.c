@@ -63,6 +63,7 @@ void game_init(void) {
 
   font_init();
   cursor_init();
+  init_game_sprites();
 }
 
 static void transition(game_state_t next) {
@@ -82,6 +83,29 @@ void game_handle_timer(void) {
     g.tick_count = 0;
     rtc_read_time(&g.rtc);
   }
+
+  if (renderer_explosion_finished()) {
+    board_t *enemy = (g.tag == STATE_TURN_P1) ? &g.p2_board : &g.p1_board;
+
+    if (board_all_sunk(enemy)) {
+      g.data.game_over.winner = (g.tag == STATE_TURN_P1) ? 1 : 2;
+      transition(STATE_GAME_OVER);
+    } else {
+      uint8_t row = renderer_get_expl_row();
+      uint8_t col = renderer_get_expl_col();
+      
+      if (enemy->grid[row][col] == CELL_HIT || enemy->grid[row][col] == CELL_SUNK) {
+      } else {
+          if (g.tag == STATE_TURN_P1) {
+            g.data.turn.player = 2;
+            transition(STATE_HANDOVER_P2);
+          } else {
+            g.data.turn.player = 1;
+            transition(STATE_HANDOVER_P1);
+          }
+      }
+    }
+  }
 }
 
 void game_handle_keyboard(uint8_t scancode) {
@@ -97,24 +121,19 @@ void game_handle_keyboard(uint8_t scancode) {
         g.data.menu.selected = (g.data.menu.selected + 1) % 3;
       if (!make && code == KEY_ESC)
         over = true;
-      if (make && code == KEY_ENTER) {
-        switch (g.data.menu.selected) {
-          case 0:
-            board_init(&g.p1_board);
-            board_init(&g.p2_board);
-            g.data.place.player     = 1;
-            g.data.place.ship_idx   = 0;
-            g.data.place.orient     = HORIZONTAL;
-            g.data.place.cursor_col = 0;
-            g.data.place.cursor_row = 0;
-            transition(STATE_PLACE_SHIPS_P1);
-            break;
-          case 1:
-            transition(STATE_INSTRUCTIONS);
-            break;
-          case 2:
-            over = true;
-            break;
+if (make && (code == KEY_ENTER || code == KEY_SPACE)) {
+        if (!renderer_is_exploding()) { 
+          board_t *enemy = (g.tag == STATE_TURN_P1) ? &g.p2_board : &g.p1_board;
+          uint8_t  col   = g.data.turn.cursor_col;
+          uint8_t  row   = g.data.turn.cursor_row;
+
+          if (!board_already_attacked(enemy, col, row)) {
+            board_attack(enemy, col, row); 
+            
+            bool is_hit = (enemy->grid[row][col] == CELL_HIT || enemy->grid[row][col] == CELL_SUNK);
+            
+            start_explosion(col, row, is_hit); 
+          }
         }
       }
       break;
@@ -336,22 +355,16 @@ void game_handle_mouse(mouse_state_t *ms) {
         g.data.turn.cursor_col = col;
         g.data.turn.cursor_row = row;
       }
-      if (ms->clicked && col >= 0 && col < BOARD_COLS &&
+  
+  if (!renderer_is_exploding() && ms->clicked && col >= 0 && col < BOARD_COLS &&
                          row >= 0 && row < BOARD_ROWS &&
                          !board_already_attacked(enemy, col, row)) {
-        board_attack(enemy, col, row);
-        if (board_all_sunk(enemy)) {
-          g.data.game_over.winner = (g.tag == STATE_TURN_P1) ? 1 : 2;
-          transition(STATE_GAME_OVER);
-        } else {
-          if (g.tag == STATE_TURN_P1) {
-            g.data.turn.player = 2;
-            transition(STATE_HANDOVER_P1);
-          } else {
-            g.data.turn.player = 1;
-            transition(STATE_HANDOVER_P2);
-          }
-        }
+                         
+        board_attack(enemy, col, row); 
+        
+        bool is_hit = (enemy->grid[row][col] == CELL_HIT || enemy->grid[row][col] == CELL_SUNK);
+        
+        start_explosion(col, row, is_hit);
       }
       break;
     }
@@ -411,16 +424,20 @@ void game_draw(void) {
       draw_rtc();
       break;
 
-    case STATE_TURN_P1:
+case STATE_TURN_P1:
       board_draw(&g.p2_board, true);
-      board_highlight_cell(g.data.turn.cursor_col, g.data.turn.cursor_row);
+      if (!board_already_attacked(&g.p2_board, g.data.turn.cursor_col, g.data.turn.cursor_row)) {
+          board_highlight_cell(g.data.turn.cursor_col, g.data.turn.cursor_row);
+      }
       draw_hud_attack(1, &g.p2_board);
       draw_rtc();
       break;
 
     case STATE_TURN_P2:
       board_draw(&g.p1_board, true);
-      board_highlight_cell(g.data.turn.cursor_col, g.data.turn.cursor_row);
+      if (!board_already_attacked(&g.p1_board, g.data.turn.cursor_col, g.data.turn.cursor_row)) {
+          board_highlight_cell(g.data.turn.cursor_col, g.data.turn.cursor_row);
+      }
       draw_hud_attack(2, &g.p1_board);
       draw_rtc();
       break;

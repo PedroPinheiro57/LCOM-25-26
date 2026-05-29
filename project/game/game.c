@@ -1,5 +1,5 @@
 /*
- * game.c — Game logic, two-player serial multiplayer.
+ * game.c — Game logic, extended for two-player serial multiplayer.
  */
 
 #include "game.h"
@@ -15,8 +15,8 @@
 #include "../../pedro/lab5/video.h"
 #include "../../pedro/lab3/kbc.h"
 
-#define TICKS_PER_SEC    30
-#define COUNTDOWN_START  5
+#define TICKS_PER_SEC     30
+#define COUNTDOWN_START   5
 #define RTC_X  650
 #define RTC_Y   20
 
@@ -35,11 +35,16 @@ bool game_is_waiting_connect(void) {
     return (g.tag == STATE_WAITING_CONNECT);
 }
 
-bool game_is_connected(void) {
-    return g.connected;
-}
+bool game_is_connected(void) { return g.connected; }
 
 bool game_is_client_turn(void) {
+    /*
+     * Returns true when the HOST should NOT process local mouse,
+     * because it is P2's turn and input comes from serial.
+     * NOTE: during STATE_PLACE_SHIPS_P2 the client now handles
+     * placement locally, so we no longer block the host mouse for
+     * that state — we only block during STATE_TURN_P2.
+     */
     return (g.role == ROLE_HOST) && (g.tag == STATE_TURN_P2);
 }
 
@@ -65,10 +70,6 @@ static void transition(game_state_t next) {
     g.prev = g.tag;
     g.tag  = next;
     dirty  = true;
-    /* Reset mouse flags on every state change to avoid phantom clicks */
-    get_mouse_state()->clicked  = false;
-    get_mouse_state()->released = false;
-    get_mouse_state()->moved    = false;
 }
 
 /* ------------------------------------------------------------------ */
@@ -100,46 +101,55 @@ void game_init(game_role_t role) {
 /* ------------------------------------------------------------------ */
 void game_handle_timer(void) {
 
-    /* 1. RTC update (both roles) */
+    /* ---- 1. RTC update (both roles) ---- */
     g.tick_count++;
     if (g.tick_count >= TICKS_PER_SEC) {
         g.tick_count = 0;
         rtc_read_time(&g.rtc);
     }
 
-    /* 2. Countdown timer (HOST only) */
+    /* ---- 2. Countdown timer (HOST only) ---- */
     if (g.role == ROLE_HOST && g.tag == STATE_COUNTDOWN) {
         g.countdown_ticks++;
         if (g.countdown_ticks >= TICKS_PER_SEC) {
             g.countdown_ticks = 0;
+            g.countdown_seconds--;
 
-            if (g.countdown_seconds == 0) {
+            if (g.countdown_seconds <= 0) {
                 g.data.turn.player     = 1;
                 g.data.turn.cursor_col = 0;
                 g.data.turn.cursor_row = 0;
                 transition(STATE_TURN_P1);
                 proto_send_state(STATE_TURN_P1);
             } else {
-                g.countdown_seconds--;
                 proto_send_countdown((uint8_t)g.countdown_seconds);
             }
         }
     }
 
-    /* 3. Cursor sync during combat (throttled to 10 Hz) */
+    /*
+     * ---- 3. Cursor sync during combat ----
+     *
+     * HOST sends its cursor to CLIENT during STATE_TURN_P1
+     * (so client/P2 can see where P1 is aiming).
+     *
+     * CLIENT sends its cursor to HOST during STATE_TURN_P2
+     * (so host/P1 can see where P2 is aiming).
+     *
+     * We throttle to every 3 ticks (10 Hz) to avoid flooding
+     * the 9600-baud serial line.
+     */
     static uint8_t cursor_tick = 0;
     cursor_tick++;
     if (cursor_tick >= 3) {
         cursor_tick = 0;
 
-        /* HOST sends P1 cursor to CLIENT during P1's turn */
         if (g.role == ROLE_HOST && g.tag == STATE_TURN_P1) {
             proto_send_cursor(
                 (uint8_t)g.data.turn.cursor_col,
                 (uint8_t)g.data.turn.cursor_row);
         }
 
-        /* CLIENT sends P2 cursor to HOST during P2's turn */
         if (g.role == ROLE_CLIENT && g.tag == STATE_TURN_P2) {
             proto_send_cursor(
                 (uint8_t)g.data.turn.cursor_col,
@@ -155,8 +165,9 @@ void game_handle_keyboard(uint8_t scancode) {
 
     /*
      * CLIENT routing:
-     *   P2 placement / P2 attack turn → handle locally (fall through).
-     *   Everything else               → forward to host via serial.
+     *   - During P2 ship placement: handle locally (fall through).
+     *   - During P2 attack turn:    handle locally (fall through).
+     *   - Everything else:          forward to host via serial.
      */
     if (g.role == ROLE_CLIENT) {
         if (g.tag == STATE_PLACE_SHIPS_P2 || g.tag == STATE_TURN_P2) {
@@ -249,7 +260,10 @@ void game_handle_keyboard(uint8_t scancode) {
                 if (board_can_place(b, col, row, size, orient)) {
                     board_place_ship(b, col, row, size, orient);
 
-                    /* CLIENT: send placed ship to host for p2_board sync */
+                    /*
+                     * CLIENT: send each placed ship to the host so the
+                     * host's p2_board is correct for combat hit-detection.
+                     */
                     if (g.role == ROLE_CLIENT) {
                         proto_send_ship_place(col, row, size, (uint8_t)orient);
                     }
@@ -258,7 +272,7 @@ void game_handle_keyboard(uint8_t scancode) {
 
                     if (g.data.place.ship_idx >= NUM_SHIPS) {
                         if (g.tag == STATE_PLACE_SHIPS_P1) {
-                            /* HOST P1 done — tell client to start P2 placement */
+                            /* HOST P1 done — wait, tell client to start */
                             g.data.place.ship_idx   = 0;
                             g.data.place.orient     = HORIZONTAL;
                             g.data.place.cursor_col = 0;
@@ -266,7 +280,7 @@ void game_handle_keyboard(uint8_t scancode) {
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_state(STATE_PLACE_SHIPS_P2);
                         } else {
-                            /* CLIENT P2 done — notify host */
+                            /* CLIENT P2 done — wait, notify host */
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_done_placing();
                         }
@@ -288,8 +302,12 @@ void game_handle_keyboard(uint8_t scancode) {
         /* ---- Combat ---- */
         case STATE_TURN_P1:
         case STATE_TURN_P2: {
-            /* Gate: only the active player fires */
-            if (g.tag == STATE_TURN_P1 && g.role != ROLE_HOST)   break;
+            /*
+             * Gate input to the correct player:
+             *   STATE_TURN_P1 → only HOST (P1) should fire.
+             *   STATE_TURN_P2 → only CLIENT (P2) should fire.
+             */
+            if (g.tag == STATE_TURN_P1 && g.role != ROLE_HOST) break;
             if (g.tag == STATE_TURN_P2 && g.role != ROLE_CLIENT) break;
 
             if (make && code == KEY_UP)
@@ -310,26 +328,34 @@ void game_handle_keyboard(uint8_t scancode) {
                     ? g.data.turn.cursor_col + 1 : BOARD_COLS - 1;
 
             if (make && (code == KEY_ENTER || code == KEY_SPACE)) {
+                /*
+                 * CLIENT fires locally and sends MSG_ATTACK to host.
+                 * HOST fires locally (already has the board).
+                 * Both sides apply the attack to their local board copy.
+                 */
                 board_t *enemy = (g.tag == STATE_TURN_P1)
                                  ? &g.p2_board : &g.p1_board;
                 uint8_t col = (uint8_t)g.data.turn.cursor_col;
                 uint8_t row = (uint8_t)g.data.turn.cursor_row;
 
                 if (!board_already_attacked(enemy, col, row)) {
-                    if (g.role == ROLE_HOST) {
-                        /* HOST applies locally, sends result to client */
-                        bool hit = board_attack(enemy, col, row);
-                        uint8_t result = ATTACK_MISS;
-                        if (hit) {
-                            result = ATTACK_HIT;
-                            for (uint8_t i = 0; i < enemy->ships_placed; i++) {
-                                if (enemy->ships[i].sunk &&
-                                    enemy->ships[i].hits == enemy->ships[i].size) {
-                                    result = ATTACK_SUNK;
-                                    break;
-                                }
+                    bool hit = board_attack(enemy, col, row);
+                    uint8_t result;
+                    if (!hit) {
+                        result = ATTACK_MISS;
+                    } else {
+                        result = ATTACK_HIT;
+                        for (uint8_t i = 0; i < enemy->ships_placed; i++) {
+                            if (enemy->ships[i].sunk &&
+                                enemy->ships[i].hits == enemy->ships[i].size) {
+                                result = ATTACK_SUNK;
+                                break;
                             }
                         }
+                    }
+
+                    if (g.role == ROLE_HOST) {
+                        /* Host sends attack result to client */
                         proto_send_attack(col, row, result);
 
                         if (board_all_sunk(enemy)) {
@@ -345,12 +371,18 @@ void game_handle_keyboard(uint8_t scancode) {
                             proto_send_state(STATE_TURN_P2);
                         }
                     } else {
-                        /*
-                         * CLIENT: do NOT apply locally.
-                         * Send to host; host applies authoritatively,
-                         * echoes MSG_ATTACK back, then sends MSG_STATE.
-                         */
-                        proto_send_attack(col, row, 0);
+                        /* Client sends attack to host; host will confirm
+                         * via MSG_ATTACK back so both boards stay in sync */
+                        proto_send_attack(col, row, result);
+
+                        if (board_all_sunk(enemy)) {
+                            /* Client detected win — host will also detect
+                             * and send MSG_WINNER + MSG_STATE, so just wait */
+                        } else {
+                            g.data.turn.cursor_col = 0;
+                            g.data.turn.cursor_row = 0;
+                            /* Don't transition yet — wait for MSG_STATE from host */
+                        }
                     }
                 }
             }
@@ -395,13 +427,27 @@ void game_handle_mouse(mouse_state_t *ms) {
 
     /*
      * CLIENT routing:
-     *   STATE_PLACE_SHIPS_P2 → handle locally (fall through to switch).
-     *   STATE_TURN_P2        → handle locally (fall through to switch).
-     *   Everything else      → forward raw packet to host.
+     *   - P2 placement: handle locally (fall through).
+     *   - P2 attack turn: handle cursor locally, only send clicks.
+     *   - Everything else: forward to host (only on move/click).
      */
     if (g.role == ROLE_CLIENT) {
-        if (g.tag == STATE_PLACE_SHIPS_P2 || g.tag == STATE_TURN_P2) {
-            /* fall through to switch below */
+        if (g.tag == STATE_PLACE_SHIPS_P2) {
+            /* fall through to local placement logic */
+        } else if (g.tag == STATE_TURN_P2) {
+            if (!g.connected) return;
+            /* Update local cursor for rendering */
+            int col, row;
+            board_pixel_to_cell(ms->x, ms->y, &col, &row);
+            if (col >= 0 && col < BOARD_COLS && row >= 0 && row < BOARD_ROWS) {
+                g.data.turn.cursor_col = col;
+                g.data.turn.cursor_row = row;
+            }
+            /* Only send clicks, not movement */
+            if (ms->clicked) {
+                proto_send_mouse(get_mouse_buf());
+            }
+            return;
         } else {
             if (!g.connected) return;
             if (ms->moved || ms->clicked) {
@@ -416,7 +462,6 @@ void game_handle_mouse(mouse_state_t *ms) {
 
     switch (g.tag) {
 
-        /* ---- Main menu (HOST only, CLIENT forwarded above) ---- */
         case STATE_MAIN_MENU: {
             int hover = menu_mouse_hover(ms->x, ms->y);
             cursor_set_mode(hover >= 0 ? CURSOR_HOVER : CURSOR_NORMAL);
@@ -447,29 +492,24 @@ void game_handle_mouse(mouse_state_t *ms) {
             break;
         }
 
-        /* ---- Ship placement ---- */
         case STATE_PLACE_SHIPS_P1:
         case STATE_PLACE_SHIPS_P2: {
-            /* Each role only handles their own board */
-            if (g.tag == STATE_PLACE_SHIPS_P1 && g.role != ROLE_HOST)   break;
-            if (g.tag == STATE_PLACE_SHIPS_P2 && g.role != ROLE_CLIENT) break;
-
             board_t *b = (g.tag == STATE_PLACE_SHIPS_P1)
                          ? &g.p1_board : &g.p2_board;
-
-            if (col >= 0 && col < BOARD_COLS && row >= 0 && row < BOARD_ROWS) {
+            if (col >= 0 && col < BOARD_COLS &&
+                row >= 0 && row < BOARD_ROWS) {
                 g.data.place.cursor_col = col;
                 g.data.place.cursor_row = row;
             }
             if (ms->clicked &&
                 col >= 0 && col < BOARD_COLS &&
                 row >= 0 && row < BOARD_ROWS) {
-                uint8_t size = SHIP_SIZES[g.data.place.ship_idx];
+                uint8_t size  = SHIP_SIZES[g.data.place.ship_idx];
                 orientation_t orient = (orientation_t)g.data.place.orient;
                 if (board_can_place(b, col, row, size, orient)) {
                     board_place_ship(b, col, row, size, orient);
 
-                    /* CLIENT: sync ship to host */
+                    /* CLIENT: sync this ship to the host */
                     if (g.role == ROLE_CLIENT) {
                         proto_send_ship_place((uint8_t)col, (uint8_t)row,
                                               size, (uint8_t)orient);
@@ -478,21 +518,15 @@ void game_handle_mouse(mouse_state_t *ms) {
                     g.data.place.ship_idx++;
                     if (g.data.place.ship_idx >= NUM_SHIPS) {
                         if (g.tag == STATE_PLACE_SHIPS_P1) {
-                            // Player 1 (Host) is finished. 
                             g.data.place.ship_idx   = 0;
                             g.data.place.orient     = HORIZONTAL;
                             g.data.place.cursor_col = 0;
                             g.data.place.cursor_row = 0;
-                            
-                            // Host safely goes to waiting room and commands client to start placing
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_state(STATE_PLACE_SHIPS_P2);
                         } else {
-                            // Player 2 (Client) is finished.
-                            // FIX: We do NOT transition locally. We let the Host tell us 
-                            // to move to STATE_COUNTDOWN authoritatively.
+                            transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_done_placing();
-                            printf("CLIENT sent MSG_DONE_PLACING\n");
                         }
                     }
                 }
@@ -500,8 +534,8 @@ void game_handle_mouse(mouse_state_t *ms) {
             break;
         }
 
-        /* ---- P1 attacks (HOST only) ---- */
         case STATE_TURN_P1: {
+            /* Only HOST (P1) controls this turn */
             if (g.role != ROLE_HOST) break;
 
             board_t *enemy = &g.p2_board;
@@ -515,9 +549,8 @@ void game_handle_mouse(mouse_state_t *ms) {
                 !board_already_attacked(enemy, col, row)) {
 
                 bool hit = board_attack(enemy, col, row);
-                uint8_t result = ATTACK_MISS;
+                uint8_t result = hit ? ATTACK_HIT : ATTACK_MISS;
                 if (hit) {
-                    result = ATTACK_HIT;
                     for (uint8_t i = 0; i < enemy->ships_placed; i++) {
                         if (enemy->ships[i].sunk &&
                             enemy->ships[i].hits == enemy->ships[i].size) {
@@ -543,11 +576,12 @@ void game_handle_mouse(mouse_state_t *ms) {
             break;
         }
 
-        /* ---- P2 attacks (CLIENT only) ---- */
         case STATE_TURN_P2: {
+            /* Only CLIENT (P2) controls this turn via mouse.
+             * Host receives clicks via MSG_MOUSE in serial handler. */
             if (g.role != ROLE_CLIENT) break;
 
-            /* Update local cursor for rendering */
+            board_t *enemy = &g.p1_board;
             if (col >= 0 && col < BOARD_COLS && row >= 0 && row < BOARD_ROWS) {
                 g.data.turn.cursor_col = col;
                 g.data.turn.cursor_row = row;
@@ -555,13 +589,13 @@ void game_handle_mouse(mouse_state_t *ms) {
             if (ms->clicked &&
                 col >= 0 && col < BOARD_COLS &&
                 row >= 0 && row < BOARD_ROWS &&
-                !board_already_attacked(&g.p1_board, col, row)) {
-                /*
-                 * Do NOT apply locally — send to host.
-                 * Host applies authoritatively, echoes MSG_ATTACK,
-                 * then sends MSG_STATE to switch turns.
-                 */
-                proto_send_attack((uint8_t)col, (uint8_t)row, 0);
+                !board_already_attacked(enemy, col, row)) {
+
+                /* Apply locally so client board updates immediately */
+                board_attack(enemy, col, row);
+                /* Send to host — host is authoritative and will send
+                 * MSG_STATE back to confirm the turn switch */
+                proto_send_mouse(get_mouse_buf());
             }
             break;
         }
@@ -593,16 +627,13 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                 break;
 
             case MSG_DONE_PLACING:
-                printf("HOST received MSG_DONE_PLACING, tag=%d, WAITING=%d\n",
-                g.tag, STATE_PLACE_SHIPS_WAITING);
-                /* Remove the state guard — start countdown whenever client is done,
-                * regardless of whether host is already in WAITING state */
-                if (!g.connected) break;  /* safety only */
-                g.countdown_seconds = COUNTDOWN_START;
-                g.countdown_ticks   = 0;
-                transition(STATE_COUNTDOWN);
-                proto_send_state(STATE_COUNTDOWN);
-                proto_send_countdown(g.countdown_seconds);
+                if (g.tag == STATE_PLACE_SHIPS_WAITING) {
+                    g.countdown_seconds = COUNTDOWN_START;
+                    g.countdown_ticks   = 0;
+                    transition(STATE_COUNTDOWN);
+                    proto_send_state(STATE_COUNTDOWN);
+                    proto_send_countdown(g.countdown_seconds);
+                }
                 break;
 
             case MSG_SHIP_PLACE: {
@@ -617,7 +648,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             }
 
             case MSG_KEY:
-                /* Forward P2 keyboard only during P2's attack turn */
+                /* Only accept P2 keyboard input during P2's attack turn */
                 if (g.tag == STATE_TURN_P2) {
                     game_role_t saved = g.role;
                     g.role = ROLE_HOST;
@@ -628,22 +659,22 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
 
             case MSG_ATTACK: {
                 /*
-                 * CLIENT (P2) fired during STATE_TURN_P2.
-                 * Host applies authoritatively to p1_board,
-                 * echoes real result to client, then switches turn.
+                 * P2 (client) fired an attack.
+                 * The host applies it to p1_board (P2 attacks P1),
+                 * then sends the authoritative result back to client
+                 * and switches the turn.
                  */
                 if (g.tag != STATE_TURN_P2) break;
 
-                uint8_t col    = msg->payload.attack.col;
-                uint8_t row    = msg->payload.attack.row;
+                uint8_t col = msg->payload.attack.col;
+                uint8_t row = msg->payload.attack.row;
                 board_t *enemy = &g.p1_board;
 
                 if (board_already_attacked(enemy, col, row)) break;
 
                 bool hit = board_attack(enemy, col, row);
-                uint8_t result = ATTACK_MISS;
+                uint8_t result = hit ? ATTACK_HIT : ATTACK_MISS;
                 if (hit) {
-                    result = ATTACK_HIT;
                     for (uint8_t i = 0; i < enemy->ships_placed; i++) {
                         if (enemy->ships[i].sunk &&
                             enemy->ships[i].hits == enemy->ships[i].size) {
@@ -653,7 +684,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                     }
                 }
 
-                /* Echo authoritative result BEFORE switching state */
+                /* Echo the attack to client so its board stays in sync */
                 proto_send_attack(col, row, result);
 
                 if (board_all_sunk(enemy)) {
@@ -671,26 +702,64 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             }
 
             case MSG_MOUSE:
-                /*
-                 * CLIENT mouse packet during P2's turn.
-                 * Used for menu forwarding only — attacks now use MSG_ATTACK.
-                 * During STATE_TURN_P2 we ignore mouse packets since
-                 * the client sends MSG_ATTACK directly.
-                 */
-                if (g.tag == STATE_MAIN_MENU ||
-                    g.tag == STATE_INSTRUCTIONS) {
+                /* Only accept P2 mouse clicks during P2's attack turn */
+                if (g.tag == STATE_TURN_P2) {
                     uint8_t *rbuf = get_mouse_buf();
                     rbuf[0] = msg->payload.mouse.pkt[0];
                     rbuf[1] = msg->payload.mouse.pkt[1];
                     rbuf[2] = msg->payload.mouse.pkt[2];
                     mouse_state_update(get_mouse_state(), rbuf,
                                        video_get_hres(), video_get_vres());
-                    game_handle_mouse(get_mouse_state());
+
+                    mouse_state_t *ms = get_mouse_state();
+                    if (ms->clicked) {
+                        int col, row;
+                        board_pixel_to_cell(ms->x, ms->y, &col, &row);
+                        board_t *enemy = &g.p1_board;
+
+                        if (col >= 0 && col < BOARD_COLS &&
+                            row >= 0 && row < BOARD_ROWS &&
+                            !board_already_attacked(enemy, col, row)) {
+
+                            bool hit = board_attack(enemy, col, row);
+                            uint8_t result = hit ? ATTACK_HIT : ATTACK_MISS;
+                            if (hit) {
+                                for (uint8_t i = 0; i < enemy->ships_placed; i++) {
+                                    if (enemy->ships[i].sunk &&
+                                        enemy->ships[i].hits == enemy->ships[i].size) {
+                                        result = ATTACK_SUNK;
+                                        break;
+                                    }
+                                }
+                            }
+                            proto_send_attack((uint8_t)col, (uint8_t)row, result);
+
+                            if (board_all_sunk(enemy)) {
+                                g.data.game_over.winner = 2;
+                                transition(STATE_GAME_OVER);
+                                proto_send_winner(2);
+                                proto_send_state(STATE_GAME_OVER);
+                            } else {
+                                g.data.turn.cursor_col = 0;
+                                g.data.turn.cursor_row = 0;
+                                transition(STATE_TURN_P1);
+                                proto_send_state(STATE_TURN_P1);
+                            }
+                        }
+                    } else {
+                        /* Movement only — update remote cursor for host display */
+                        int col, row;
+                        board_pixel_to_cell(ms->x, ms->y, &col, &row);
+                        if (col >= 0 && col < BOARD_COLS && row >= 0 && row < BOARD_ROWS) {
+                            g.remote_cursor_col = col;
+                            g.remote_cursor_row = row;
+                        }
+                    }
                 }
                 break;
 
             case MSG_CURSOR:
-                /* CLIENT cursor position during P2's turn */
+                /* Client sending its cursor position during P2 turn */
                 g.remote_cursor_col = (int8_t)msg->payload.cursor.col;
                 g.remote_cursor_row = (int8_t)msg->payload.cursor.row;
                 break;
@@ -712,12 +781,6 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
 
         case MSG_STATE:
             transition((game_state_t)msg->payload.state.state);
-            /* Also reset mouse flags (transition() does this,
-             * but be explicit for clarity) */
-            get_mouse_state()->clicked  = false;
-            get_mouse_state()->released = false;
-            get_mouse_state()->moved    = false;
-
             if (g.tag == STATE_TURN_P1 || g.tag == STATE_TURN_P2) {
                 g.data.turn.cursor_col = 0;
                 g.data.turn.cursor_row = 0;
@@ -734,24 +797,16 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
 
         case MSG_ATTACK: {
             /*
-             * Host sent an attack result.
-             * STATE_TURN_P1 → P1 (host) attacked → update p2_board.
-             * STATE_TURN_P2 → host echoing P2's attack → update p1_board.
+             * Host is confirming an attack result (either P1 attacked
+             * or echoing back P2's attack).  Apply to the correct board.
              *
-             * Use g.prev as fallback in case MSG_STATE arrived first
-             * and already flipped g.tag.
+             * STATE_TURN_P1 → P1 attacked → update p2_board on client.
+             * STATE_TURN_P2 → host echoing P2's attack → update p1_board.
              */
-            uint8_t col = msg->payload.attack.col;
-            uint8_t row = msg->payload.attack.row;
-
-            game_state_t attack_state =
-                (g.tag == STATE_TURN_P1 || g.tag == STATE_TURN_P2)
-                ? g.tag : g.prev;
-
-            board_t *enemy = (attack_state == STATE_TURN_P1)
-                             ? &g.p2_board
-                             : &g.p1_board;
-
+            uint8_t col    = msg->payload.attack.col;
+            uint8_t row    = msg->payload.attack.row;
+            board_t *enemy = (g.tag == STATE_TURN_P1)
+                             ? &g.p2_board : &g.p1_board;
             if (!board_already_attacked(enemy, col, row)) {
                 board_attack(enemy, col, row);
             }
@@ -842,7 +897,8 @@ void game_draw(void) {
             } else {
                 board_draw(&g.p2_board, false);
             }
-            draw_string("WAITING FOR OPPONENT...", 160, 550, 0x888888, 2);
+            draw_string("WAITING FOR", 248, 540, 0x888888, 2);
+            draw_string("OPPONENT...", 248, 560, 0x888888, 2);
             draw_rtc();
             break;
 
@@ -856,9 +912,8 @@ void game_draw(void) {
 
         case STATE_TURN_P1: {
             /*
-             * P1 (HOST) attacking P2's board.
-             * HOST shows its own cursor (yellow).
-             * CLIENT shows remote cursor (orange).
+             * P1 (HOST) is attacking P2's board.
+             * HOST sees its own cursor; CLIENT sees remote cursor.
              */
             board_draw(&g.p2_board, true);
             if (g.role == ROLE_HOST) {
@@ -878,9 +933,8 @@ void game_draw(void) {
 
         case STATE_TURN_P2: {
             /*
-             * P2 (CLIENT) attacking P1's board.
-             * CLIENT shows its own cursor (yellow).
-             * HOST shows remote cursor (orange).
+             * P2 (CLIENT) is attacking P1's board.
+             * CLIENT sees its own cursor; HOST sees remote cursor.
              */
             board_draw(&g.p1_board, true);
             if (g.role == ROLE_CLIENT) {

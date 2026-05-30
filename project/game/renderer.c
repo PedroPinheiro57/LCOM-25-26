@@ -9,6 +9,8 @@
 #include "renderer.h"
 #include "../video/font.h"
 #include "../../pedro/lab5/video.h"
+#include "../assets/pixmaps.h"
+#include "../video/sprites.h"
 
 /* Cell fill colours */
 #define C_EMPTY    0x1a3a5c   /* dark blue — empty water             */
@@ -29,6 +31,25 @@
 /* ------------------------------------------------------------------ */
 /* Internal: draw one cell as a filled rectangle (1px border gap)    */
 /* ------------------------------------------------------------------ */
+sprite_t *spr_ships[NUM_SHIPS];
+sprite_t *spr_ships_dead[NUM_SHIPS];
+
+animated_sprite_t *anim_flame;
+animated_sprite_t *anim_explosion;
+
+static bool is_exploding = false;
+static int expl_col = 0;
+static int expl_row = 0;
+static int expl_timer_ticks = 0;
+static bool explosion_finished = false;
+static bool is_waiting_for_turn = false;
+static int wait_ticks = 0;
+static bool expl_is_hit = false;
+
+/* ------------------------------------------------------------------
+ * num_to_str — write a 1- or 2-digit number into buf, return length.
+ * Avoids sprintf which is unreliable in some MINIX builds.
+ * ------------------------------------------------------------------ */
 static uint8_t num_to_str(uint8_t n, char buf[3]) {
     if (n >= 10) {
         buf[0] = '0' + n / 10;
@@ -96,6 +117,46 @@ void board_draw(board_t *b, bool hide_ships) {
             BOARD_X - 35,
             BOARD_Y + row * CELL_SIZE + 13, 0xFFFFFF, 2);
     }
+
+    /* Draw ship sprites */
+    for (int i = 0; i < b->ships_placed; i++) {
+        ship_t s = b->ships[i];
+        uint16_t px = BOARD_X + s.col * CELL_SIZE + 1;
+        uint16_t py = BOARD_Y + s.row * CELL_SIZE + 1;
+        bool need_rotation = (s.orient == HORIZONTAL);
+        if (s.sunk) {
+            sprite_draw_rotated(spr_ships_dead[i], px, py, need_rotation);
+        } else if (!hide_ships) {
+            sprite_draw_rotated(spr_ships[i], px, py, need_rotation);
+        }
+    }
+
+    /* Draw flame animations on hit/sunk cells */
+    for (uint8_t row = 0; row < BOARD_ROWS; row++) {
+        for (uint8_t col = 0; col < BOARD_COLS; col++) {
+            if (b->grid[row][col] == CELL_HIT || b->grid[row][col] == CELL_SUNK) {
+                if (is_exploding && col == expl_col && row == expl_row) continue;
+                uint16_t px = BOARD_X + col * CELL_SIZE + 1;
+                uint16_t py = BOARD_Y + row * CELL_SIZE + 1;
+                if (anim_flame != NULL) {
+                    anim_flame->x = px + 2;
+                    anim_flame->y = py;
+                    anim_sprite_draw(anim_flame);
+                } else {
+                    draw_cell(col, row, C_HIT);
+                }
+            }
+        }
+    }
+
+    /* Draw explosion animation */
+    if (is_exploding && anim_explosion != NULL) {
+        uint16_t px = BOARD_X + expl_col * CELL_SIZE + 1;
+        uint16_t py = BOARD_Y + expl_row * CELL_SIZE + 1;
+        anim_explosion->x = px;
+        anim_explosion->y = py;
+        anim_sprite_draw(anim_explosion);
+    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -113,6 +174,15 @@ void board_draw_preview(board_t *b, int col, int row,
         if (c >= BOARD_COLS || r >= BOARD_ROWS) break;
         draw_cell((uint8_t)c, (uint8_t)r, color);
     }
+
+    /* Draw the ship sprite preview on top */
+    int ship_idx = b->ships_placed;
+    if (ship_idx < NUM_SHIPS) {
+        uint16_t px = BOARD_X + col * CELL_SIZE + 1;
+        uint16_t py = BOARD_Y + row * CELL_SIZE + 1;
+        bool need_rotation = (orient == HORIZONTAL);
+        sprite_draw_rotated(spr_ships[ship_idx], px, py, need_rotation);
+    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -124,26 +194,6 @@ void board_highlight_cell(int col, int row) {
     draw_cell((uint8_t)col, (uint8_t)row, C_HOVER);
 }
 
-/* ------------------------------------------------------------------ */
-/* board_highlight_remote_cursor — opponent's cursor (orange)        */
-/* ------------------------------------------------------------------ */
-/*
- * NEW FUNCTION.
- *
- * On the CLIENT (defending player's screen) we draw an orange cell
- * wherever the HOST (attacking player) is hovering their cursor.
- *
- * This is the "remote cursor" feature: the defender can see the
- * attacker's intended target in near-real-time, because the host
- * sends MSG_CURSOR every timer tick (30 Hz).
- *
- * We draw this AFTER board_draw() so it always appears on top of
- * the board cells, and BEFORE the local cursor so the local cursor
- * (yellow, from board_highlight_cell) has visual priority.
- *
- * Note: if col == row == (local cursor), the yellow local cursor
- * wins because game_draw() calls board_highlight_cell() afterwards.
- */
 void board_highlight_remote_cursor(int col, int row) {
     if (col < 0 || col >= BOARD_COLS) return;
     if (row < 0 || row >= BOARD_ROWS) return;
@@ -199,4 +249,118 @@ void draw_hud_attack(int player, board_t *enemy) {
     num_to_str(sunk, num);
     draw_string(num,  126, 588, 0xFF6666, 2);
     draw_string("/5",  142, 588, 0xFF6666, 2);
+}
+
+void init_game_sprites() {
+    spr_ships[0]      = sprite_load((xpm_map_t) Carrier_xpm);
+    spr_ships_dead[0] = sprite_load((xpm_map_t) Carrier_dead_xpm);
+    
+    spr_ships[1]      = sprite_load((xpm_map_t) Battleship_xpm);
+    spr_ships_dead[1] = sprite_load((xpm_map_t) Battleship_dead_xpm);
+    
+    spr_ships[2]      = sprite_load((xpm_map_t) Cruiser_xpm);
+    spr_ships_dead[2] = sprite_load((xpm_map_t) Cruiser_dead_xpm);
+    
+    spr_ships[3]      = sprite_load((xpm_map_t) Submarine_xpm);
+    spr_ships_dead[3] = sprite_load((xpm_map_t) Submarine_dead_xpm);
+    
+    spr_ships[4]      = sprite_load((xpm_map_t) Destroyer_xpm);
+    spr_ships_dead[4] = sprite_load((xpm_map_t) Destroyer_dead_xpm);
+
+    anim_flame = anim_sprite_create(0, 0, 6); 
+    if (anim_flame != NULL) {
+        anim_flame->pixmaps[0] = sprite_load((xpm_map_t) flame_1_xpm);
+        anim_flame->pixmaps[1] = sprite_load((xpm_map_t) flame_2_xpm);
+        anim_flame->pixmaps[2] = sprite_load((xpm_map_t) flame_3_xpm);
+        anim_flame->pixmaps[3] = sprite_load((xpm_map_t) flame_4_xpm);
+        anim_flame->pixmaps[4] = sprite_load((xpm_map_t) flame_5_xpm);
+        anim_flame->pixmaps[5] = sprite_load((xpm_map_t) flame_6_xpm);
+    }
+
+    anim_explosion = anim_sprite_create(0, 0, 8);
+    if (anim_explosion != NULL) {
+        anim_explosion->pixmaps[0] = sprite_load((xpm_map_t) Explosion_1_xpm);
+        anim_explosion->pixmaps[1] = sprite_load((xpm_map_t) Explosion_2_xpm);
+        anim_explosion->pixmaps[2] = sprite_load((xpm_map_t) Explosion_3_xpm);
+        anim_explosion->pixmaps[3] = sprite_load((xpm_map_t) Explosion_4_xpm);
+        anim_explosion->pixmaps[4] = sprite_load((xpm_map_t) Explosion_5_xpm);
+        anim_explosion->pixmaps[5] = sprite_load((xpm_map_t) Explosion_6_xpm);
+        anim_explosion->pixmaps[6] = sprite_load((xpm_map_t) Explosion_7_xpm);
+        anim_explosion->pixmaps[7] = sprite_load((xpm_map_t) Explosion_8_xpm);
+    }
+}
+
+void destroy_game_sprites() {
+    for (int i = 0; i < NUM_SHIPS; i++) {
+        sprite_destroy(spr_ships[i]);
+        sprite_destroy(spr_ships_dead[i]);
+    }
+    anim_sprite_destroy(anim_flame);
+    anim_sprite_destroy(anim_explosion);
+}
+
+void start_explosion(int col, int row, bool is_hit) {
+    is_exploding = true;
+    explosion_finished = false;
+    expl_col = col;
+    expl_row = row;
+    expl_timer_ticks = 0;
+    expl_is_hit = is_hit; 
+
+    if (anim_explosion != NULL) {
+        anim_explosion->cur_pixmap = 0; 
+    }
+}
+
+void update_animations() {
+    static int flame_ticks = 0;
+    flame_ticks++;
+    if (flame_ticks % 5 == 0) { 
+        anim_sprite_update(anim_flame);
+    }
+
+    if (is_exploding && anim_explosion != NULL) {
+        expl_timer_ticks++;
+        if (expl_timer_ticks % 5 == 0) { 
+            anim_sprite_update(anim_explosion);
+            
+            if (anim_explosion->cur_pixmap == 0) {
+                is_exploding = false; 
+                
+                if (expl_is_hit) {
+                    is_waiting_for_turn = false;
+                    explosion_finished = true; 
+                } else {
+                    is_waiting_for_turn = true;
+                    wait_ticks = 0;
+                }
+            }
+        }
+    } else if (is_waiting_for_turn) {
+        wait_ticks++;
+        if (wait_ticks >= 45) {
+            is_waiting_for_turn = false;
+            explosion_finished = true; 
+        }
+    }
+}
+
+bool renderer_explosion_finished(void) {
+    if (explosion_finished) {
+        explosion_finished = false; 
+        return true;
+    }
+    return false;
+}
+
+bool renderer_is_exploding(void) {
+    return is_exploding || is_waiting_for_turn; 
+}
+
+int renderer_get_expl_col(void) {
+    return expl_col;
+}
+
+int renderer_get_expl_row(void) {
+    return expl_row;
 }

@@ -42,6 +42,7 @@
 /* NEW: UART and protocol headers */
 #include "serial/uart.h"
 #include "serial/protocol.h"
+#include "game/renderer.h"
 
 extern int foo();
 int timer_get_counter(void);
@@ -177,6 +178,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
         /* Timer interrupt — render at 30 Hz */
         if (irqs & BIT(timer_bit)) {
             handle_timer();
+            update_animations(); 
 
             /* CLIENT: retry MSG_HELLO once per second until connected */
             if (role == ROLE_CLIENT && game_is_waiting_connect() && !game_is_connected()) {

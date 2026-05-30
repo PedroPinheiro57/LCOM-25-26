@@ -1,9 +1,9 @@
 PROG = proj
 
 # Adicionamos as novas subpastas ao .PATH
-.PATH: devices video game handlers assets assets/ships assets/flames assets/explosions
+.PATH: devices video game handlers assets assets/ships assets/flames assets/explosions serial
 
-SRCS = main.c mouse.c rtc.c sprites.c game.c handlers.c font.c font_assets.c hand_cursor.c mouse_cursor.c menu.c board.c renderer.c
+SRCS = main.c mouse.c rtc.c sprites.c game.c handlers.c font.c font_assets.c hand_cursor.c mouse_cursor.c menu.c board.c renderer.c uart.c protocol.c
 
 SRCS += Carrier.c Carrier_dead.c Battleship.c Battleship_dead.c Cruiser.c Cruiser_dead.c Submarine.c Submarine_dead.c Destroyer.c Destroyer_dead.c
 SRCS += flame_1.c flame_2.c flame_3.c flame_4.c flame_5.c flame_6.c
@@ -14,6 +14,7 @@ CFLAGS += -I../pedro/lab3
 CFLAGS += -I../pedro/lab4
 CFLAGS += -I../pedro/lab5
 CFLAGS += -I.
+CFLAGS += -Iserial
 CFLAGS += -O0
 
 VIDEO_LIB = ../pedro/lab5/libvideo.a

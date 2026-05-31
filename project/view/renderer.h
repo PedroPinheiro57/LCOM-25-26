@@ -45,3 +45,4 @@ void update_animations();
 int renderer_get_expl_col(void);
 int renderer_get_expl_row(void);
 void game_draw(const game_t *g);
+void renderer_reset(void);

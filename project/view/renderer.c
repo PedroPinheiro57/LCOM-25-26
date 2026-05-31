@@ -527,3 +527,18 @@ void game_draw(const game_t *g) {
     }
 }
 
+void renderer_reset(void) {
+    is_exploding        = false;
+    explosion_finished  = false;
+    is_waiting_for_turn = false;
+    expl_col            = 0;
+    expl_row            = 0;
+    expl_timer_ticks    = 0;
+    wait_ticks          = 0;
+    expl_is_hit         = false;
+
+    if (anim_explosion != NULL)
+        anim_explosion->cur_pixmap = 0;
+    if (anim_flame != NULL)
+        anim_flame->cur_pixmap = 0;
+}

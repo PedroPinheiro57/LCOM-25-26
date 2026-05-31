@@ -713,8 +713,18 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             g.connected = true;
             break;
  
-        case MSG_STATE:
-            transition((game_state_t)msg->payload.state.state);
+        case MSG_STATE: {
+            game_state_t next = (game_state_t)msg->payload.state.state;
+
+            /* reset boards when a new game starts from game over */
+            if (next == STATE_MAIN_MENU && g.tag == STATE_GAME_OVER) {
+                board_init(&g.p1_board);
+                board_init(&g.p2_board);
+                renderer_reset();
+            }
+
+            transition(next);
+
             if (g.tag == STATE_TURN_P1 || g.tag == STATE_TURN_P2) {
                 g.data.turn.cursor_col = 0;
                 g.data.turn.cursor_row = 0;
@@ -728,7 +738,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                 g.data.place.cursor_row = 0;
             }
             break;
- 
+}
         case MSG_ATTACK: {
             /*
              * HOST sent the authoritative attack result.

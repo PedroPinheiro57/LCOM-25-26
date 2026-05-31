@@ -1,4 +1,5 @@
 #pragma once
+#include "../controller/game.h"
 /*
  * renderer.h — Board and HUD drawing functions.
  *
@@ -9,7 +10,7 @@
  */
 #include <stdint.h>
 #include <stdbool.h>
-#include "board.h"
+#include "../model/board.h"
 
 /* Draw the entire board. hide_ships=true masks CELL_SHIP cells.     */
 void board_draw(board_t *b, bool hide_ships);
@@ -43,3 +44,5 @@ void start_explosion(int col, int row, bool is_hit);
 void update_animations();
 int renderer_get_expl_col(void);
 int renderer_get_expl_row(void);
+void game_draw(const game_t *g);
+void renderer_reset(void);

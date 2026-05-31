@@ -1,5 +1,5 @@
-#include "menu.h"
-#include "../video/font.h"
+#include "game_menu.h"
+#include "../view/font.h"
 #include "../../pedro/lab5/video.h"
 
 

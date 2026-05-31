@@ -23,14 +23,15 @@ bool board_can_place(board_t *b, uint8_t col, uint8_t row,
 }
 
 void board_place_ship(board_t *b, uint8_t col, uint8_t row,
-                      uint8_t size, orientation_t orient) {
+                      uint8_t size, uint8_t type_idx, orientation_t orient) {
   uint8_t idx = b->ships_placed;
-  b->ships[idx].col    = col;
-  b->ships[idx].row    = row;
-  b->ships[idx].size   = size;
-  b->ships[idx].orient = orient;
-  b->ships[idx].hits   = 0;
-  b->ships[idx].sunk   = false;
+  b->ships[idx].col      = col;
+  b->ships[idx].row      = row;
+  b->ships[idx].size     = size;
+  b->ships[idx].type_idx = type_idx;
+  b->ships[idx].orient   = orient;
+  b->ships[idx].hits     = 0;
+  b->ships[idx].sunk     = false;
 
   if (orient == HORIZONTAL)
     for (uint8_t c = col; c < col + size; c++)
@@ -45,17 +46,14 @@ void board_place_ship(board_t *b, uint8_t col, uint8_t row,
 bool board_attack(board_t *b, uint8_t col, uint8_t row) {
   if (b->grid[row][col] == CELL_SHIP) {
     b->grid[row][col] = CELL_HIT;
-
     for (uint8_t i = 0; i < b->ships_placed; i++) {
       ship_t *s = &b->ships[i];
       if (s->sunk) continue;
-
       bool hit = false;
       if (s->orient == HORIZONTAL)
         hit = (row == s->row && col >= s->col && col < s->col + s->size);
       else
         hit = (col == s->col && row >= s->row && row < s->row + s->size);
-
       if (hit) {
         s->hits++;
         if (s->hits >= s->size) {

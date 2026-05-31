@@ -5,9 +5,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "../devices/mouse.h"
-#include "../devices/rtc.h"
+#include "../model/mouse.h"
+#include "../model/rtc.h"
 #include "../serial/protocol.h"
+#include "../model/board.h"
 
 /* ------------------------------------------------------------------ */
 /* Role                                                               */
@@ -37,7 +38,6 @@ typedef enum {
     STATE_EXIT
 } game_state_t;
 
-#include "board.h"
 
 /* ------------------------------------------------------------------ */
 /* Main game structure                                                */
@@ -93,7 +93,7 @@ void game_init(game_role_t role);
 void game_handle_timer(void);
 void game_handle_keyboard(uint8_t scancode);
 void game_handle_mouse(mouse_state_t *ms);
-void game_draw(void);
+void game_draw(const game_t *g);
 void game_erase_cursor(void);
 void game_save_cursor(int16_t x, int16_t y);
 bool game_is_over(void);
@@ -103,3 +103,4 @@ void game_handle_serial_msg(const serial_msg_t *msg);
 bool game_is_waiting_connect(void);
 bool game_is_connected(void);
 bool game_is_client_turn(void);
+const game_t *game_get_state(void);

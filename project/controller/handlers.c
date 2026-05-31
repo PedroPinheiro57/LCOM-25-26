@@ -20,15 +20,15 @@
  */
 
 #include "handlers.h"
-#include "../devices/mouse.h"
+#include "../model/mouse.h"
 #include <lcom/lcf.h>
 #include "../../pedro/lab3/kbc.h"
 #include "../../pedro/lab4/mouse.h"
-#include "../devices/keyboard.h"
-#include "../devices/mouse.h"
+#include "../model/keyboard.h"
+#include "../model/mouse.h"
 #include "../../pedro/lab5/video.h"
-#include "../video/sprites.h"
-#include "../game/game.h"
+#include "../view/sprites.h"
+#include "../controller/game.h"
 /* NEW: UART driver and application protocol */
 #include "../serial/uart.h"
 #include "../serial/protocol.h"

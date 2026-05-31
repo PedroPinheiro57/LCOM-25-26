@@ -15,20 +15,21 @@
  *     CLIENT  → draws p1_board, hide_ships=true  (attacking enemy, ships hidden)
  *     HOST    → draws p1_board, hide_ships=false (own ships being attacked)
  */
- 
-#include "game.h"
-#include "menu.h"
-#include "renderer.h"
+/* Prevent curses.h key constant conflicts with PS/2 scancodes */
+
 #include <lcom/lcf.h>
-#include <string.h>
-#include "../video/font.h"
-#include "../video/sprites.h"
-#include "../devices/keyboard.h"
-#include "../devices/rtc.h"
-#include "../serial/protocol.h"
-#include "../../pedro/lab5/video.h"
+#include "game.h"
+#include "../view/game_menu.h"
 #include "../../pedro/lab3/kbc.h"
- 
+#include "../view/renderer.h"
+#include <string.h>
+#include "../view/sprites.h"
+#include "../model/keyboard.h"
+#include "../model/rtc.h"
+#include "../serial/protocol.h"
+#include "../view/font.h"
+#include "../../pedro/lab5/video.h"
+
 #define TICKS_PER_SEC          30
 #define COUNTDOWN_START        5
 #define POST_ATTACK_WAIT_TICKS 60   /* 2 seconds at 30 Hz — only after a MISS */
@@ -62,24 +63,7 @@ bool game_is_client_turn(void) {
     return (g.role == ROLE_HOST) && (g.tag == STATE_TURN_P2);
 }
  
-static void rtc_format(const rtc_time_t *t, char buf[9]) {
-    buf[0] = '0' + t->hours   / 10;
-    buf[1] = '0' + t->hours   % 10;
-    buf[2] = ':';
-    buf[3] = '0' + t->minutes / 10;
-    buf[4] = '0' + t->minutes % 10;
-    buf[5] = ':';
-    buf[6] = '0' + t->seconds / 10;
-    buf[7] = '0' + t->seconds % 10;
-    buf[8] = '\0';
-}
- 
-static void draw_rtc(void) {
-    char buf[9];
-    rtc_format(&g.rtc, buf);
-    draw_string(buf, RTC_X, RTC_Y, 0xAAAAAA, 2);
-}
- 
+
 static void transition(game_state_t next) {
     g.prev = g.tag;
     g.tag  = next;
@@ -830,161 +814,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             break;
     }
 }
- 
-/* ------------------------------------------------------------------ */
-/* game_draw                                                          */
-/* ------------------------------------------------------------------ */
-void game_draw(void) {
-    video_clear_screen(0x000000);
- 
-    switch (g.tag) {
- 
-        case STATE_WAITING_CONNECT:
-            if (g.role == ROLE_HOST) {
-                draw_string("WAITING FOR", 248, 220, 0x00BFFF, 3);
-                draw_string("PLAYER 2...", 248, 270, 0x00BFFF, 3);
-                draw_string("(START CLIENT VM NOW)", 132, 380, 0x888888, 2);
-            } else {
-                draw_string("CONNECTING TO", 208, 220, 0xFFD700, 3);
-                draw_string("HOST...", 304, 270, 0xFFD700, 3);
-            }
-            break;
- 
-        case STATE_MAIN_MENU:
-            menu_draw_main(g.data.menu.selected);
-            draw_rtc();
-            break;
- 
-        case STATE_INSTRUCTIONS:
-            menu_draw_instructions();
-            break;
- 
-        case STATE_PLACE_SHIPS_P1:
-            if (g.role == ROLE_HOST) {
-                board_draw(&g.p1_board, false);
-                board_draw_preview(&g.p1_board,
-                    g.data.place.cursor_col, g.data.place.cursor_row,
-                    SHIP_SIZES[g.data.place.ship_idx],
-                    (orientation_t)g.data.place.orient);
-                draw_hud_place(1, g.data.place.ship_idx);
-            } else {
-                draw_string("PLAYER 1 IS", 248, 220, 0x00BFFF, 3);
-                draw_string("PLACING SHIPS...", 192, 270, 0x00BFFF, 3);
-                draw_string("PLEASE WAIT", 248, 340, 0x888888, 2);
-            }
-            draw_rtc();
-            break;
- 
-        case STATE_PLACE_SHIPS_P2:
-            if (g.role == ROLE_CLIENT) {
-                board_draw(&g.p2_board, false);
-                board_draw_preview(&g.p2_board,
-                    g.data.place.cursor_col, g.data.place.cursor_row,
-                    SHIP_SIZES[g.data.place.ship_idx],
-                    (orientation_t)g.data.place.orient);
-                draw_hud_place(2, g.data.place.ship_idx);
-            } else {
-                draw_string("PLAYER 2 IS", 248, 220, 0x00BFFF, 3);
-                draw_string("PLACING SHIPS...", 192, 270, 0x00BFFF, 3);
-                draw_string("PLEASE WAIT", 248, 340, 0x888888, 2);
-            }
-            draw_rtc();
-            break;
- 
-        case STATE_PLACE_SHIPS_WAITING:
-            if (g.role == ROLE_HOST) {
-                board_draw(&g.p1_board, false);
-            } else {
-                board_draw(&g.p2_board, false);
-            }
-            draw_string("WAITING FOR", 248, 540, 0x888888, 2);
-            draw_string("OPPONENT...", 248, 560, 0x888888, 2);
-            draw_rtc();
-            break;
- 
-        case STATE_COUNTDOWN: {
-            draw_string("GAME STARTS IN", 192, 200, 0x00BFFF, 3);
-            char digit[2] = { '0' + g.countdown_seconds, '\0' };
-            draw_string(digit, 376, 280, 0xFFD700, 8);
-            draw_rtc();
-            break;
-        }
- 
-        case STATE_TURN_P1: {
-            /*
-             * HOST = attacker: sees p2_board with ships hidden
-             *                  (only sunk ships + flames visible).
-             * CLIENT = defender: sees p2_board (own ships) fully visible,
-             *                    with remote cursor showing where HOST aims.
-             */
-            if (g.role == ROLE_HOST) {
-                board_draw(&g.p2_board, true);
-                board_highlight_cell(
-                    g.data.turn.cursor_col,
-                    g.data.turn.cursor_row);
-                draw_hud_attack(1, &g.p2_board);
-            } else {
-                board_draw(&g.p2_board, false);
-                if (g.remote_cursor_col >= 0) {
-                    board_highlight_remote_cursor(
-                        g.remote_cursor_col,
-                        g.remote_cursor_row);
-                }
-                draw_hud_attack(1, &g.p2_board);
-            }
-            draw_rtc();
-            break;
-        }
- 
-        case STATE_TURN_P2: {
-            /*
-             * CLIENT = attacker: sees p1_board with ships hidden
-             *                    (only sunk ships + flames visible).
-             * HOST = defender: sees p1_board (own ships) fully visible,
-             *                  with remote cursor showing where CLIENT aims.
-             */
-            if (g.role == ROLE_CLIENT) {
-                board_draw(&g.p1_board, true);
-                board_highlight_cell(
-                    g.data.turn.cursor_col,
-                    g.data.turn.cursor_row);
-                draw_hud_attack(2, &g.p1_board);
-            } else {
-                board_draw(&g.p1_board, false);
-                if (g.remote_cursor_col >= 0) {
-                    board_highlight_remote_cursor(
-                        g.remote_cursor_col,
-                        g.remote_cursor_row);
-                }
-                draw_hud_attack(2, &g.p1_board);
-            }
-            draw_rtc();
-            break;
-        }
- 
-        case STATE_HANDOVER_P1:
-            menu_draw_handover(1);
-            draw_rtc();
-            break;
- 
-        case STATE_HANDOVER_P2:
-            menu_draw_handover(2);
-            draw_rtc();
-            break;
- 
-        case STATE_PAUSED:
-            menu_draw_pause(g.data.pause.selected);
-            draw_rtc();
-            break;
- 
-        case STATE_GAME_OVER:
-            menu_draw_game_over(g.data.game_over.winner);
-            break;
- 
-        default:
-            break;
-    }
-}
+
  
 /* ------------------------------------------------------------------ */
 /* Cursor helpers                                                     */
@@ -999,3 +829,5 @@ void game_save_cursor(int16_t x, int16_t y) {
 }
  
 bool game_is_over(void) { return over; }
+const game_t *game_get_state(void) { return &g; }
+

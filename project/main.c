@@ -35,14 +35,15 @@
 #include "../pedro/lab3/kbc.h"
 #include "../pedro/lab4/mouse.h"
 #include "../pedro/lab5/video.h"
-#include "devices/mouse.h"
-#include "handlers/handlers.h"
-#include "game/game.h"
-#include "video/sprites.h"
+#include "model/mouse.h"
+#include "controller/handlers.h"
+#include "controller/game.h"
+#include "view/sprites.h"
 /* NEW: UART and protocol headers */
 #include "serial/uart.h"
 #include "serial/protocol.h"
-#include "game/renderer.h"
+#include "view/renderer.h"
+
 
 extern int foo();
 int timer_get_counter(void);
@@ -200,7 +201,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
             }
 
             video_clear_screen(0x000000);
-            game_draw();
+            game_draw(game_get_state());
             cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
             video_swap_buffers();
         }

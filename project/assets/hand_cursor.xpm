@@ -1,7 +1,4 @@
-#include <lcom/lcf.h>
-
-
-xpm_row_t const cursor_normal_xpm[] = {
+static char * cursor_normal_xpm[] = {
 "16 16 5 1",
 " 	c #FFFFFE",
 ".	c #000000",

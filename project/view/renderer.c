@@ -1,10 +1,42 @@
 #include "renderer.h"
 #include "font.h"
 #include "../../pedro/lab5/video.h"
-#include "../assets/pixmaps.h"
 #include "sprites.h"
 #include "../controller/game.h"
 #include "game_menu.h"
+
+#include "../assets/explosions/Explosion_1.xpm"
+#include "../assets/explosions/Explosion_2.xpm"
+#include "../assets/explosions/Explosion_3.xpm"
+#include "../assets/explosions/Explosion_4.xpm"
+#include "../assets/explosions/Explosion_5.xpm"
+#include "../assets/explosions/Explosion_6.xpm"
+#include "../assets/explosions/Explosion_7.xpm"
+#include "../assets/explosions/Explosion_8.xpm"
+
+#include "../assets/flames/flame_1.xpm"
+#include "../assets/flames/flame_2.xpm"
+#include "../assets/flames/flame_3.xpm"
+#include "../assets/flames/flame_4.xpm"
+#include "../assets/flames/flame_5.xpm"
+#include "../assets/flames/flame_6.xpm"
+
+#include "../assets/ships/Battleship.xpm"
+#include "../assets/ships/Battleship_dead.xpm"
+#include "../assets/ships/Carrier.xpm"
+#include "../assets/ships/Carrier_dead.xpm"
+#include "../assets/ships/Cruiser.xpm"
+#include "../assets/ships/Cruiser_dead.xpm"
+#include "../assets/ships/Destroyer_dead.xpm"
+#include "../assets/ships/Destroyer.xpm"
+#include "../assets/ships/Submarine.xpm"
+#include "../assets/ships/Submarine_dead.xpm"
+
+
+
+
+
+
 
 #define RTC_X 650
 #define RTC_Y 20
@@ -274,6 +306,7 @@ void start_explosion(int col, int row, bool is_hit) {
 }
 
 void update_animations(void) {
+    
     static int flame_ticks = 0;
     flame_ticks++;
     if (flame_ticks % 5 == 0)
@@ -353,7 +386,7 @@ static void draw_rtc(const rtc_time_t *t) {
 }
 
 void game_draw(const game_t *g) {
-    video_clear_screen(0x000000);
+    video_clear_screen();
 
     switch (g->tag) {
 

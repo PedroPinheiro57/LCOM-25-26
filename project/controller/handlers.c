@@ -1,24 +1,3 @@
-/*
- * handlers.c — Interrupt handlers called from the event loop in main.c.
- *
- * CHANGES FROM ORIGINAL:
- *   Added handle_serial():
- *     - Calls uart_ih() to drain the UART hardware and fill the
- *       software RX ring buffer (defined in uart.c).
- *     - Then pulls every complete byte out of the ring buffer and
- *       feeds it to proto_feed_byte() (the protocol state machine).
- *     - When proto_feed_byte() returns true (= full message assembled),
- *       calls game_handle_serial_msg() to let the game react.
- *
- *   handle_keyboard():
- *     - Unchanged in structure; the two-byte prefix assembler is kept.
- *     - game_handle_keyboard() now internally decides whether to
- *       process locally (HOST) or forward via serial (CLIENT).
- *
- *   handle_mouse():
- *     - Unchanged.  game_handle_mouse() decides HOST vs CLIENT logic.
- */
-
 #include "handlers.h"
 #include "../model/mouse.h"
 #include <lcom/lcf.h>
@@ -29,68 +8,57 @@
 #include "../../pedro/lab5/video.h"
 #include "../view/sprites.h"
 #include "../controller/game.h"
-/* NEW: UART driver and application protocol */
 #include "../serial/uart.h"
 #include "../serial/protocol.h"
+#include "../view/renderer.h"
 
 /* ------------------------------------------------------------------ */
 /* handle_timer                                                       */
 /* ------------------------------------------------------------------ */
 void handle_timer(void) {
-    timer_int_handler();   /* acknowledge the timer interrupt in lcf  */
-    game_handle_timer();   /* update RTC, countdown, send cursor      */
+    timer_int_handler();   
+    game_handle_timer();   /* update game */
+
+    update_animations(); 
+
+    /* Only process player 1 mouse, player 2 mouse is handled with the serial port */
+    if (!game_is_client_turn()) {
+        game_handle_mouse(get_mouse_state());
+    }
+
+    video_clear_screen();
+    game_draw(game_get_state());
+    cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
+    video_swap_buffers();
 }
 
 /* ------------------------------------------------------------------ */
 /* handle_keyboard                                                    */
 /* ------------------------------------------------------------------ */
 /*
- * Two-byte scancode assembler (unchanged from original).
- *
- * Arrow keys and some other special keys send a 0xE0 prefix byte
- * followed by the actual key byte.  kbc_ih() fires once per byte, so
- * handle_keyboard() is called twice for those keys.
- *
- * We swallow the 0xE0 prefix and pass the second byte directly to
- * game_handle_keyboard().  The KEY_* constants (KEY_UP = 0x48, etc.)
- * match the second byte, so no adjustment is needed.
- *
  * game_handle_keyboard() now internally decides:
  *   HOST  → process locally (run game logic)
  *   CLIENT → call proto_send_key() to forward over serial
  */
-static bool expecting_second_byte = false;
 
 void handle_keyboard(void) {
     kbc_ih();
     if (kbc_has_error()) return;
 
     uint8_t sc = kbc_get_scancode_byte();
-
-    if (sc == TWOBYTE_PREFIX) {
-        /* 0xE0 prefix — wait for the second byte */
-        expecting_second_byte = true;
-        return;
-    }
-
-    expecting_second_byte = false;
+    if (sc == TWOBYTE_PREFIX) return;
     game_handle_keyboard(sc);
 }
 
 /* ------------------------------------------------------------------ */
 /* handle_mouse                                                       */
 /* ------------------------------------------------------------------ */
-/*
- * Assembles the 3-byte PS/2 mouse packet exactly as before.
- *
- * Once a complete packet is ready, mouse_state_update() is called.
+/* Once a complete packet is ready, mouse_state_update() is called.
  * Then game_handle_mouse() decides:
  *   HOST  → process locally (update cursor, check clicks)
  *   CLIENT → call proto_send_mouse() to forward over serial
- *
- * NOTE for CLIENT: we still update the local mouse_state so the
- * cursor sprite is drawn at the correct position on the client screen.
  */
+
 void handle_mouse(void) {
     mouse_ih();
     if (mouse_has_error()) return;
@@ -98,7 +66,7 @@ void handle_mouse(void) {
     uint8_t byte = mouse_get_byte();
     uint8_t idx  = get_mouse_idx();
 
-    /* Byte 0 must have the sync bit set; discard desynchronised bytes */
+    /* Byte 0 must have the sync bit (3) set */
     if (idx == 0 && !(byte & MOUSE_SYNC_BIT)) return;
 
     get_mouse_buf()[idx++] = byte;

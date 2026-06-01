@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const Cruiser_xpm[] = {
+static char * Cruiser_xpm[] = {
 "41 130 179 2",
 "  	c None",
 ". 	c #242424",

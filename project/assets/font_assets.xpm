@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const font_xpm[] = {
+static char * font_xpm[] = {
   "128 72 3 1",
   " 	c None",
   ".	c #000000",

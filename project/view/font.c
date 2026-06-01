@@ -1,8 +1,8 @@
 #include "font.h"
 #include "../../pedro/lab5/video.h"
-#include "../assets/pixmaps.h"
 #include <lcom/lcf.h>
 #include "sprites.h"
+#include "../assets/font_assets.xpm"
 
 #define FONT_CHAR_W  8
 #define FONT_CHAR_H  12

@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const Submarine_xpm[] = {
+static char * Submarine_dead_xpm[] = {
 "41 131 65 1",
 " 	c None",
 ".	c #303030",

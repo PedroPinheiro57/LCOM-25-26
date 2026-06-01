@@ -30,7 +30,7 @@ typedef struct {
 void mouse_state_init(mouse_state_t *ms, int16_t start_x, int16_t start_y);
 void mouse_state_update(mouse_state_t *ms, uint8_t buf[3], uint16_t hres, uint16_t vres);
 
-/* global mouse state accessors */
+/* mouse state accessors */
 mouse_state_t *get_mouse_state(void);
 uint8_t       *get_mouse_buf(void);
 uint8_t        get_mouse_idx(void);

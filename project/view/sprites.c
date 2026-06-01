@@ -1,8 +1,9 @@
 #include "sprites.h"
 #include "../../pedro/lab5/video.h"
-#include "../assets/pixmaps.h"
 #include <stdlib.h>
-
+#include "../assets/mouse_cursor.xpm"
+#include "../assets/hand_cursor.xpm"
+ 
 sprite_t *sprite_load(xpm_map_t xpm) {
   sprite_t *sp = malloc(sizeof(sprite_t));
   if (sp == NULL) return NULL;

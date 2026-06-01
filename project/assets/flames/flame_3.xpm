@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const flame_3_xpm[] = {
+static char * flame_3_xpm[] = {
 "40 40 478 2",
 "  	c None",
 ". 	c #E6A891",

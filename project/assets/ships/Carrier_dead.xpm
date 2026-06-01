@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const Carrier_dead_xpm[] = {
+static char * Carrier_dead_xpm[] = {
 "41 220 13 1",
 " 	c None",
 ".	c #393939",

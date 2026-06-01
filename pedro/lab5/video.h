@@ -23,6 +23,6 @@ void     vg_draw_pixel_fast(uint16_t x, uint16_t y, uint32_t color);
 
 int      (vg_draw_hline_project)(uint16_t x, uint16_t y, uint16_t len, uint32_t color);
 int      (vg_draw_rectangle_project)(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint32_t color);
-void     video_clear_screen(uint32_t color);
+void     video_clear_screen(void);
 uint16_t video_get_hres(void);
 uint16_t video_get_vres(void);

@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const Battleship_dead_xpm[] = {
+static char * Battleship_dead_xpm[] = {
 "34 176 167 2",
 "  	c None",
 ". 	c #303030",

@@ -1,6 +1,4 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const Explosion_3_xpm[] = {
+static char * Explosion_3_xpm[] = {
 "40 40 550 2",
 "  	c None",
 ". 	c #E16D2D",

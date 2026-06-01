@@ -25,15 +25,12 @@ void mouse_state_update(mouse_state_t *ms, uint8_t buf[3], uint16_t hres, uint16
   ms->released = (prev_lb && !ms->lb);
 
   if (b1.fields.x_ovf || b1.fields.y_ovf) {
-    ms->moved = false;
+    ms->moved = true;
     goto clamp;
   }
 
-  int16_t dx = buf[1];
-  int16_t dy = buf[2];
-
-  if (b1.fields.x_sign) dx |= 0xFF00;
-  if (b1.fields.y_sign) dy |= 0xFF00;
+  int16_t dx = b1.fields.x_sign ? (int16_t)(buf[1] | 0xFF00) : (int16_t)buf[1];
+  int16_t dy = b1.fields.y_sign ? (int16_t)(buf[2] | 0xFF00) : (int16_t)buf[2];
 
   ms->x    += dx;
   ms->y    -= dy;

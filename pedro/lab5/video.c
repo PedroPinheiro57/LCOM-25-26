@@ -106,8 +106,7 @@ static void _fill_hrun(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {
     memcpy(dst, &color, bytes_per_pixel);
 }
 
-void video_clear_screen(uint32_t color) {
-  (void) color;  /* always clear to black */
+void video_clear_screen(void) {
   unsigned int buffer_offset = current_draw_buffer * buffer_size;
   memset(vram + buffer_offset, 0, buffer_size);
 }

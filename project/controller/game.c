@@ -33,6 +33,18 @@ static bool    waiting_post_attack = false;
 bool game_is_waiting_connect(void) { return (g.tag == STATE_WAITING_CONNECT); }
 bool game_is_connected(void)       { return g.connected; }
 bool game_is_client_turn(void)     { return (g.role == ROLE_HOST) && (g.tag == STATE_TURN_P2); }
+bool game_is_over(void)            { return over; }
+const game_t *game_get_state(void) { return &g; }
+
+void game_erase_cursor(void) {
+    vg_draw_rectangle_project(prev_cx, prev_cy, 11, 11, 0x000000);
+}
+
+void game_save_cursor(int16_t x, int16_t y) {
+    prev_cx = x;
+    prev_cy = y;
+}
+
 
 static void transition(game_state_t next) {
     g.prev = g.tag;
@@ -44,23 +56,33 @@ static void transition(game_state_t next) {
 }
 
 void game_init(game_role_t role) {
+
+    /* zero game_t memory */
     memset(&g, 0, sizeof(g));
+
+    /* init game_t parameters */
     g.role      = role;
     g.connected = false;
     g.remote_cursor_col = -1;
     g.remote_cursor_row = -1;
     board_init(&g.p1_board);
     board_init(&g.p2_board);
+    g.tag  = STATE_WAITING_CONNECT;
+    g.prev = STATE_WAITING_CONNECT;
     rtc_read_time(&g.rtc);
+
+    /* init sprites */
     font_init();
     cursor_init();
     init_game_sprites();
     renderer_reset();
+
+    /* game variables */
     post_attack_ticks   = 0;
     waiting_post_attack = false;
-    g.tag  = STATE_WAITING_CONNECT;
-    g.prev = STATE_WAITING_CONNECT;
 }
+
+
 
 void game_handle_timer(void) {
 
@@ -751,15 +773,3 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             break;
     }
 }
-
-void game_erase_cursor(void) {
-    vg_draw_rectangle_project(prev_cx, prev_cy, 11, 11, 0x000000);
-}
-
-void game_save_cursor(int16_t x, int16_t y) {
-    prev_cx = x;
-    prev_cy = y;
-}
-
-bool game_is_over(void)            { return over; }
-const game_t *game_get_state(void) { return &g; }

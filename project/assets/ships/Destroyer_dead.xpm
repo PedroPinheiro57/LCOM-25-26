@@ -1,17 +1,15 @@
-#include <lcom/lcf.h>
-
-xpm_row_t const Destroyer_xpm[] = {
+static char * Destroyer_dead_xpm[] = {
 "40 86 10 1",
 " 	c None",
-".	c #353535",
-"+	c #848484",
-"@	c #6A6A6A",
-"#	c #5A5A5A",
-"$	c #4F4F4F",
-"%	c #D4D4D4",
-"&	c #7A7A7A",
-"*	c #000000",
-"=	c #BFBFBF",
+".	c #292929",
+"+	c #7C7C7C",
+"@	c #585858",
+"#	c #444444",
+"$	c #393939",
+"%	c #E1E1E1",
+"&	c #6D6D6D",
+"*	c #1E1E1E",
+"=	c #D3D3D3",
 "                                        ",
 "                                        ",
 "                                        ",

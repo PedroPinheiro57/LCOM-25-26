@@ -2,8 +2,13 @@
 #include <string.h>
 
 void board_init(board_t *b) {
-  memset(b->grid, CELL_EMPTY, sizeof(b->grid));
+
+  /* Initialize all cells as empty */
+  memset(b->grid, CELL_EMPTY, sizeof(b->grid)); 
+
+  /* Initialize all ships as null */
   memset(b->ships, 0, sizeof(b->ships));
+
   b->ships_placed = 0;
   b->ships_sunk   = 0;
 }

@@ -1,16 +1,21 @@
 #pragma once
-#include "../controller/game.h"
-/*
- * renderer.h — Board and HUD drawing functions.
- *
- * CHANGE FROM ORIGINAL:
- *   Added board_highlight_remote_cursor() — draws the opponent's
- *   hovering cursor on the defending player's screen in a distinct
- *   orange colour, so the defender can see where the attacker aims.
- */
 #include <stdint.h>
 #include <stdbool.h>
 #include "../model/board.h"
+#include "../controller/game.h"
+
+#define RTC_X 650
+#define RTC_Y 20
+
+#define C_EMPTY    0x1a3a5c
+#define C_SHIP     0x808080
+#define C_HIT      0xFF4500
+#define C_MISS     0x00BFFF
+#define C_SUNK     0x8B0000
+#define C_VALID    0x00FF00
+#define C_INVALID  0xFF0000
+#define C_HOVER    0xFFFF00
+#define C_REMOTE   0xFF8C00
 
 /* Draw the entire board. hide_ships=true masks CELL_SHIP cells.     */
 void board_draw(board_t *b, bool hide_ships);
@@ -22,19 +27,11 @@ void board_draw_preview(board_t *b, int col, int row,
 /* Draw the local player's attack cursor (yellow).                   */
 void board_highlight_cell(int col, int row);
 
-/*
- * board_highlight_remote_cursor() — NEW
- * Draw the OPPONENT's cursor on the defending player's screen.
- * Uses a distinct orange colour so the defender can tell it apart
- * from the local cursor (yellow).
- * Called on the CLIENT only, when remote_cursor_col >= 0.
- */
+/* remote player */
 void board_highlight_remote_cursor(int col, int row);
 
-/* HUD for ship-placement phase.                                     */
+                                   
 void draw_hud_place(int player, int ship_idx);
-
-
 void draw_hud_attack(int player, board_t *enemy); /* enemy board for counters */
 void destroy_game_sprites();
 void init_game_sprites();

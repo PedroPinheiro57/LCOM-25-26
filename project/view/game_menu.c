@@ -4,7 +4,6 @@
 
 
 static const char *options[] = { "PLAY", "INSTRUCTIONS", "EXIT" };
-#define NUM_OPTIONS 3
 
 void menu_draw_main(int selected) {
   /* "BATTLESHIP" = 10 chars * 8px * scale4 = 320px  → x = (800-320)/2 = 240 */

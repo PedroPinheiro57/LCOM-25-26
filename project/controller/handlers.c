@@ -35,12 +35,6 @@ void handle_timer(void) {
 /* ------------------------------------------------------------------ */
 /* handle_keyboard                                                    */
 /* ------------------------------------------------------------------ */
-/*
- * game_handle_keyboard() now internally decides:
- *   HOST  → process locally (run game logic)
- *   CLIENT → call proto_send_key() to forward over serial
- */
-
 void handle_keyboard(void) {
     kbc_ih();
     if (kbc_has_error()) return;
@@ -53,12 +47,6 @@ void handle_keyboard(void) {
 /* ------------------------------------------------------------------ */
 /* handle_mouse                                                       */
 /* ------------------------------------------------------------------ */
-/* Once a complete packet is ready, mouse_state_update() is called.
- * Then game_handle_mouse() decides:
- *   HOST  → process locally (update cursor, check clicks)
- *   CLIENT → call proto_send_mouse() to forward over serial
- */
-
 void handle_mouse(void) {
     mouse_ih();
     if (mouse_has_error()) return;
@@ -72,12 +60,10 @@ void handle_mouse(void) {
     get_mouse_buf()[idx++] = byte;
     set_mouse_idx(idx);
 
+    /* Full packet assembled */
     if (idx == 3) {
-        /* Full packet assembled */
-        mouse_state_update(get_mouse_state(), get_mouse_buf(),
-                           video_get_hres(), video_get_vres());
+        mouse_state_update(get_mouse_state(), get_mouse_buf(), video_get_hres(), video_get_vres());
         set_mouse_idx(0);
-        /* game_handle_mouse handles HOST vs CLIENT internally */
     }
 }
 

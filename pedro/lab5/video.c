@@ -124,9 +124,24 @@ int(vg_draw_rectangle_project)(uint16_t x, uint16_t y, uint16_t w, uint16_t h, u
   return 0;
 }
 
-void vg_draw_pixel_fast(uint16_t x, uint16_t y, uint32_t color) {
+void vg_draw_pixel_project(uint16_t x, uint16_t y, uint32_t color) {
   if (x >= vmi.XResolution || y >= vmi.YResolution) return;
   _put_pixel(x, y, color);
+}
+
+int vg_draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
+  if (x >= vmi.XResolution || y >= vmi.YResolution) return 1;
+
+  char *pixel = video_mem + (y * vmi.XResolution + x) * bytes_per_pixel;
+  memcpy(pixel, &color, bytes_per_pixel);
+  return 0;
+}
+
+static inline void _put_pixel(uint16_t x, uint16_t y, uint32_t color) {
+  unsigned int buffer_offset = current_draw_buffer * buffer_size;
+  unsigned int index = buffer_offset + (vmi.XResolution * y + x) * bytes_per_pixel;
+  uint8_t *dst = vram + index;
+  memcpy(dst, &color, bytes_per_pixel);
 }
 
 int(vg_draw_hline_project)(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {

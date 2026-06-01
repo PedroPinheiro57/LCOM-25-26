@@ -1,7 +1,5 @@
 #include "mouse.h"
 
-#define MOUSE_SENSITIVITY 1
-
 void mouse_state_init(mouse_state_t *ms, int16_t start_x, int16_t start_y) {
   ms->x        = start_x;
   ms->y        = start_y;

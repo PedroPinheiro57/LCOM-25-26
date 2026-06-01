@@ -63,9 +63,6 @@ static cursor_mode_t cursor_mode  = CURSOR_NORMAL;
 void cursor_set_mode(cursor_mode_t mode) { cursor_mode = mode; }
 
 void cursor_init(void) {
-  /* cursor_normal_xpm is the hand shape, cursor_hover_xpm is the arrow —
-     the asset file names are swapped, so we load them into the opposite
-     variables to get the correct visual behaviour */
   cursor_normal = sprite_load((xpm_map_t) cursor_hover_xpm);   /* arrow = normal */
   cursor_hover  = sprite_load((xpm_map_t) cursor_normal_xpm);  /* hand  = hover  */
 }

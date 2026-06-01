@@ -32,20 +32,6 @@
 #include "../assets/ships/Submarine.xpm"
 #include "../assets/ships/Submarine_dead.xpm"
 
-
-#define RTC_X 650
-#define RTC_Y 20
-
-#define C_EMPTY    0x1a3a5c
-#define C_SHIP     0x808080
-#define C_HIT      0xFF4500
-#define C_MISS     0x00BFFF
-#define C_SUNK     0x8B0000
-#define C_VALID    0x00FF00
-#define C_INVALID  0xFF0000
-#define C_HOVER    0xFFFF00
-#define C_REMOTE   0xFF8C00
-
 sprite_t *spr_ships[NUM_SHIPS];
 sprite_t *spr_ships_dead[NUM_SHIPS];
 

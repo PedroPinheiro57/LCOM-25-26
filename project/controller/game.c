@@ -1,5 +1,6 @@
 #include <lcom/lcf.h>
 #include "game.h"
+#include <string.h>
 #include "../view/game_menu.h"
 #include "../view/renderer.h"
 #include "../view/font.h"
@@ -7,18 +8,8 @@
 #include "../model/rtc.h"
 #include "../serial/protocol.h"
 #include "../../pedro/lab5/video.h"
-#include <string.h>
-
-#undef KEY_ENTER
-#undef KEY_UP
-#undef KEY_DOWN
-#undef KEY_LEFT
-#undef KEY_RIGHT
 #include "../../pedro/lab3/kbc.h"
 
-#define TICKS_PER_SEC          30
-#define COUNTDOWN_START        5
-#define POST_ATTACK_WAIT_TICKS 60
 
 static game_t  g;
 static bool    over  = false;

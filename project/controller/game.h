@@ -1,14 +1,15 @@
 #pragma once
-/*
- * game.h — Game state definitions, two-player serial multiplayer.
- */
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "../model/mouse.h"
 #include "../model/rtc.h"
 #include "../serial/protocol.h"
 #include "../model/board.h"
+
+
+#define TICKS_PER_SEC          30
+#define COUNTDOWN_START        5
+#define POST_ATTACK_WAIT_TICKS 60
 
 /* ------------------------------------------------------------------ */
 /* Role                                                               */
@@ -86,9 +87,8 @@ typedef struct {
 
 } game_t;
 
-/* ------------------------------------------------------------------ */
-/* Public API                                                         */
-/* ------------------------------------------------------------------ */
+
+
 void game_init(game_role_t role);
 void game_handle_timer(void);
 void game_handle_keyboard(uint8_t scancode);

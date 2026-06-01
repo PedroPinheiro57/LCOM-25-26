@@ -33,11 +33,6 @@
 #include "../assets/ships/Submarine_dead.xpm"
 
 
-
-
-
-
-
 #define RTC_X 650
 #define RTC_Y 20
 

@@ -67,41 +67,14 @@ void handle_mouse(void) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* handle_serial  (NEW)                                               */
-/* ------------------------------------------------------------------ */
-/*
- * Called from the event loop in main.c when an IRQ4 (COM1) interrupt
- * fires (i.e., when irqs & BIT(serial_bit) is true).
- *
- * Steps:
- *   1. Call uart_ih() — this drains the hardware UART/FIFO and fills
- *      the software RX ring buffer with received raw bytes.
- *      It also handles TX interrupts (sends next queued byte).
- *
- *   2. Pull every available byte from the RX ring buffer using
- *      uart_recv_byte() and feed them one by one into proto_feed_byte().
- *
- *   3. When proto_feed_byte() returns true, a complete application
- *      message has been assembled.  Pass it to game_handle_serial_msg()
- *      which applies it to the game state (HOST or CLIENT logic).
- *
- * We loop until the RX ring buffer is empty so that a burst of bytes
- * (e.g., a full mouse packet arriving in one interrupt) is processed
- * entirely in this handler invocation.
- */
 
-/* Module-level receiver state machine — persists between interrupts  */
 static proto_rx_state_t rx_state;
-static bool rx_state_initialised = false;
+
+proto_rx_state_t *get_rx_state() {
+    return &rx_state;
+}
 
 void handle_serial(void) {
-
-    if (!rx_state_initialised) {
-        proto_rx_reset(&rx_state);
-        rx_state_initialised = true;
-    }
-
     uart_ih();
 
     uint8_t b;

@@ -54,6 +54,7 @@ static int devices_init(void) {
         return 1;
     }
 
+    /* Serial Port */
     if (uart_init(&serial_bit) != 0) {
         mouse_unsubscribe_int();
         kbc_unsubscribe_int();

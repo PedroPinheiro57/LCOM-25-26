@@ -41,11 +41,13 @@ bool proto_feed_byte(proto_rx_state_t *s, uint8_t b, serial_msg_t *msg_out) {
         return false;
     }
 
+    /* store payload, if not complete skip this function call */
     s->buf[s->collected++] = b;
     if (s->collected < s->expected) return false;
 
     msg_out->type = s->type;
 
+    /* fill serial_msg_t payload */
     switch (s->type) {
         case MSG_KEY:
             msg_out->payload.key.scancode = s->buf[0];
@@ -105,10 +107,8 @@ void proto_send_mouse(uint8_t pkt[3]) {
 
 void proto_send_ship_place(uint8_t col, uint8_t row,
                             uint8_t size, uint8_t type_idx, uint8_t orient) {
-    /*
-     * 4 separate bytes: col, row, size, (type_idx << 1 | orient)
-     * type_idx fits in 3 bits (0-4), orient in 1 bit.
-     */
+
+    /* type_idx fits in 3 bits (0-4), orient in 1 bit */
     uint8_t type_orient = (uint8_t)((type_idx << 1) | (orient & 0x01));
     uart_send_byte(MSG_SHIP_PLACE);
     uart_send_byte(col);

@@ -26,7 +26,7 @@
 #define MSG_WINNER_LEN         1
 #define MSG_DONE_PLACING_LEN   0
 
-#define MSG_MAX_PAYLOAD        4   /* bumped from 3 */
+#define MSG_MAX_PAYLOAD        4  
 
 #define ATTACK_MISS   0
 #define ATTACK_HIT    1
@@ -37,7 +37,7 @@ typedef struct {
     union {
         struct { uint8_t scancode; }                    key;
         struct { uint8_t pkt[3]; }                      mouse;
-        struct { uint8_t col, row, size, type_orient; } ship;  /* changed */
+        struct { uint8_t col, row, size, type_orient; } ship;
         struct { uint8_t col, row, result; }            attack;
         struct { uint8_t col, row; }                    cursor;
         struct { uint8_t state; }                       state;
@@ -48,12 +48,13 @@ typedef struct {
 
 typedef struct {
     uint8_t type;
-    uint8_t buf[MSG_MAX_PAYLOAD];
-    uint8_t collected;
-    uint8_t expected;
-    bool    have_type;
+    uint8_t buf[MSG_MAX_PAYLOAD];   /* full payload*/
+    uint8_t collected;              /* number of bytes collected in a payload */
+    uint8_t expected;               /* number of bytes expected in a payload */
+    bool    have_type;              /* if a type has been assigned */
 } proto_rx_state_t;
 
+proto_rx_state_t *get_rx_state();
 void proto_rx_reset(proto_rx_state_t *s);
 bool proto_feed_byte(proto_rx_state_t *s, uint8_t b, serial_msg_t *msg_out);
 

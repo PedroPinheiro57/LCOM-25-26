@@ -13,8 +13,8 @@
 #define RTC_MONTH   0x08
 #define RTC_YEAR    0x09
 
-#define RTC_UIP  (1 << 7)   /* update in progress */
-#define RTC_DM   (1 << 2)   /* data mode: 1=binary, 0=BCD */
+#define RTC_UIP  BIT(7)   /* update in progress */
+#define RTC_DM   BIT(2)   /* data mode: 1=binary, 0=BCD */
 
 
 typedef struct {

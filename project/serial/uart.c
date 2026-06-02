@@ -28,8 +28,8 @@ static bool rxbuf_pop(uint8_t *out) {
 
 /* Low-level register helpers */
 static uint8_t uart_read_reg(uint8_t offset) {
-    uint32_t val = 0;
-    sys_inb(UART_COM1_BASE + offset, &val);
+    uint8_t val = 0;
+    util_sys_inb(UART_COM1_BASE + offset, &val);
     return (uint8_t)(val & 0xFF);
 }
 
@@ -66,16 +66,16 @@ int uart_init(uint8_t *bit_no) {
     // preventing the Host from ever detecting a new edge-triggered interrupt.
     uint8_t lsr_check = 0;
     // Read the current Line Status Register (LSR is offset 5)
-    uint32_t val_lsr = 0;
-    sys_inb(UART_COM1_BASE + 5, &val_lsr);
+    uint8_t val_lsr = 0;
+    util_sys_inb(UART_COM1_BASE + 5, &val_lsr);
     lsr_check = (uint8_t)(val_lsr & 0xFF);
 
     while (lsr_check & UART_LSR_DR) { // As long as Data Ready (Bit 0) is true
-        uint32_t dummy_rbr = 0;
-        sys_inb(UART_COM1_BASE + 0, &dummy_rbr); // Read RBR to discard the ghost byte
+        uint8_t dummy_rbr = 0;
+        util_sys_inb(UART_COM1_BASE + 0, &dummy_rbr); // Read RBR to discard the ghost byte
         
         // Refresh LSR to see if more bytes remain
-        sys_inb(UART_COM1_BASE + 5, &val_lsr);
+        util_sys_inb(UART_COM1_BASE + 5, &val_lsr);
         lsr_check = (uint8_t)(val_lsr & 0xFF);
     }
 

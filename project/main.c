@@ -15,7 +15,6 @@
 
 
 extern int foo();
-int timer_get_counter(void);
 
 /* IRQ hook bit indices returned by the subscribe functions           */
 static uint8_t timer_bit;
@@ -23,7 +22,10 @@ static uint8_t kbd_bit;
 static uint8_t mouse_bit;
 static uint8_t serial_bit;  
 
-
+game_role_t role = ROLE_HOST;
+bool role_is_client() {
+    return role == ROLE_CLIENT;
+}
 
 /* ------------------------------------------------------------------ */
 /* devices_init                                                       */
@@ -92,7 +94,6 @@ int(proj_main_loop)(int argc, char *argv[]) {
      *   lcom_run proj "host"    → original VM runs game logic
      *   lcom_run proj "client"  → cloned VM forwards input
      */
-    game_role_t role = ROLE_HOST;
     if (argc == 1) {
         if (strcmp(argv[0], "client") == 0) {
             printf("running as client\n");
@@ -138,14 +139,6 @@ int(proj_main_loop)(int argc, char *argv[]) {
         /* Timer interrupt */
         if (irqs & BIT(timer_bit)) {
             handle_timer();
-
-            /* CLIENT: retry MSG_HELLO once per second until connected */
-            if (role == ROLE_CLIENT && game_is_waiting_connect() && !game_is_connected()) {
-                if (timer_get_counter() % 30 == 0) {
-                    proto_send_hello();
-                    printf("Client sending MSG_HELLO...\n");
-                }
-            }
         }
     }
 

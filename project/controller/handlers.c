@@ -11,6 +11,9 @@
 #include "../serial/uart.h"
 #include "../serial/protocol.h"
 #include "../view/renderer.h"
+#include "../main.h"
+
+int timer_get_counter();
 
 /* ------------------------------------------------------------------ */
 /* handle_timer                                                       */
@@ -30,6 +33,14 @@ void handle_timer(void) {
     game_draw(game_get_state());
     cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
     video_swap_buffers();
+
+    /* CLIENT: retry MSG_HELLO once per second until connected */
+    if (role_is_client() && game_is_waiting_connect() && !game_is_connected()) {
+        if (timer_get_counter() % 30 == 0) {
+            proto_send_hello();
+            printf("Client sending MSG_HELLO...\n");
+        }
+    }
 }
 
 /* ------------------------------------------------------------------ */

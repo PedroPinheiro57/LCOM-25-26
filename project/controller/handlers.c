@@ -15,19 +15,12 @@
 
 int timer_get_counter();
 
-/* ------------------------------------------------------------------ */
-/* handle_timer                                                       */
-/* ------------------------------------------------------------------ */
+/* handle_timer */
 void handle_timer(void) {
     timer_int_handler();   
     game_handle_timer();   /* update game */
 
     update_animations(); 
-
-    /* Only process player 1 mouse, player 2 mouse is handled with the serial port */
-    if (!game_is_client_turn()) {
-        game_handle_mouse(get_mouse_state());
-    }
 
     video_clear_screen();
     game_draw(game_get_state());
@@ -43,9 +36,7 @@ void handle_timer(void) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* handle_keyboard                                                    */
-/* ------------------------------------------------------------------ */
+/* handle_keyboard */
 void handle_keyboard(void) {
     kbc_ih();
     if (kbc_has_error()) return;
@@ -55,9 +46,7 @@ void handle_keyboard(void) {
     game_handle_keyboard(sc);
 }
 
-/* ------------------------------------------------------------------ */
-/* handle_mouse                                                       */
-/* ------------------------------------------------------------------ */
+/* handle_mouse */
 void handle_mouse(void) {
     mouse_ih();
     if (mouse_has_error()) return;
@@ -75,6 +64,10 @@ void handle_mouse(void) {
     if (idx == 3) {
         mouse_state_update(get_mouse_state(), get_mouse_buf(), video_get_hres(), video_get_vres());
         set_mouse_idx(0);
+
+        if (!game_is_client_turn()) {
+            game_handle_mouse(get_mouse_state());
+        }
     }
 }
 

@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "../model/board.h"
 #include "../controller/game.h"
+#include "sprites.h"
 
 #define RTC_X 650
 #define RTC_Y 20
@@ -16,6 +17,12 @@
 #define C_INVALID  0xFF0000
 #define C_HOVER    0xFFFF00
 #define C_REMOTE   0xFF8C00
+
+/* sprite getters */
+sprite_t* get_ship_sprite(int index);
+sprite_t* get_ship_dead_sprite(int index);
+animated_sprite_t* get_anim_flame(void);
+animated_sprite_t* get_anim_explosion(void);
 
 /* Draw the entire board. hide_ships=true masks CELL_SHIP cells.     */
 void board_draw(board_t *b, bool hide_ships);
@@ -33,7 +40,6 @@ void board_highlight_remote_cursor(int col, int row);
                                    
 void draw_hud_place(int player, int ship_idx);
 void draw_hud_attack(int player, board_t *enemy); /* enemy board for counters */
-void destroy_game_sprites();
 void init_game_sprites();
 bool renderer_is_exploding(void);
 bool renderer_explosion_finished(void);

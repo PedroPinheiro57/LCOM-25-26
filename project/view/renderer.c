@@ -47,6 +47,24 @@ static bool is_waiting_for_turn = false;
 static int  wait_ticks          = 0;
 static bool expl_is_hit         = false;
 
+sprite_t* get_ship_sprite(int index) {
+    if (index < 0 || index >= NUM_SHIPS) return NULL;
+    return spr_ships[index];
+}
+
+sprite_t* get_ship_dead_sprite(int index) {
+    if (index < 0 || index >= NUM_SHIPS) return NULL;
+    return spr_ships_dead[index];
+}
+
+animated_sprite_t* get_anim_flame(void) {
+    return anim_flame;
+}
+
+animated_sprite_t* get_anim_explosion(void) {
+    return anim_explosion;
+}
+
 static uint8_t num_to_str(uint8_t n, char buf[3]) {
     if (n >= 10) {
         buf[0] = '0' + n / 10;
@@ -263,14 +281,7 @@ void init_game_sprites(void) {
     }
 }
 
-void destroy_game_sprites(void) {
-    for (int i = 0; i < NUM_SHIPS; i++) {
-        sprite_destroy(spr_ships[i]);
-        sprite_destroy(spr_ships_dead[i]);
-    }
-    anim_sprite_destroy(anim_flame);
-    anim_sprite_destroy(anim_explosion);
-}
+
 
 void start_explosion(int col, int row, bool is_hit) {
     is_exploding       = true;

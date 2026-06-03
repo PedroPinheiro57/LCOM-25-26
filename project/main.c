@@ -142,6 +142,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
         }
     }
 
+    destroy_game_sprites();
     if (devices_cleanup() != 0) return 1;
     return 0;
 }

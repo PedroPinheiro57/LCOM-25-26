@@ -36,3 +36,4 @@ animated_sprite_t* anim_sprite_create(uint16_t x, uint16_t y, uint8_t no_pixmaps
 void anim_sprite_update(animated_sprite_t *anim);
 void anim_sprite_draw(animated_sprite_t *anim);
 void anim_sprite_destroy(animated_sprite_t *anim);
+void destroy_game_sprites();

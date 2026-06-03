@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include "../assets/mouse_cursor.xpm"
 #include "../assets/hand_cursor.xpm"
- 
+#include "font.h"
+#include "../model/board.h"
+#include "renderer.h"
+
 sprite_t *sprite_load(xpm_map_t xpm) {
   sprite_t *sp = malloc(sizeof(sprite_t));
   if (sp == NULL) return NULL;
@@ -48,12 +51,6 @@ void sprite_draw_rotated(sprite_t *sp, uint16_t x, uint16_t y, bool rotate) {
       }
     }
   }
-}
-
-void sprite_destroy(sprite_t *sp) {
-  if (sp == NULL) return;
-  if (sp->colors) free(sp->colors);
-  free(sp);
 }
 
 static sprite_t    *cursor_normal = NULL;
@@ -108,6 +105,12 @@ void anim_sprite_draw(animated_sprite_t *anim) {
     }
 }
 
+void sprite_destroy(sprite_t *sp) {
+  if (sp == NULL) return;
+  if (sp->colors) free(sp->colors);
+  free(sp);
+}
+
 void anim_sprite_destroy(animated_sprite_t *anim) {
     if (anim == NULL) return;
     
@@ -117,4 +120,18 @@ void anim_sprite_destroy(animated_sprite_t *anim) {
         }
     }
     free(anim);
+}
+
+void destroy_game_sprites(void) {
+    for (int i = 0; i < NUM_SHIPS; i++) {
+        sprite_destroy(get_ship_sprite(i));
+        sprite_destroy(get_ship_dead_sprite(i));
+    }
+    
+    anim_sprite_destroy(get_anim_flame());
+    anim_sprite_destroy(get_anim_explosion());
+
+    sprite_destroy(font_get_sprite());
+    sprite_destroy(cursor_normal);
+    sprite_destroy(cursor_hover);
 }

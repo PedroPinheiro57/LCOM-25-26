@@ -11,6 +11,10 @@ void font_init(void) {
   font_sprite = sprite_load((xpm_map_t) font_xpm);
 }
 
+sprite_t* font_get_sprite(void) {
+    return font_sprite;
+}
+
 bool font_is_loaded(void) { return font_sprite != NULL; }
 
 void draw_char(char c, uint16_t x, uint16_t y, uint32_t color, uint8_t scale) {

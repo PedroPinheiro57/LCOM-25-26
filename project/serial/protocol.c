@@ -92,59 +92,46 @@ bool proto_feed_byte(proto_rx_state_t *s, uint8_t b, serial_msg_t *msg_out) {
 
 void proto_send_hello(void)     { uart_send_byte(MSG_HELLO); }
 void proto_send_hello_ack(void) { uart_send_byte(MSG_HELLO_ACK); }
+void proto_send_done_placing(void) { uart_send_byte(MSG_DONE_PLACING); }
 
 void proto_send_key(uint8_t scancode) {
-    uart_send_byte(MSG_KEY);
-    uart_send_byte(scancode);
+    uint8_t buf[] = { MSG_KEY, scancode };
+    uart_send_buf(buf, 1 + MSG_KEY_LEN);
 }
 
 void proto_send_mouse(uint8_t pkt[3]) {
-    uart_send_byte(MSG_MOUSE);
-    uart_send_byte(pkt[0]);
-    uart_send_byte(pkt[1]);
-    uart_send_byte(pkt[2]);
+    uint8_t buf[] = { MSG_MOUSE, pkt[0], pkt[1], pkt[2] };
+    uart_send_buf(buf, 1 + MSG_MOUSE_LEN);
 }
 
 void proto_send_ship_place(uint8_t col, uint8_t row,
                             uint8_t size, uint8_t type_idx, uint8_t orient) {
-
-    /* type_idx fits in 3 bits (0-4), orient in 1 bit */
     uint8_t type_orient = (uint8_t)((type_idx << 1) | (orient & 0x01));
-    uart_send_byte(MSG_SHIP_PLACE);
-    uart_send_byte(col);
-    uart_send_byte(row);
-    uart_send_byte(size);
-    uart_send_byte(type_orient);
+    uint8_t buf[] = { MSG_SHIP_PLACE, col, row, size, type_orient };
+    uart_send_buf(buf, 1 + MSG_SHIP_PLACE_LEN);
 }
 
 void proto_send_attack(uint8_t col, uint8_t row, uint8_t result) {
-    uart_send_byte(MSG_ATTACK);
-    uart_send_byte(col);
-    uart_send_byte(row);
-    uart_send_byte(result);
+    uint8_t buf[] = { MSG_ATTACK, col, row, result };
+    uart_send_buf(buf, 1 + MSG_ATTACK_LEN);
 }
 
 void proto_send_cursor(uint8_t col, uint8_t row) {
-    uart_send_byte(MSG_CURSOR);
-    uart_send_byte(col);
-    uart_send_byte(row);
+    uint8_t buf[] = { MSG_CURSOR, col, row };
+    uart_send_buf(buf, 1 + MSG_CURSOR_LEN);
 }
 
 void proto_send_state(uint8_t state) {
-    uart_send_byte(MSG_STATE);
-    uart_send_byte(state);
+    uint8_t buf[] = { MSG_STATE, state };
+    uart_send_buf(buf, 1 + MSG_STATE_LEN);
 }
 
 void proto_send_countdown(uint8_t seconds) {
-    uart_send_byte(MSG_COUNTDOWN);
-    uart_send_byte(seconds);
+    uint8_t buf[] = { MSG_COUNTDOWN, seconds };
+    uart_send_buf(buf, 1 + MSG_COUNTDOWN_LEN);
 }
 
 void proto_send_winner(uint8_t winner) {
-    uart_send_byte(MSG_WINNER);
-    uart_send_byte(winner);
-}
-
-void proto_send_done_placing(void) {
-    uart_send_byte(MSG_DONE_PLACING);
+    uint8_t buf[] = { MSG_WINNER, winner };
+    uart_send_buf(buf, 1 + MSG_WINNER_LEN);
 }

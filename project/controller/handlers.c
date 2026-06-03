@@ -88,6 +88,11 @@ proto_rx_state_t *get_rx_state() {
 void handle_serial(void) {
     uart_ih();
 
+    if (uart_rx_overflow()) {
+        proto_rx_reset(&rx_state);
+        return;
+    }
+
     uint8_t b;
     while (uart_recv_byte(&b)) {
         serial_msg_t msg;

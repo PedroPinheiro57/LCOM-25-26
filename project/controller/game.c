@@ -81,6 +81,11 @@ void game_handle_timer(void) {
     if (g.tick_count >= TICKS_PER_SEC) {
         g.tick_count = 0;
         rtc_read_time(&g.rtc);
+
+        if (g.tag != STATE_WAITING_CONNECT && g.tag != STATE_MAIN_MENU && 
+            g.tag != STATE_INSTRUCTIONS && g.tag != STATE_GAME_OVER) {
+            g.timer_seconds++;
+        }
     }
 
     if (g.role == ROLE_HOST && g.tag == STATE_COUNTDOWN) {
@@ -222,6 +227,9 @@ void game_handle_keyboard(uint8_t scancode) {
                         board_init(&g.p1_board);
                         board_init(&g.p2_board);
                         renderer_reset();
+
+                        g.timer_seconds = 0; 
+
                         g.data.place.player     = 1;
                         g.data.place.ship_idx   = 0;
                         g.data.place.orient     = HORIZONTAL;
@@ -424,6 +432,9 @@ void game_handle_mouse(mouse_state_t *ms) {
                         board_init(&g.p1_board);
                         board_init(&g.p2_board);
                         renderer_reset();
+
+                        g.timer_seconds = 0; 
+
                         g.data.place.player     = 1;
                         g.data.place.ship_idx   = 0;
                         g.data.place.orient     = HORIZONTAL;
@@ -652,6 +663,10 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
 
         case MSG_STATE: {
             game_state_t next = (game_state_t)msg->payload.state.state;
+
+            if (next == STATE_PLACE_SHIPS_P1) {
+                g.timer_seconds = 0;
+            }
 
             if (next == STATE_MAIN_MENU && g.tag == STATE_GAME_OVER) {
                 board_init(&g.p1_board);

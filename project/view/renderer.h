@@ -5,8 +5,8 @@
 #include "../controller/game.h"
 #include "sprites.h"
 
-#define RTC_X 650
-#define RTC_Y 20
+#define RTC_X 30
+#define RTC_Y 80
 
 #define C_EMPTY    0x1a3a5c
 #define C_SHIP     0x808080
@@ -38,8 +38,9 @@ void board_highlight_cell(int col, int row);
 void board_highlight_remote_cursor(int col, int row);
 
                                    
-void draw_hud_place(int player, int ship_idx);
-void draw_hud_attack(int player, board_t *enemy); /* enemy board for counters */
+void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds);
+void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds); /* enemy board for counters */
+void draw_stopwatch(uint32_t total_seconds, uint16_t x, uint16_t y);
 void init_game_sprites();
 bool renderer_is_exploding(void);
 bool renderer_explosion_finished(void);

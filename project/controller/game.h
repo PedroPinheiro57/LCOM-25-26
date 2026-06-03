@@ -55,6 +55,7 @@ typedef struct {
 
     rtc_time_t rtc;
     uint32_t   tick_count;
+    uint32_t   timer_seconds;
 
     uint32_t countdown_ticks;
     uint8_t  countdown_seconds;

@@ -5,7 +5,7 @@
 #define BOARD_COLS   10
 #define BOARD_ROWS   10
 #define CELL_SIZE    45
-#define BOARD_X      175
+#define BOARD_X      290
 #define BOARD_Y      90
 #define NUM_SHIPS    5
 

@@ -83,3 +83,13 @@ int menu_mouse_hover(int x, int y) {
   }
   return -1;
 }
+
+int menu_pause_hover(int x, int y) {
+    if (x >= OPT_X && x <= OPT_X + OPT_W &&
+        y >= 300   && y <= 300 + OPT_H)
+        return 0; // RESUME
+    if (x >= OPT_X && x <= OPT_X + OPT_W &&
+        y >= 370   && y <= 370 + OPT_H)
+        return 1; // QUIT
+    return -1;
+}

@@ -544,6 +544,18 @@ void game_handle_mouse(mouse_state_t *ms) {
             break;
         }
 
+        case STATE_PAUSED: {
+            int hover = menu_pause_hover(ms->x, ms->y);
+            cursor_set_mode(hover >= 0 ? CURSOR_HOVER : CURSOR_NORMAL);
+            if (ms->moved && hover >= 0 && hover != g.data.pause.selected)
+                g.data.pause.selected = hover;
+            if (ms->clicked && hover >= 0) {
+                if (hover == 0) transition(g.prev);
+                if (hover == 1) over = true;
+            }
+            break;
+        }
+
         default:
             break;
     }

@@ -129,7 +129,7 @@
  * Divisor = 115200 / desired_baud.
  * @{
  */
-#define UART_BAUD_115200     1  /**< Divisor for 115200 baud (maximum speed for smooth gameplay). */
+#define UART_BAUD_115200     1  /**< Divisor for 115200 baud (maximum speed) */
 
 #define UART_DEFAULT_BAUD    UART_BAUD_115200
 /** @} */

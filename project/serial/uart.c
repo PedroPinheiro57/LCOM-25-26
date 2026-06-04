@@ -57,8 +57,11 @@ static void uart_set_line_control(void) {
 static void uart_configure_fifo(void) {
     uart_write_reg(UART_FCR, UART_FCR_INIT);
 
+    /* check fifo support */
+    /* (página 14 da folha da porta de série dos powerpoints) */
     if ((uart_read_reg(UART_IIR) & UART_IIR_FIFO_EN) != UART_IIR_FIFO_EN) {
-        uart_write_reg(UART_FCR, 0x00); /* disable; chip lacks FIFO support */
+        /* disable fifos */
+        uart_write_reg(UART_FCR, 0x00);
     }
 }
 
@@ -69,12 +72,13 @@ static void uart_enable_out2(void) {
 static void uart_flush_rx(void) {
     uint8_t lsr = uart_read_reg(UART_LSR);
 
+    /* while there is data to receive */
     while (lsr & UART_LSR_DR) {
-        (void)uart_read_reg(UART_RBR);
+        uart_read_reg(UART_RBR);
         lsr = uart_read_reg(UART_LSR);
     }
 
-    (void)uart_read_reg(UART_IIR); /* clear any latched interrupt */
+    uart_read_reg(UART_IIR); /* clear any latched interrupt */
 }
 
 static void uart_enable_interrupts(void) {
@@ -88,7 +92,8 @@ static int uart_subscribe_irq(uint8_t *bit_no) {
 
 int uart_init(uint8_t *bit_no) {
     if (bit_no == NULL) return 1;
-
+    *bit_no = uart_hook_id;
+     
     uart_set_baud_rate();       
     uart_set_line_control();   
     uart_configure_fifo();     

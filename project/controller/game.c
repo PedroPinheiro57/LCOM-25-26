@@ -36,6 +36,9 @@ void game_save_cursor(int16_t x, int16_t y) {
     prev_cy = y;
 }
 
+/* ------------------------------------------------------------------ */
+/* Internal helpers                                                   */
+/* ------------------------------------------------------------------ */
 
 static void transition(game_state_t next) {
     g.prev = g.tag;
@@ -46,10 +49,12 @@ static void transition(game_state_t next) {
     get_mouse_state()->moved    = false;
 }
 
+/* ------------------------------------------------------------------ */
+/* game_init                                                          */
+/* ------------------------------------------------------------------ */
 void game_init(game_role_t role) {
     memset(&g, 0, sizeof(g));
 
-    /* init game_t parameters */
     g.role      = role;
     g.connected = false;
     g.remote_cursor_col = -1;
@@ -60,18 +65,17 @@ void game_init(game_role_t role) {
     g.prev = STATE_WAITING_CONNECT;
     rtc_read_time(&g.rtc);
 
-    /* init sprites */
     font_init();
     cursor_init();
     init_game_sprites();
 
-    /* game variables */
     post_attack_ticks   = 0;
     waiting_post_attack = false;
 }
 
-
-
+/* ------------------------------------------------------------------ */
+/* game_handle_timer  (HOST only for logic; both sides call it)       */
+/* ------------------------------------------------------------------ */
 void game_handle_timer(void) {
 
     g.tick_count++;
@@ -126,7 +130,6 @@ void game_handle_timer(void) {
         }
 
         if (result == ATTACK_HIT || result == ATTACK_SUNK) {
-            /* same player continues */
         } else {
             waiting_post_attack = true;
             post_attack_ticks   = 0;
@@ -171,9 +174,10 @@ void game_handle_timer(void) {
         }
     }
 
+
     static uint8_t cursor_tick = 0;
     cursor_tick++;
-    if (cursor_tick >= 3) {
+    if (cursor_tick >= 2) {
         cursor_tick = 0;
         if (g.role == ROLE_HOST && g.tag == STATE_TURN_P1)
             proto_send_cursor(
@@ -186,21 +190,95 @@ void game_handle_timer(void) {
     }
 }
 
+/* ------------------------------------------------------------------ */
+/* game_handle_keyboard                                               */
+/* ------------------------------------------------------------------ */
 void game_handle_keyboard(uint8_t scancode) {
 
-    /* ignore player 2 keyboard when its not his turn */
-    if (g.role == ROLE_CLIENT) {
-        if (g.tag == STATE_PLACE_SHIPS_P2 || g.tag == STATE_TURN_P2) {
+    uint8_t code = key_get_code(scancode);
+    bool    make = key_is_make(scancode);
 
-        } else {
+    if (g.role == ROLE_CLIENT) {
+
+        bool client_owns =
+            (g.tag == STATE_PLACE_SHIPS_P2) ||
+            (g.tag == STATE_TURN_P2)        ||
+            (g.tag == STATE_PAUSED)         ||
+            (g.tag == STATE_MAIN_MENU)      ||
+            (g.tag == STATE_INSTRUCTIONS)   ||
+            (g.tag == STATE_GAME_OVER);
+
+        if (!client_owns) {
             if (!g.connected) return;
             proto_send_key(scancode);
             return;
         }
+
+        if (g.tag == STATE_PAUSED) {
+            if (make && (code == KEY_UP || code == KEY_DOWN))
+                g.data.pause.selected = (g.data.pause.selected + 1) % 2;
+            if (make && code == KEY_ENTER) {
+                if (g.data.pause.selected == 0) {
+                    transition(g.prev);
+                } else {
+                    proto_send_client_quit();
+                    over = true;
+                }
+            }
+            if (!make && code == KEY_ESC) {
+                transition(g.prev);
+            }
+            return;
+        }
+
+        if (g.tag == STATE_MAIN_MENU) {
+            if (make && code == KEY_UP) {
+                g.data.menu.selected = (g.data.menu.selected + 2) % 3;
+                proto_send_key(scancode); 
+            }
+            if (make && code == KEY_DOWN) {
+                g.data.menu.selected = (g.data.menu.selected + 1) % 3;
+                proto_send_key(scancode);
+            }
+            if (!make && code == KEY_ESC) {
+                proto_send_client_quit();
+                over = true;
+            }
+            if (make && code == KEY_ENTER) {
+                if (g.data.menu.selected == 0) {
+                    proto_send_key(scancode); 
+                } else if (g.data.menu.selected == 1) {
+                    transition(STATE_INSTRUCTIONS);
+                    proto_send_state(STATE_INSTRUCTIONS);
+                } else if (g.data.menu.selected == 2) {
+                    proto_send_client_quit();
+                    over = true;
+                }
+            }
+            return;
+        }
+
+        if (g.tag == STATE_INSTRUCTIONS) {
+            if ((make && code == KEY_ENTER) || (!make && code == KEY_ESC)) {
+                transition(STATE_MAIN_MENU);
+                proto_send_state(STATE_MAIN_MENU);
+            }
+            return;
+        }
+
+        if (g.tag == STATE_GAME_OVER) {
+            if (make && code == KEY_ENTER) {
+                proto_send_key(scancode);
+            }
+            if (!make && code == KEY_ESC) {
+                proto_send_client_quit();
+                over = true;
+            }
+            return;
+        }
+
     }
 
-    uint8_t code = key_get_code(scancode);
-    bool    make = key_is_make(scancode);
 
     switch (g.tag) {
 
@@ -217,7 +295,6 @@ void game_handle_keyboard(uint8_t scancode) {
             if (make && code == KEY_ENTER) {
                 switch (g.data.menu.selected) {
                     case 0:
-                        /* prepare data for the first play */
                         renderer_reset();
                         g.data.place.player     = 1;
                         g.data.place.ship_idx   = 0;
@@ -247,44 +324,40 @@ void game_handle_keyboard(uint8_t scancode) {
 
         case STATE_PLACE_SHIPS_P1:
         case STATE_PLACE_SHIPS_P2: {
-            if (make && code == KEY_UP) 
-                g.data.place.cursor_row = (g.data.place.cursor_row > 0) ? 
-                g.data.place.cursor_row - 1 : 0;
+            if (make && code == KEY_UP)
+                g.data.place.cursor_row = (g.data.place.cursor_row > 0) ?
+                    g.data.place.cursor_row - 1 : 0;
             if (make && code == KEY_DOWN)
-                g.data.place.cursor_row = (g.data.place.cursor_row < BOARD_ROWS - 1)?
-                g.data.place.cursor_row + 1 : BOARD_ROWS - 1;
+                g.data.place.cursor_row = (g.data.place.cursor_row < BOARD_ROWS - 1) ?
+                    g.data.place.cursor_row + 1 : BOARD_ROWS - 1;
             if (make && code == KEY_LEFT)
-                g.data.place.cursor_col = (g.data.place.cursor_col > 0)?
-                g.data.place.cursor_col - 1 : 0;
+                g.data.place.cursor_col = (g.data.place.cursor_col > 0) ?
+                    g.data.place.cursor_col - 1 : 0;
             if (make && code == KEY_RIGHT)
-                g.data.place.cursor_col = (g.data.place.cursor_col < BOARD_COLS - 1)? 
-                g.data.place.cursor_col + 1 : BOARD_COLS - 1;
+                g.data.place.cursor_col = (g.data.place.cursor_col < BOARD_COLS - 1) ?
+                    g.data.place.cursor_col + 1 : BOARD_COLS - 1;
 
             if (make && code == KEY_R)
                 g.data.place.orient ^= 1;
 
-            /* if placing ship */
             if (make && code == KEY_ENTER) {
-                /* which player board */
                 board_t *b   = (g.tag == STATE_PLACE_SHIPS_P1) ? &g.p1_board : &g.p2_board;
                 uint8_t col  = (uint8_t)g.data.place.cursor_col;
                 uint8_t row  = (uint8_t)g.data.place.cursor_row;
-                /* size of current placing ship */
                 uint8_t size = SHIP_SIZES[g.data.place.ship_idx];
                 orientation_t orient = (orientation_t)g.data.place.orient;
 
                 if (board_can_place(b, col, row, size, orient)) {
-                    board_place_ship(b, col, row, size, (uint8_t)g.data.place.ship_idx, orient);
+                    board_place_ship(b, col, row, size,
+                                     (uint8_t)g.data.place.ship_idx, orient);
 
-                    /* if client, notify hostinfo about ship placed */
                     if (g.role == ROLE_CLIENT) {
-                        proto_send_ship_place(col, row, size, (uint8_t)g.data.place.ship_idx, (uint8_t)orient);
+                        proto_send_ship_place(col, row, size,
+                                              (uint8_t)g.data.place.ship_idx,
+                                              (uint8_t)orient);
                     }
 
-                    /* next ship */
                     g.data.place.ship_idx++;
-
-                    /* if all ships have been placed */
                     if (g.data.place.ship_idx >= NUM_SHIPS) {
                         if (g.tag == STATE_PLACE_SHIPS_P1) {
                             g.data.place.ship_idx   = 0;
@@ -317,27 +390,23 @@ void game_handle_keyboard(uint8_t scancode) {
             if (g.tag == STATE_TURN_P1 && g.role != ROLE_HOST)   break;
             if (g.tag == STATE_TURN_P2 && g.role != ROLE_CLIENT) break;
 
-            /* wait for animations */
             if (renderer_is_exploding()) break;
 
             if (make && code == KEY_UP)
-                g.data.turn.cursor_row = (g.data.turn.cursor_row > 0) ? 
-                g.data.turn.cursor_row - 1 : 0;
+                g.data.turn.cursor_row = (g.data.turn.cursor_row > 0) ?
+                    g.data.turn.cursor_row - 1 : 0;
             if (make && code == KEY_DOWN)
-                g.data.turn.cursor_row = (g.data.turn.cursor_row < BOARD_ROWS - 1)? 
-                g.data.turn.cursor_row + 1 : BOARD_ROWS - 1;
+                g.data.turn.cursor_row = (g.data.turn.cursor_row < BOARD_ROWS - 1) ?
+                    g.data.turn.cursor_row + 1 : BOARD_ROWS - 1;
             if (make && code == KEY_LEFT)
-                g.data.turn.cursor_col = (g.data.turn.cursor_col > 0) ? 
-                g.data.turn.cursor_col - 1 : 0;
+                g.data.turn.cursor_col = (g.data.turn.cursor_col > 0) ?
+                    g.data.turn.cursor_col - 1 : 0;
             if (make && code == KEY_RIGHT)
-                g.data.turn.cursor_col = (g.data.turn.cursor_col < BOARD_COLS - 1)?
-                g.data.turn.cursor_col + 1 : BOARD_COLS - 1;
+                g.data.turn.cursor_col = (g.data.turn.cursor_col < BOARD_COLS - 1) ?
+                    g.data.turn.cursor_col + 1 : BOARD_COLS - 1;
 
-            /* if attack */
             if (make && (code == KEY_ENTER || code == KEY_SPACE)) {
-
-                /* get enemy board */
-                board_t *enemy = (g.tag == STATE_TURN_P1)? &g.p2_board : &g.p1_board;
+                board_t *enemy = (g.tag == STATE_TURN_P1) ? &g.p2_board : &g.p1_board;
                 uint8_t col = (uint8_t)g.data.turn.cursor_col;
                 uint8_t row = (uint8_t)g.data.turn.cursor_row;
 
@@ -345,9 +414,10 @@ void game_handle_keyboard(uint8_t scancode) {
                     if (g.role == ROLE_HOST) {
                         board_attack(enemy, col, row);
                         bool is_hit = (enemy->grid[row][col] == CELL_HIT ||
-                            enemy->grid[row][col] == CELL_SUNK);
+                                       enemy->grid[row][col] == CELL_SUNK);
                         start_explosion(col, row, is_hit);
                     } else {
+                        start_explosion(col, row, false); 
                         proto_send_attack(col, row, 0);
                     }
                 }
@@ -391,17 +461,80 @@ void game_handle_keyboard(uint8_t scancode) {
     }
 }
 
+/* ------------------------------------------------------------------ */
+/* game_handle_mouse                                                  */
+/* ------------------------------------------------------------------ */
 void game_handle_mouse(mouse_state_t *ms) {
 
     if (g.role == ROLE_CLIENT) {
-        if (g.tag == STATE_PLACE_SHIPS_P2 || g.tag == STATE_TURN_P2) {
-            /* fall through */
-        } else {
+        bool client_owns =
+            (g.tag == STATE_PLACE_SHIPS_P2) ||
+            (g.tag == STATE_TURN_P2)        ||
+            (g.tag == STATE_PAUSED)         ||
+            (g.tag == STATE_MAIN_MENU)      ||
+            (g.tag == STATE_INSTRUCTIONS)   || 
+            (g.tag == STATE_GAME_OVER);
+
+        if (!client_owns) {
             if (!g.connected) return;
             if (ms->moved || ms->clicked)
                 proto_send_mouse(get_mouse_buf());
             return;
         }
+
+        if (g.tag == STATE_PAUSED) {
+            int hover = menu_pause_hover(ms->x, ms->y);
+            cursor_set_mode(hover >= 0 ? CURSOR_HOVER : CURSOR_NORMAL);
+            if (ms->moved && hover >= 0 && hover != g.data.pause.selected)
+                g.data.pause.selected = hover;
+            if (ms->clicked && hover >= 0) {
+                if (hover == 0) {
+                    transition(g.prev);
+                } else {
+                    proto_send_client_quit();
+                    over = true;
+                }
+            }
+            return;
+        }
+
+        if (g.tag == STATE_MAIN_MENU) {
+            int hover = menu_mouse_hover(ms->x, ms->y);
+            cursor_set_mode(hover >= 0 ? CURSOR_HOVER : CURSOR_NORMAL);
+            
+            if (ms->moved && hover >= 0 && hover != g.data.menu.selected)
+                g.data.menu.selected = hover;
+                
+            if (ms->clicked && hover >= 0) {
+                switch (hover) {
+                    case 0: 
+                        proto_send_key(0x1C); 
+                        break;
+                        
+                    case 1: 
+                        transition(STATE_INSTRUCTIONS);
+                        proto_send_state(STATE_INSTRUCTIONS); 
+                        break;
+                        
+                    case 2: 
+                        proto_send_client_quit(); 
+                        over = true;             
+                        break;
+                }
+            }
+            return;
+        }
+
+        if (g.tag == STATE_INSTRUCTIONS) {
+            if (ms->clicked) {
+                transition(STATE_MAIN_MENU);
+                proto_send_state(STATE_MAIN_MENU);
+            }
+            return;
+        }
+
+        if (g.tag == STATE_GAME_OVER) return;
+
     }
 
     int col, row;
@@ -538,8 +671,10 @@ void game_handle_mouse(mouse_state_t *ms) {
             if (ms->clicked) {
                 col = g.data.turn.cursor_col;
                 row = g.data.turn.cursor_row;
-                if (!board_already_attacked(enemy, col, row))
+                if (!board_already_attacked(enemy, col, row)) {
+                    start_explosion(col, row, false);
                     proto_send_attack((uint8_t)col, (uint8_t)row, 0);
+                }
             }
             break;
         }
@@ -561,13 +696,15 @@ void game_handle_mouse(mouse_state_t *ms) {
     }
 }
 
+/* ------------------------------------------------------------------ */
+/* game_handle_serial_msg                                             */
+/* ------------------------------------------------------------------ */
 void game_handle_serial_msg(const serial_msg_t *msg) {
 
-    /* HOST */
+    /* ---- HOST ---- */
     if (g.role == ROLE_HOST) {
         switch (msg->type) {
 
-            /* if receiving hello, send acknowledge to client */
             case MSG_HELLO:
                 if (!g.connected) {
                     g.connected = true;
@@ -580,7 +717,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
 
             case MSG_DONE_PLACING:
                 if (g.tag == STATE_PLACE_SHIPS_WAITING) {
-                    /* send HOST's (P1) ships to CLIENT before countdown */
+                    /* Send HOST's (P1) ships to CLIENT before countdown */
                     for (uint8_t i = 0; i < g.p1_board.ships_placed; i++) {
                         ship_t *s = &g.p1_board.ships[i];
                         proto_send_ship_place(s->col, s->row, s->size,
@@ -595,7 +732,6 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                 break;
 
             case MSG_SHIP_PLACE: {
-                /* CLIENT's P2 ships arriving during placement */
                 uint8_t col         = msg->payload.ship.col;
                 uint8_t row         = msg->payload.ship.row;
                 uint8_t size        = msg->payload.ship.size;
@@ -610,15 +746,19 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             case MSG_KEY:
                 if (g.tag == STATE_TURN_P2) {
                     game_role_t saved = g.role;
-                    g.role = ROLE_HOST;
+                    g.role = ROLE_HOST;        
                     game_handle_keyboard(msg->payload.key.scancode);
                     g.role = saved;
+                }
+                if (g.tag == STATE_MAIN_MENU ||
+                    g.tag == STATE_INSTRUCTIONS ||
+                    g.tag == STATE_GAME_OVER) {
+                    game_handle_keyboard(msg->payload.key.scancode);
                 }
                 break;
 
             case MSG_ATTACK: {
                 if (g.tag != STATE_TURN_P2) break;
-                if (renderer_is_exploding()) break;
 
                 uint8_t col    = msg->payload.attack.col;
                 uint8_t row    = msg->payload.attack.row;
@@ -633,21 +773,23 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                 break;
             }
 
-            case MSG_MOUSE:
-                break;
-
             case MSG_CURSOR:
                 g.remote_cursor_col = (int8_t)msg->payload.cursor.col;
                 g.remote_cursor_row = (int8_t)msg->payload.cursor.row;
                 break;
 
+            case MSG_CLIENT_QUIT:
+                over = true;
+                break;
+
+            case MSG_MOUSE:
             default:
                 break;
         }
         return;
     }
 
-    /* CLIENT */
+    /* ---- CLIENT ---- */
     switch (msg->type) {
 
         case MSG_HELLO_ACK:
@@ -661,7 +803,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                 over = true;
                 break;
             }
-            
+
             if (next == STATE_MAIN_MENU && g.tag == STATE_GAME_OVER) {
                 board_init(&g.p1_board);
                 board_init(&g.p2_board);
@@ -692,8 +834,10 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             uint8_t type_orient = msg->payload.ship.type_orient;
             uint8_t type_idx    = (type_orient >> 1) & 0x07;
             uint8_t ori         = type_orient & 0x01;
-            board_t *target     = (g.p2_board.ships_placed < NUM_SHIPS)? &g.p2_board : &g.p1_board;
-            board_place_ship(target, col, row, size,type_idx, (orientation_t)ori);
+
+            board_t *target = (g.p1_board.ships_placed < NUM_SHIPS)
+                              ? &g.p1_board : &g.p2_board;
+            board_place_ship(target, col, row, size, type_idx, (orientation_t)ori);
             break;
         }
 
@@ -702,48 +846,45 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             uint8_t row    = msg->payload.attack.row;
             uint8_t result = msg->payload.attack.result;
 
-            board_t *target = (g.tag == STATE_TURN_P1) ? &g.p2_board: &g.p1_board;
+            board_t *target = (g.tag == STATE_TURN_P1)
+                              ? &g.p2_board : &g.p1_board;
 
-            if (!board_already_attacked(target, col, row)) {
-                if (result == ATTACK_MISS) {
-                    target->grid[row][col] = CELL_MISS;
-                } else if (result == ATTACK_HIT) {
-                    target->grid[row][col] = CELL_HIT;
-                } else if (result == ATTACK_SUNK) {
-                    target->grid[row][col] = CELL_SUNK;
-                    target->ships_sunk++;
-
-                    for (uint8_t i = 0; i < target->ships_placed; i++) {
-                        ship_t *s = &target->ships[i];
-                        if (s->sunk) continue;
-                        bool contains = false;
+            if (result == ATTACK_MISS) {
+                target->grid[row][col] = CELL_MISS;
+            } else if (result == ATTACK_HIT) {
+                target->grid[row][col] = CELL_HIT;
+            } else if (result == ATTACK_SUNK) {
+                target->grid[row][col] = CELL_SUNK;
+                target->ships_sunk++;
+                /* Mark all cells of the sunk ship */
+                for (uint8_t i = 0; i < target->ships_placed; i++) {
+                    ship_t *s = &target->ships[i];
+                    if (s->sunk) continue;
+                    bool contains = false;
+                    if (s->orient == HORIZONTAL)
+                        contains = (row == s->row &&
+                                    col >= s->col &&
+                                    col < s->col + s->size);
+                    else
+                        contains = (col == s->col &&
+                                    row >= s->row &&
+                                    row < s->row + s->size);
+                    if (contains) {
+                        s->sunk = true;
+                        s->hits = s->size;
                         if (s->orient == HORIZONTAL)
-                            contains = (row == s->row &&
-                                        col >= s->col &&
-                                        col < s->col + s->size);
+                            for (uint8_t c = s->col; c < s->col + s->size; c++)
+                                target->grid[s->row][c] = CELL_SUNK;
                         else
-                            contains = (col == s->col &&
-                                        row >= s->row &&
-                                        row < s->row + s->size);
-                        if (contains) {
-                            s->sunk = true;
-                            s->hits = s->size;
-                            if (s->orient == HORIZONTAL)
-                                for (uint8_t c = s->col;
-                                     c < s->col + s->size; c++)
-                                    target->grid[s->row][c] = CELL_SUNK;
-                            else
-                                for (uint8_t r = s->row;
-                                     r < s->row + s->size; r++)
-                                    target->grid[r][s->col] = CELL_SUNK;
-                            break;
-                        }
+                            for (uint8_t r = s->row; r < s->row + s->size; r++)
+                                target->grid[r][s->col] = CELL_SUNK;
+                        break;
                     }
                 }
-
-                bool is_hit = (result == ATTACK_HIT || result == ATTACK_SUNK);
-                start_explosion(col, row, is_hit);
             }
+
+            bool is_hit = (result == ATTACK_HIT || result == ATTACK_SUNK);
+            start_explosion(col, row, is_hit);
             break;
         }
 

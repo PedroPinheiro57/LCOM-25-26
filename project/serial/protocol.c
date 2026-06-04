@@ -14,6 +14,7 @@ static uint8_t payload_len_for(uint8_t type) {
         case MSG_COUNTDOWN:     return MSG_COUNTDOWN_LEN;
         case MSG_WINNER:        return MSG_WINNER_LEN;
         case MSG_DONE_PLACING:  return MSG_DONE_PLACING_LEN;
+        case MSG_CLIENT_QUIT:   return MSG_CLIENT_QUIT_LEN;
         default:                return 0xFF;
     }
 }
@@ -41,13 +42,12 @@ bool proto_feed_byte(proto_rx_state_t *s, uint8_t b, serial_msg_t *msg_out) {
         return false;
     }
 
-    /* store payload, if not complete skip this function call */
+    /* store payload bytes until complete */
     s->buf[s->collected++] = b;
     if (s->collected < s->expected) return false;
 
     msg_out->type = s->type;
 
-    /* fill serial_msg_t payload */
     switch (s->type) {
         case MSG_KEY:
             msg_out->payload.key.scancode = s->buf[0];
@@ -90,9 +90,10 @@ bool proto_feed_byte(proto_rx_state_t *s, uint8_t b, serial_msg_t *msg_out) {
     return true;
 }
 
-void proto_send_hello(void)     { uart_send_byte(MSG_HELLO); }
-void proto_send_hello_ack(void) { uart_send_byte(MSG_HELLO_ACK); }
+void proto_send_hello(void)        { uart_send_byte(MSG_HELLO); }
+void proto_send_hello_ack(void)    { uart_send_byte(MSG_HELLO_ACK); }
 void proto_send_done_placing(void) { uart_send_byte(MSG_DONE_PLACING); }
+void proto_send_client_quit(void)  { uart_send_byte(MSG_CLIENT_QUIT); }
 
 void proto_send_key(uint8_t scancode) {
     uint8_t buf[] = { MSG_KEY, scancode };

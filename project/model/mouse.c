@@ -19,20 +19,23 @@ void mouse_state_update(mouse_state_t *ms, uint8_t buf[3], uint16_t hres, uint16
   ms->rb = b1.fields.rb;
   ms->mb = b1.fields.mb;
 
-  ms->clicked  = (!prev_lb && ms->lb);
-  ms->released = (prev_lb && !ms->lb);
+
+  ms->clicked  |= (!prev_lb && ms->lb);
+  ms->released |= (prev_lb  && !ms->lb);
 
   if (b1.fields.x_ovf || b1.fields.y_ovf) {
     ms->moved = true;
     goto clamp;
   }
 
-  int16_t dx = b1.fields.x_sign ? (int16_t)(buf[1] | 0xFF00) : (int16_t)buf[1];
-  int16_t dy = b1.fields.y_sign ? (int16_t)(buf[2] | 0xFF00) : (int16_t)buf[2];
+  {
+    int16_t dx = b1.fields.x_sign ? (int16_t)(buf[1] | 0xFF00) : (int16_t)buf[1];
+    int16_t dy = b1.fields.y_sign ? (int16_t)(buf[2] | 0xFF00) : (int16_t)buf[2];
 
-  ms->x    += dx;
-  ms->y    -= dy;
-  ms->moved = (dx != 0 || dy != 0);
+    ms->x    += dx;
+    ms->y    -= dy;
+    ms->moved |= (dx != 0 || dy != 0);
+  }
 
 clamp:
   if (ms->x < 0)               ms->x = 0;

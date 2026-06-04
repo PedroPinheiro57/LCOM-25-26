@@ -1,6 +1,6 @@
 #include <lcom/lcf.h>
 #include <lcom/timer.h>
-#include <string.h>              
+#include <string.h>
 #include "../pedro/lab2/i8254.h"
 #include "../pedro/lab3/kbc.h"
 #include "../pedro/lab4/mouse.h"
@@ -20,7 +20,7 @@ extern int foo();
 static uint8_t timer_bit;
 static uint8_t kbd_bit;
 static uint8_t mouse_bit;
-static uint8_t serial_bit;  
+static uint8_t serial_bit;
 
 game_role_t role = ROLE_HOST;
 bool role_is_client() {
@@ -73,10 +73,10 @@ static int devices_init(void) {
 /* devices_cleanup                                                    */
 /* ------------------------------------------------------------------ */
 static int devices_cleanup(void) {
-    uart_cleanup();              
+    uart_cleanup();
+    if (mouse_disable_data_reporting() != 0)    return 1;
     if (mouse_unsubscribe_int() != 0)           return 1;
     if (kbc_unsubscribe_int() != 0)             return 1;
-    if (mouse_disable_data_reporting() != 0)    return 1;
     if (timer_unsubscribe_int() != 0)           return 1;
     vg_exit();
     return 0;
@@ -141,7 +141,8 @@ int(proj_main_loop)(int argc, char *argv[]) {
             handle_timer();
         }
     }
-
+    proto_send_state(STATE_EXIT);
+    tickdelay(micros_to_ticks(50000));
     destroy_game_sprites();
     if (devices_cleanup() != 0) return 1;
     return 0;

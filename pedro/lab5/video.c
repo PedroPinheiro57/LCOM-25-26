@@ -129,20 +129,6 @@ void vg_draw_pixel_project(uint16_t x, uint16_t y, uint32_t color) {
   _put_pixel(x, y, color);
 }
 
-int vg_draw_pixel(uint16_t x, uint16_t y, uint32_t color) {
-  if (x >= vmi.XResolution || y >= vmi.YResolution) return 1;
-
-  char *pixel = video_mem + (y * vmi.XResolution + x) * bytes_per_pixel;
-  memcpy(pixel, &color, bytes_per_pixel);
-  return 0;
-}
-
-static inline void _put_pixel(uint16_t x, uint16_t y, uint32_t color) {
-  unsigned int buffer_offset = current_draw_buffer * buffer_size;
-  unsigned int index = buffer_offset + (vmi.XResolution * y + x) * bytes_per_pixel;
-  uint8_t *dst = vram + index;
-  memcpy(dst, &color, bytes_per_pixel);
-}
 
 int(vg_draw_hline_project)(uint16_t x, uint16_t y, uint16_t len, uint32_t color) {
   if (y >= vmi.YResolution) return 1;
@@ -209,15 +195,6 @@ int video_swap_buffers(void) {
   set_display_buffer(current_draw_buffer);
   current_view_buffer = current_draw_buffer;
   current_draw_buffer = (current_draw_buffer + 1) % NUM_BUFFERS;
-  return 0;
-}
-
-
-/* --- public API --- */
-
-int vg_draw_pixel_project(uint16_t x, uint16_t y, uint32_t color) {
-  if (x >= vmi.XResolution || y >= vmi.YResolution) return 1;
-  _put_pixel(x, y, color);
   return 0;
 }
 

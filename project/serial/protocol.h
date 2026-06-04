@@ -13,6 +13,7 @@
 #define MSG_COUNTDOWN      'D'
 #define MSG_WINNER         'W'
 #define MSG_DONE_PLACING   'F'
+#define MSG_CLIENT_QUIT    'Q'   
 
 #define MSG_HELLO_LEN          0
 #define MSG_HELLO_ACK_LEN      0
@@ -25,6 +26,7 @@
 #define MSG_COUNTDOWN_LEN      1
 #define MSG_WINNER_LEN         1
 #define MSG_DONE_PLACING_LEN   0
+#define MSG_CLIENT_QUIT_LEN    0
 
 #define MSG_MAX_PAYLOAD        4  
 
@@ -48,7 +50,7 @@ typedef struct {
 
 typedef struct {
     uint8_t type;
-    uint8_t buf[MSG_MAX_PAYLOAD];   /* full payload*/
+    uint8_t buf[MSG_MAX_PAYLOAD];   /* full payload */
     uint8_t collected;              /* number of bytes collected in a payload */
     uint8_t expected;               /* number of bytes expected in a payload */
     bool    have_type;              /* if a type has been assigned */
@@ -70,3 +72,4 @@ void proto_send_state(uint8_t state);
 void proto_send_countdown(uint8_t seconds);
 void proto_send_winner(uint8_t winner);
 void proto_send_done_placing(void);
+void proto_send_client_quit(void);

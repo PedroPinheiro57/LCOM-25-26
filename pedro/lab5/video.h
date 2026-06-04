@@ -12,7 +12,7 @@ int vg_draw_pixel(uint16_t x, uint16_t y, uint32_t color);
 int      video_init(uint16_t mode);
 int      video_swap_buffers(void);
 
-int      vg_draw_pixel_project(uint16_t x, uint16_t y, uint32_t color);
+void      vg_draw_pixel_project(uint16_t x, uint16_t y, uint32_t color);
 
 /*
  * vg_draw_pixel_fast — same as vg_draw_pixel but declared here so

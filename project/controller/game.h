@@ -30,7 +30,7 @@ typedef enum {
     STATE_HANDOVER_P2,
     STATE_PLACE_SHIPS_P2,
     STATE_HANDOVER_P1,
-    STATE_PLACE_SHIPS_WAITING,  /* waiting for opponent to finish placing */
+    STATE_PLACE_SHIPS_WAITING, 
     STATE_COUNTDOWN,
     STATE_TURN_P1,
     STATE_TURN_P2,
@@ -100,7 +100,6 @@ void game_save_cursor(int16_t x, int16_t y);
 bool game_is_over(void);
 void game_handle_serial_msg(const serial_msg_t *msg);
 
-/* State query helpers (used by main.c) */
 bool game_is_waiting_connect(void);
 bool game_is_connected(void);
 bool game_is_client_turn(void);

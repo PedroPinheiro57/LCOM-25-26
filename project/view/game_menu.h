@@ -20,3 +20,4 @@ void menu_draw_game_over(int winner);
 void menu_draw_handover(int player);
 void menu_draw_instructions(void);
 int menu_mouse_hover(int x, int y);
+int menu_pause_hover(int x, int y);

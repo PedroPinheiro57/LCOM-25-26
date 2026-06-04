@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 #include "video.h"
-#include "rtc.h"
+#include "../lab4/kbc.h"
 
 int main(int argc, char *argv[]) {
     // sets the language of LCF messages (can be either EN-US or PT-PT)

@@ -42,3 +42,4 @@ int mouse_disable_data_reporting(void);
 /* Getters for data set by mouse_ih() */
 uint8_t mouse_get_byte(void);
 bool    mouse_has_error(void);
+int kbc_read_mouse_byte(uint8_t *byte);

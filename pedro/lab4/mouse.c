@@ -82,13 +82,12 @@ int mouse_send_cmd(uint8_t cmd) {
     if (kbc_write_arg(cmd)             != 0) return 1;
 
     uint8_t ack;
-    if (kbc_read_byte(&ack) != 0) return 1;
+    if (kbc_read_mouse_byte(&ack) != 0) return 1; 
 
-    if (ack == MOUSE_ACK)   return 0;   /* success */
-    if (ack == MOUSE_ERROR) return 1;   /* unrecoverable */
-    /* ack == MOUSE_NACK → retry the whole command */
+    if (ack == MOUSE_ACK)   return 0;
+    if (ack == MOUSE_ERROR) return 1;
   }
-  return 1; /* too many retries */
+  return 1;
 }
 
 /* ------------------------------------------------------------------
@@ -100,4 +99,21 @@ int mouse_send_cmd(uint8_t cmd) {
  * ------------------------------------------------------------------ */
 int mouse_disable_data_reporting(void) {
   return mouse_send_cmd(MOUSE_DISABLE_DR);
+}
+
+
+int kbc_read_mouse_byte(uint8_t *byte) {
+  uint8_t st, data;
+  for (int i = 0; i < KBC_MAX_TRIES; i++) {
+    if (util_sys_inb(KBC_ST_REG, &st) != 0) return 1;
+    if (st & KBC_OBF) {
+      if (util_sys_inb(KBC_OUT_BUF, &data) != 0) return 1;
+      if (st & (KBC_PARITY | KBC_TIMEOUT))        return 1;
+      if (!(st & KBC_AUX))                        return 1;  // must be mouse data
+      *byte = data;
+      return 0;
+    }
+    tickdelay(micros_to_ticks(KBC_DELAY_US));
+  }
+  return 1;
 }

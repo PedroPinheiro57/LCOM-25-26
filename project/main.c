@@ -73,10 +73,10 @@ static int devices_init(void) {
 /* devices_cleanup                                                    */
 /* ------------------------------------------------------------------ */
 static int devices_cleanup(void) {
-    uart_cleanup();              
-    if (mouse_unsubscribe_int() != 0)           return 1;
+    uart_cleanup();  
+    if (mouse_disable_data_reporting() != 0)    return 1; 
+    if (mouse_unsubscribe_int() != 0)           return 1; 
     if (kbc_unsubscribe_int() != 0)             return 1;
-    if (mouse_disable_data_reporting() != 0)    return 1;
     if (timer_unsubscribe_int() != 0)           return 1;
     vg_exit();
     return 0;
@@ -141,7 +141,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
             handle_timer();
         }
     }
-
+    printf("destroying game spprites!");
     destroy_game_sprites();
     if (devices_cleanup() != 0) return 1;
     return 0;

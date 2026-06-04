@@ -93,7 +93,7 @@ static int uart_subscribe_irq(uint8_t *bit_no) {
 int uart_init(uint8_t *bit_no) {
     if (bit_no == NULL) return 1;
     *bit_no = uart_hook_id;
-     
+
     uart_set_baud_rate();       
     uart_set_line_control();   
     uart_configure_fifo();     
@@ -101,7 +101,7 @@ int uart_init(uint8_t *bit_no) {
     uart_flush_rx();            
     uart_enable_interrupts(); 
 
-    return uart_subscribe_irq(bit_no); 
+    return uart_subscribe_irq((uint8_t*)&uart_hook_id); 
 }
 
 

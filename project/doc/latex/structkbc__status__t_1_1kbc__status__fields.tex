@@ -1,0 +1,91 @@
+\doxysection{kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields Struct Reference}
+\hypertarget{structkbc__status__t_1_1kbc__status__fields}{}\label{structkbc__status__t_1_1kbc__status__fields}\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+
+
+{\ttfamily \#include $<$keyboard.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_abbc04ca893ca82cd764fd95ecda82c0a}{obf}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a7a6aab459373004f9975b2cdddeaa56f}{ibf}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a97b429901e36f19db18c0dd3675a12f9}{sys}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_af0fe86de18de8207f6b5faecdec89027}{cmd}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a89d811bf70db07528c0252b9021f03d1}{\+\_\+unused}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a4703a197aa049684062c4af08c276e00}{aux}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_abc431eaf0a2ec02b5a0560068f7b28ed}{timeout}}\+: 1
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_aca66b8bd5278ceb5bfaee85f37f05ca0}{parity}}\+: 1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Named bit-\/fields matching the KBC status register layout. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structkbc__status__t_1_1kbc__status__fields_a89d811bf70db07528c0252b9021f03d1}\label{structkbc__status__t_1_1kbc__status__fields_a89d811bf70db07528c0252b9021f03d1} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!\_unused@{\_unused}}
+\index{\_unused@{\_unused}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{\_unused}{\_unused}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::\+\_\+unused}
+
+Reserved. ~\newline
+ \Hypertarget{structkbc__status__t_1_1kbc__status__fields_a4703a197aa049684062c4af08c276e00}\label{structkbc__status__t_1_1kbc__status__fields_a4703a197aa049684062c4af08c276e00} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!aux@{aux}}
+\index{aux@{aux}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{aux}{aux}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::aux}
+
+Output buffer data came from the mouse. ~\newline
+ \Hypertarget{structkbc__status__t_1_1kbc__status__fields_af0fe86de18de8207f6b5faecdec89027}\label{structkbc__status__t_1_1kbc__status__fields_af0fe86de18de8207f6b5faecdec89027} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!cmd@{cmd}}
+\index{cmd@{cmd}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{cmd}{cmd}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::cmd}
+
+1 = data in input buffer is a command. ~\newline
+ \Hypertarget{structkbc__status__t_1_1kbc__status__fields_a7a6aab459373004f9975b2cdddeaa56f}\label{structkbc__status__t_1_1kbc__status__fields_a7a6aab459373004f9975b2cdddeaa56f} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!ibf@{ibf}}
+\index{ibf@{ibf}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{ibf}{ibf}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::ibf}
+
+Input buffer full – controller still busy. ~\newline
+ \Hypertarget{structkbc__status__t_1_1kbc__status__fields_abbc04ca893ca82cd764fd95ecda82c0a}\label{structkbc__status__t_1_1kbc__status__fields_abbc04ca893ca82cd764fd95ecda82c0a} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!obf@{obf}}
+\index{obf@{obf}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{obf}{obf}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::obf}
+
+Output buffer full – data ready to be read. \Hypertarget{structkbc__status__t_1_1kbc__status__fields_aca66b8bd5278ceb5bfaee85f37f05ca0}\label{structkbc__status__t_1_1kbc__status__fields_aca66b8bd5278ceb5bfaee85f37f05ca0} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!parity@{parity}}
+\index{parity@{parity}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{parity}{parity}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::parity}
+
+Parity error on last transfer. ~\newline
+ \Hypertarget{structkbc__status__t_1_1kbc__status__fields_a97b429901e36f19db18c0dd3675a12f9}\label{structkbc__status__t_1_1kbc__status__fields_a97b429901e36f19db18c0dd3675a12f9} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!sys@{sys}}
+\index{sys@{sys}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{sys}{sys}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::sys}
+
+System flag (POST result). ~\newline
+ \Hypertarget{structkbc__status__t_1_1kbc__status__fields_abc431eaf0a2ec02b5a0560068f7b28ed}\label{structkbc__status__t_1_1kbc__status__fields_abc431eaf0a2ec02b5a0560068f7b28ed} 
+\index{kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}!timeout@{timeout}}
+\index{timeout@{timeout}!kbc\_status\_t::kbc\_status\_fields@{kbc\_status\_t::kbc\_status\_fields}}
+\doxysubsubsection{\texorpdfstring{timeout}{timeout}}
+{\footnotesize\ttfamily uint8\+\_\+t kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields\+::timeout}
+
+Timeout error on last transfer. ~\newline
+ 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{keyboard_8h}{keyboard.\+h}}\end{DoxyCompactItemize}

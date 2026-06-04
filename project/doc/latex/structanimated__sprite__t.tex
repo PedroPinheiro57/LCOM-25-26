@@ -1,0 +1,81 @@
+\doxysection{animated\+\_\+sprite\+\_\+t Struct Reference}
+\hypertarget{structanimated__sprite__t}{}\label{structanimated__sprite__t}\index{animated\_sprite\_t@{animated\_sprite\_t}}
+
+
+A sequence of sprite frames that animate in a loop.  
+
+
+
+
+{\ttfamily \#include $<$sprites.\+h$>$}
+
+
+
+Collaboration diagram for animated\+\_\+sprite\+\_\+t\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=185pt]{structanimated__sprite__t__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structanimated__sprite__t_aef2fcec06a10bd1424d1ded0e8fb0fe9}{no\+\_\+pixmaps}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structanimated__sprite__t_afc5ab0a669dcc0b7a7eb8026274d4356}{cur\+\_\+pixmap}}
+\item 
+\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structanimated__sprite__t_adcf3ba9d66521f60e3dda6060cf67ace}{pixmaps}} \mbox{[}8\mbox{]}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{structanimated__sprite__t_ae881b128f9002b8ed3bfa1a6b65a182c}{x}}
+\item 
+uint16\+\_\+t \mbox{\hyperlink{structanimated__sprite__t_a0066c593cc4afd9b04ccf75376ebb224}{y}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A sequence of sprite frames that animate in a loop. 
+
+Frames are stored as an array of pointers to individually decoded \doxylink{structsprite__t}{sprite\+\_\+t} objects. Call \doxylink{sprites_8h_a9a6066de14062a59dc413cd131fd63fe}{anim\+\_\+sprite\+\_\+update} each tick to advance {\ttfamily cur\+\_\+pixmap} and \doxylink{sprites_8h_af99e43be627b7643a7324a2bfaa25995}{anim\+\_\+sprite\+\_\+draw} to blit the current frame. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structanimated__sprite__t_afc5ab0a669dcc0b7a7eb8026274d4356}\label{structanimated__sprite__t_afc5ab0a669dcc0b7a7eb8026274d4356} 
+\index{animated\_sprite\_t@{animated\_sprite\_t}!cur\_pixmap@{cur\_pixmap}}
+\index{cur\_pixmap@{cur\_pixmap}!animated\_sprite\_t@{animated\_sprite\_t}}
+\doxysubsubsection{\texorpdfstring{cur\_pixmap}{cur\_pixmap}}
+{\footnotesize\ttfamily uint8\+\_\+t animated\+\_\+sprite\+\_\+t\+::cur\+\_\+pixmap}
+
+Index of the frame to draw next. ~\newline
+ \Hypertarget{structanimated__sprite__t_aef2fcec06a10bd1424d1ded0e8fb0fe9}\label{structanimated__sprite__t_aef2fcec06a10bd1424d1ded0e8fb0fe9} 
+\index{animated\_sprite\_t@{animated\_sprite\_t}!no\_pixmaps@{no\_pixmaps}}
+\index{no\_pixmaps@{no\_pixmaps}!animated\_sprite\_t@{animated\_sprite\_t}}
+\doxysubsubsection{\texorpdfstring{no\_pixmaps}{no\_pixmaps}}
+{\footnotesize\ttfamily uint8\+\_\+t animated\+\_\+sprite\+\_\+t\+::no\+\_\+pixmaps}
+
+Total number of frames in the sequence (max 8). \Hypertarget{structanimated__sprite__t_adcf3ba9d66521f60e3dda6060cf67ace}\label{structanimated__sprite__t_adcf3ba9d66521f60e3dda6060cf67ace} 
+\index{animated\_sprite\_t@{animated\_sprite\_t}!pixmaps@{pixmaps}}
+\index{pixmaps@{pixmaps}!animated\_sprite\_t@{animated\_sprite\_t}}
+\doxysubsubsection{\texorpdfstring{pixmaps}{pixmaps}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}}\texorpdfstring{$\ast$}{*} animated\+\_\+sprite\+\_\+t\+::pixmaps\mbox{[}8\mbox{]}}
+
+Per-\/frame sprite pointers. ~\newline
+ \Hypertarget{structanimated__sprite__t_ae881b128f9002b8ed3bfa1a6b65a182c}\label{structanimated__sprite__t_ae881b128f9002b8ed3bfa1a6b65a182c} 
+\index{animated\_sprite\_t@{animated\_sprite\_t}!x@{x}}
+\index{x@{x}!animated\_sprite\_t@{animated\_sprite\_t}}
+\doxysubsubsection{\texorpdfstring{x}{x}}
+{\footnotesize\ttfamily uint16\+\_\+t animated\+\_\+sprite\+\_\+t\+::x}
+
+Pixel X of the animation\textquotesingle{}s top-\/left corner. ~\newline
+ \Hypertarget{structanimated__sprite__t_a0066c593cc4afd9b04ccf75376ebb224}\label{structanimated__sprite__t_a0066c593cc4afd9b04ccf75376ebb224} 
+\index{animated\_sprite\_t@{animated\_sprite\_t}!y@{y}}
+\index{y@{y}!animated\_sprite\_t@{animated\_sprite\_t}}
+\doxysubsubsection{\texorpdfstring{y}{y}}
+{\footnotesize\ttfamily uint16\+\_\+t animated\+\_\+sprite\+\_\+t\+::y}
+
+Pixel Y of the animation\textquotesingle{}s top-\/left corner. ~\newline
+ 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+view/\mbox{\hyperlink{sprites_8h}{sprites.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['msg_5fattack_0',['MSG_ATTACK',['../protocol_8h.html#a0791b6112a8862c43dc15529e9dd2b06',1,'protocol.h']]],
+  ['msg_5fattack_5flen_1',['MSG_ATTACK_LEN',['../protocol_8h.html#a4a0954169c9634d5398154b2110d6c68',1,'protocol.h']]],
+  ['msg_5fclient_5fquit_2',['MSG_CLIENT_QUIT',['../protocol_8h.html#abbcdbc7b6d51efc021db0a0e0ee9cd18',1,'protocol.h']]],
+  ['msg_5fcountdown_3',['MSG_COUNTDOWN',['../protocol_8h.html#aaa8b107c2b05f22ffab153a52a9a659a',1,'protocol.h']]],
+  ['msg_5fcountdown_5flen_4',['MSG_COUNTDOWN_LEN',['../protocol_8h.html#a9ddfd1eaa67dad26302a67fde51fcaec',1,'protocol.h']]],
+  ['msg_5fcursor_5',['MSG_CURSOR',['../protocol_8h.html#a5e31eaaf39839a5dc03012593dba0439',1,'protocol.h']]],
+  ['msg_5fcursor_5flen_6',['MSG_CURSOR_LEN',['../protocol_8h.html#a3600d4248ef0d27f242fa30096a0893c',1,'protocol.h']]],
+  ['msg_5fdone_5fplacing_7',['MSG_DONE_PLACING',['../protocol_8h.html#afbfb0ec23b85b6fb0b75d4d87d7331f3',1,'protocol.h']]],
+  ['msg_5fhello_8',['MSG_HELLO',['../protocol_8h.html#afe3d280cf3696225b6a6316df92238a2',1,'protocol.h']]],
+  ['msg_5fhello_5fack_9',['MSG_HELLO_ACK',['../protocol_8h.html#a3ac53aae36d80fc39c9245b97e85e6c1',1,'protocol.h']]],
+  ['msg_5fkey_10',['MSG_KEY',['../protocol_8h.html#acebb45f6d9740063956da4fc574b2b04',1,'protocol.h']]],
+  ['msg_5fkey_5flen_11',['MSG_KEY_LEN',['../protocol_8h.html#a5e44308525c8969fa4cba193b2a13304',1,'protocol.h']]],
+  ['msg_5fmax_5fpayload_12',['MSG_MAX_PAYLOAD',['../protocol_8h.html#a7a1b14c6089364e05b3ea85c2c6472b2',1,'protocol.h']]],
+  ['msg_5fmouse_13',['MSG_MOUSE',['../protocol_8h.html#a51d422b24fe00d604e6f25e8f58525ea',1,'protocol.h']]],
+  ['msg_5fmouse_5flen_14',['MSG_MOUSE_LEN',['../protocol_8h.html#a5392fc09f280539385393a4b6e1b726c',1,'protocol.h']]],
+  ['msg_5fship_5fplace_15',['MSG_SHIP_PLACE',['../protocol_8h.html#a764a1fd418b4cef307617488a923fa1e',1,'protocol.h']]],
+  ['msg_5fship_5fplace_5flen_16',['MSG_SHIP_PLACE_LEN',['../protocol_8h.html#a2d92f87eefdfdc319a0288191c4208bb',1,'protocol.h']]],
+  ['msg_5fstate_17',['MSG_STATE',['../protocol_8h.html#a24b50eaf64edf80a93adb695b1a712f5',1,'protocol.h']]],
+  ['msg_5fstate_5flen_18',['MSG_STATE_LEN',['../protocol_8h.html#a819f3ec4294378cbcd6451524f2d00e8',1,'protocol.h']]],
+  ['msg_5fwinner_19',['MSG_WINNER',['../protocol_8h.html#a2824e03acbda847502f3e59ea63442ce',1,'protocol.h']]],
+  ['msg_5fwinner_5flen_20',['MSG_WINNER_LEN',['../protocol_8h.html#ab2c80abb31d9a2765f5c38af7f1b7241',1,'protocol.h']]]
+];

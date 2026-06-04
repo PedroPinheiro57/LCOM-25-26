@@ -1,0 +1,198 @@
+\doxysection{view/game\+\_\+menu.h File Reference}
+\hypertarget{game__menu_8h}{}\label{game__menu_8h}\index{view/game\_menu.h@{view/game\_menu.h}}
+
+
+Menu and overlay rendering for all non-\/gameplay screens.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+Include dependency graph for game\+\_\+menu.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{game__menu_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{game__menu_8h_a7ebeba86e0052d7a48de7828893f4d2b}\label{game__menu_8h_a7ebeba86e0052d7a48de7828893f4d2b} 
+\#define {\bfseries NUM\+\_\+\+OPTIONS}~3
+\begin{DoxyCompactList}\small\item\em Number of selectable options in the main menu and pause menu. \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_a09148acafdc57078c804b6cd57446675}\label{game__menu_8h_a09148acafdc57078c804b6cd57446675} 
+\#define {\bfseries OPT\+\_\+X}~300
+\begin{DoxyCompactList}\small\item\em X pixel coordinate of the left edge of each menu option box. \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_ae58b50bd585702bc0cfa6ca2f9898762}\label{game__menu_8h_ae58b50bd585702bc0cfa6ca2f9898762} 
+\#define {\bfseries OPT\+\_\+W}~200
+\begin{DoxyCompactList}\small\item\em Width in pixels of each menu option box. \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_aae4b76c89edb69d0b76e759ecc0ca33d}\label{game__menu_8h_aae4b76c89edb69d0b76e759ecc0ca33d} 
+\#define {\bfseries OPT\+\_\+H}~50
+\begin{DoxyCompactList}\small\item\em Height in pixels of each menu option box. \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_a884e2626171f30f1f303de8fa305f08e}\label{game__menu_8h_a884e2626171f30f1f303de8fa305f08e} 
+\#define {\bfseries OPT\+\_\+\+Y\+\_\+\+START}~250
+\begin{DoxyCompactList}\small\item\em Y pixel coordinate of the top edge of the first option box. \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_a035bdb7a2e2597b2031424982dde9b11}\label{game__menu_8h_a035bdb7a2e2597b2031424982dde9b11} 
+\#define {\bfseries OPT\+\_\+\+GAP}~70
+\begin{DoxyCompactList}\small\item\em Vertical gap in pixels between consecutive option boxes. \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_aadcf88db7470d7487e31e5c25f1ddd57}\label{game__menu_8h_aadcf88db7470d7487e31e5c25f1ddd57} 
+\#define {\bfseries COLOR\+\_\+\+SELECTED}~0x\+FFD700
+\begin{DoxyCompactList}\small\item\em Colour used to highlight the currently selected option (gold). \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_af0ffd3c519bf6d60a5b32a808054405c}\label{game__menu_8h_af0ffd3c519bf6d60a5b32a808054405c} 
+\#define {\bfseries COLOR\+\_\+\+UNSELECTED}~0x444444
+\begin{DoxyCompactList}\small\item\em Colour used for unselected option boxes (dark grey). \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_a9f4dfe30a7d1c96f6d4438c0b2019cd6}\label{game__menu_8h_a9f4dfe30a7d1c96f6d4438c0b2019cd6} 
+\#define {\bfseries COLOR\+\_\+\+TEXT}~0x\+FFFFFF
+\begin{DoxyCompactList}\small\item\em Colour used for option label text (white). \end{DoxyCompactList}\item 
+\Hypertarget{game__menu_8h_a76578aa19ef7a41c746249e508ce89ef}\label{game__menu_8h_a76578aa19ef7a41c746249e508ce89ef} 
+\#define {\bfseries COLOR\+\_\+\+TITLE}~0x00\+BFFF
+\begin{DoxyCompactList}\small\item\em Colour used for the title / header text (sky blue). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{game__menu_8h_a436076b7bcc54fa7793384488920cdf1}{menu\+\_\+draw\+\_\+main}} (int selected)
+\begin{DoxyCompactList}\small\item\em Draws the main menu screen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game__menu_8h_a3339299641130649f6471e817ca4b065}{menu\+\_\+draw\+\_\+pause}} (int selected)
+\begin{DoxyCompactList}\small\item\em Draws the in-\/game pause menu overlay. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game__menu_8h_a1e5809dd96621521b1206f726668b9a2}{menu\+\_\+draw\+\_\+game\+\_\+over}} (int winner)
+\begin{DoxyCompactList}\small\item\em Draws the game-\/over screen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game__menu_8h_a78288f5540af5b381bffae8d058486fb}{menu\+\_\+draw\+\_\+handover}} (int player)
+\begin{DoxyCompactList}\small\item\em Draws the player-\/handover transition screen. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game__menu_8h_a38f852a4fdd70afd48e8f6111f2df3c5}{menu\+\_\+draw\+\_\+instructions}} (void)
+\begin{DoxyCompactList}\small\item\em Draws the instructions / help screen. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__menu_8h_a6bf11d4650a5f70abc6721814734f2e1}{menu\+\_\+mouse\+\_\+hover}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Returns the index of the main-\/menu option under the given cursor. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__menu_8h_a000bfef71968d233f35e2a14be016b42}{menu\+\_\+pause\+\_\+hover}} (int x, int y)
+\begin{DoxyCompactList}\small\item\em Returns the index of the pause-\/menu option under the given cursor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Menu and overlay rendering for all non-\/gameplay screens. 
+
+Provides drawing routines for the main menu, pause menu, game-\/over screen, player-\/handover overlay, and the instructions screen, together with hit-\/testing helpers that map a mouse position to the highlighted menu option.
+
+Layout constants define where the option buttons are rendered so that the same values can be shared between the draw and hit-\/test routines. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game__menu_8h_a1e5809dd96621521b1206f726668b9a2}\label{game__menu_8h_a1e5809dd96621521b1206f726668b9a2} 
+\index{game\_menu.h@{game\_menu.h}!menu\_draw\_game\_over@{menu\_draw\_game\_over}}
+\index{menu\_draw\_game\_over@{menu\_draw\_game\_over}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_draw\_game\_over()}{menu\_draw\_game\_over()}}
+{\footnotesize\ttfamily void menu\+\_\+draw\+\_\+game\+\_\+over (\begin{DoxyParamCaption}\item[{int}]{winner }\end{DoxyParamCaption})}
+
+
+
+Draws the game-\/over screen. 
+
+Announces which player won and offers a prompt to return to the main menu.
+
+
+\begin{DoxyParams}{Parameters}
+{\em winner} & Winning player index (1 or 2). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game__menu_8h_a78288f5540af5b381bffae8d058486fb}\label{game__menu_8h_a78288f5540af5b381bffae8d058486fb} 
+\index{game\_menu.h@{game\_menu.h}!menu\_draw\_handover@{menu\_draw\_handover}}
+\index{menu\_draw\_handover@{menu\_draw\_handover}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_draw\_handover()}{menu\_draw\_handover()}}
+{\footnotesize\ttfamily void menu\+\_\+draw\+\_\+handover (\begin{DoxyParamCaption}\item[{int}]{player }\end{DoxyParamCaption})}
+
+
+
+Draws the player-\/handover transition screen. 
+
+Displayed between ship-\/placement phases to ask the current player to hand the keyboard/mouse to the next player.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Index of the player who should now take control (1 or 2). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game__menu_8h_a38f852a4fdd70afd48e8f6111f2df3c5}\label{game__menu_8h_a38f852a4fdd70afd48e8f6111f2df3c5} 
+\index{game\_menu.h@{game\_menu.h}!menu\_draw\_instructions@{menu\_draw\_instructions}}
+\index{menu\_draw\_instructions@{menu\_draw\_instructions}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_draw\_instructions()}{menu\_draw\_instructions()}}
+{\footnotesize\ttfamily void menu\+\_\+draw\+\_\+instructions (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Draws the instructions / help screen. 
+
+Renders a static page explaining the game rules and controls. \Hypertarget{game__menu_8h_a436076b7bcc54fa7793384488920cdf1}\label{game__menu_8h_a436076b7bcc54fa7793384488920cdf1} 
+\index{game\_menu.h@{game\_menu.h}!menu\_draw\_main@{menu\_draw\_main}}
+\index{menu\_draw\_main@{menu\_draw\_main}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_draw\_main()}{menu\_draw\_main()}}
+{\footnotesize\ttfamily void menu\+\_\+draw\+\_\+main (\begin{DoxyParamCaption}\item[{int}]{selected }\end{DoxyParamCaption})}
+
+
+
+Draws the main menu screen. 
+
+Renders the game title, the three menu options (Play / Instructions / Exit), and highlights the option at index {\ttfamily selected}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em selected} & Zero-\/based index of the currently highlighted option (0 = Play, 1 = Instructions, 2 = Exit). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game__menu_8h_a3339299641130649f6471e817ca4b065}\label{game__menu_8h_a3339299641130649f6471e817ca4b065} 
+\index{game\_menu.h@{game\_menu.h}!menu\_draw\_pause@{menu\_draw\_pause}}
+\index{menu\_draw\_pause@{menu\_draw\_pause}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_draw\_pause()}{menu\_draw\_pause()}}
+{\footnotesize\ttfamily void menu\+\_\+draw\+\_\+pause (\begin{DoxyParamCaption}\item[{int}]{selected }\end{DoxyParamCaption})}
+
+
+
+Draws the in-\/game pause menu overlay. 
+
+Renders the pause menu options (Resume / Restart / Exit) on top of the current game view, highlighting the option at index {\ttfamily selected}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em selected} & Zero-\/based index of the currently highlighted option (0 = Resume, 1 = Restart, 2 = Exit). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game__menu_8h_a6bf11d4650a5f70abc6721814734f2e1}\label{game__menu_8h_a6bf11d4650a5f70abc6721814734f2e1} 
+\index{game\_menu.h@{game\_menu.h}!menu\_mouse\_hover@{menu\_mouse\_hover}}
+\index{menu\_mouse\_hover@{menu\_mouse\_hover}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_mouse\_hover()}{menu\_mouse\_hover()}}
+{\footnotesize\ttfamily int menu\+\_\+mouse\+\_\+hover (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+Returns the index of the main-\/menu option under the given cursor. 
+
+Performs a bounding-\/box hit test against the option rectangles defined by \doxylink{game__menu_8h_a09148acafdc57078c804b6cd57446675}{OPT\+\_\+X}, \doxylink{game__menu_8h_a884e2626171f30f1f303de8fa305f08e}{OPT\+\_\+\+Y\+\_\+\+START}, \doxylink{game__menu_8h_ae58b50bd585702bc0cfa6ca2f9898762}{OPT\+\_\+W}, \doxylink{game__menu_8h_aae4b76c89edb69d0b76e759ecc0ca33d}{OPT\+\_\+H}, and \doxylink{game__menu_8h_a035bdb7a2e2597b2031424982dde9b11}{OPT\+\_\+\+GAP}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Cursor X position in screen pixels. \\
+\hline
+{\em y} & Cursor Y position in screen pixels. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zero-\/based option index (0–\doxylink{game__menu_8h_a7ebeba86e0052d7a48de7828893f4d2b}{NUM\+\_\+\+OPTIONS} − 1), or {\ttfamily -\/1} if the cursor is not over any option. 
+\end{DoxyReturn}
+\Hypertarget{game__menu_8h_a000bfef71968d233f35e2a14be016b42}\label{game__menu_8h_a000bfef71968d233f35e2a14be016b42} 
+\index{game\_menu.h@{game\_menu.h}!menu\_pause\_hover@{menu\_pause\_hover}}
+\index{menu\_pause\_hover@{menu\_pause\_hover}!game\_menu.h@{game\_menu.h}}
+\doxysubsubsection{\texorpdfstring{menu\_pause\_hover()}{menu\_pause\_hover()}}
+{\footnotesize\ttfamily int menu\+\_\+pause\+\_\+hover (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+Returns the index of the pause-\/menu option under the given cursor. 
+
+Identical layout logic to menu\+\_\+mouse\+\_\+hover but applied to the pause menu option positions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Cursor X position in screen pixels. \\
+\hline
+{\em y} & Cursor Y position in screen pixels. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zero-\/based option index (0–\doxylink{game__menu_8h_a7ebeba86e0052d7a48de7828893f4d2b}{NUM\+\_\+\+OPTIONS} − 1), or {\ttfamily -\/1} if the cursor is not over any option. 
+\end{DoxyReturn}

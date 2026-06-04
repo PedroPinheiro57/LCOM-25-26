@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['p1_5fboard_0',['p1_board',['../structgame__t.html#a38190564a6e5a257baff7fff6c01b584',1,'game_t']]],
+  ['p2_5fboard_1',['p2_board',['../structgame__t.html#a9854fcbd5921e9e66b825bad81efd24a',1,'game_t']]],
+  ['parity_2',['parity',['../structkbc__status__t_1_1kbc__status__fields.html#aca66b8bd5278ceb5bfaee85f37f05ca0',1,'kbc_status_t::kbc_status_fields']]],
+  ['pause_3',['pause',['../structgame__t.html#a4a0b59f4a0df35cc78052abf2ab83d4e',1,'game_t']]],
+  ['pixmaps_4',['pixmaps',['../structanimated__sprite__t.html#adcf3ba9d66521f60e3dda6060cf67ace',1,'animated_sprite_t']]],
+  ['place_5',['place',['../structgame__t.html#aeb5d089e68fa53f795fc5130f3494569',1,'game_t']]],
+  ['player_6',['player',['../structgame__t.html#a375539eb20fd99f56024475375dad76b',1,'game_t']]],
+  ['post_5fattack_5fwait_5fticks_7',['POST_ATTACK_WAIT_TICKS',['../game_8h.html#a73bdaed6449cf6059295b416fd91b7df',1,'game.h']]],
+  ['prev_8',['prev',['../structgame__t.html#a42f3ecb23b22f96cef90a42bc0e13e9f',1,'game_t']]],
+  ['proto_5ffeed_5fbyte_9',['proto_feed_byte',['../protocol_8h.html#aa23ad1324e468e7f119d7b7363d84e17',1,'protocol.c']]],
+  ['proto_5frx_5freset_10',['proto_rx_reset',['../protocol_8h.html#af5cc84158e0926a9c0add64b4bdb5557',1,'protocol.c']]],
+  ['proto_5frx_5fstate_5ft_11',['proto_rx_state_t',['../structproto__rx__state__t.html',1,'']]],
+  ['proto_5fsend_5fattack_12',['proto_send_attack',['../protocol_8h.html#af9951aec7b11e9699d5f1bc2a2384733',1,'protocol.c']]],
+  ['proto_5fsend_5fclient_5fquit_13',['proto_send_client_quit',['../protocol_8h.html#aedee5c447e8fa692c2b406e0d2dab83e',1,'protocol.c']]],
+  ['proto_5fsend_5fcountdown_14',['proto_send_countdown',['../protocol_8h.html#a3197c39523808dee171e52403d0ffe2e',1,'protocol.c']]],
+  ['proto_5fsend_5fcursor_15',['proto_send_cursor',['../protocol_8h.html#a4049149428a2b0d31cd2e719b76078e5',1,'protocol.c']]],
+  ['proto_5fsend_5fdone_5fplacing_16',['proto_send_done_placing',['../protocol_8h.html#a5d6a311882611da698297c004cb15309',1,'protocol.c']]],
+  ['proto_5fsend_5fkey_17',['proto_send_key',['../protocol_8h.html#ac532c3510e17ad14064484e148de1671',1,'protocol.c']]],
+  ['proto_5fsend_5fmouse_18',['proto_send_mouse',['../protocol_8h.html#aed6400d029afabd3d03df06dbc079cac',1,'protocol.c']]],
+  ['proto_5fsend_5fship_5fplace_19',['proto_send_ship_place',['../protocol_8h.html#a0bc580ae49a3fd81a980d03c02c55720',1,'protocol.c']]],
+  ['proto_5fsend_5fstate_20',['proto_send_state',['../protocol_8h.html#aaf2e6409b671db395f04dd945b8cab72',1,'protocol.c']]],
+  ['proto_5fsend_5fwinner_21',['proto_send_winner',['../protocol_8h.html#a4bd42bc1a5f52cc3fc1796d5f8118fbf',1,'protocol.c']]],
+  ['protocol_2eh_22',['protocol.h',['../protocol_8h.html',1,'']]]
+];

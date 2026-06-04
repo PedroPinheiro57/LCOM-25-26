@@ -1,0 +1,574 @@
+\doxysection{serial/uart.h File Reference}
+\hypertarget{uart_8h}{}\label{uart_8h}\index{serial/uart.h@{serial/uart.h}}
+
+
+16550-\/compatible UART driver for COM1 serial communication.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$lcom/lcf.\+h$>$}\newline
+Include dependency graph for uart.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=296pt]{uart_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{uart_8h_a65e1e19ecd921e0c6d47d5c1d7b2666e}\label{uart_8h_a65e1e19ecd921e0c6d47d5c1d7b2666e} 
+\#define {\bfseries UART\+\_\+\+DEFAULT\+\_\+\+LCR}~\mbox{\hyperlink{uart_8h_a85091c7cbf4a03aa96bbdfac4136898b}{UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+8}}
+\begin{DoxyCompactList}\small\item\em Default line format\+: 8 data bits, no parity, 1 stop bit. \end{DoxyCompactList}\item 
+\Hypertarget{uart_8h_ad1f0f31ed8578a4eb4f68262618571e2}\label{uart_8h_ad1f0f31ed8578a4eb4f68262618571e2} 
+\#define {\bfseries UART\+\_\+\+RXBUF\+\_\+\+SIZE}~128
+\begin{DoxyCompactList}\small\item\em Capacity of the software RX ring buffer (bytes). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Hardware base address and IRQ}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a5ffbb5f1d2742cab7bbc25b56be7171d}{UART\+\_\+\+COM1\+\_\+\+BASE}}~0x3\+F8
+\item 
+\#define \mbox{\hyperlink{uart_8h_a9a9f956b13f320742556368e4df12d7c}{UART\+\_\+\+COM1\+\_\+\+IRQ}}~4
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Register offsets (DLAB = 0)}\par
+{\em Add these to \doxylink{uart_8h_a5ffbb5f1d2742cab7bbc25b56be7171d}{UART\+\_\+\+COM1\+\_\+\+BASE} to get the actual port address. }\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a3eb7d5a767dae7774aa2b4be28e20a7e}{UART\+\_\+\+RBR}}~0
+\item 
+\#define \mbox{\hyperlink{uart_8h_a7a676f075475e46d27eb878977b867ec}{UART\+\_\+\+THR}}~0
+\item 
+\#define \mbox{\hyperlink{uart_8h_aaf7aaa372e86b3aa99e6c78242be2722}{UART\+\_\+\+IER}}~1
+\item 
+\#define \mbox{\hyperlink{uart_8h_a16add7e6b9f91a6698c5910704111b68}{UART\+\_\+\+IIR}}~2
+\item 
+\#define \mbox{\hyperlink{uart_8h_a220a678f91ca8244b30fe813200c26c1}{UART\+\_\+\+FCR}}~2
+\item 
+\#define \mbox{\hyperlink{uart_8h_a36c30861e332468c7f1998648e706740}{UART\+\_\+\+LCR}}~3
+\item 
+\#define \mbox{\hyperlink{uart_8h_a8ef39bc0942ddd0411d87001d12224f4}{UART\+\_\+\+MCR}}~4
+\item 
+\#define \mbox{\hyperlink{uart_8h_a0f8ac527073d763bac90daba987361c6}{UART\+\_\+\+LSR}}~5
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Register offsets (DLAB = 1)}\par
+{\em Set \doxylink{uart_8h_ac2e0b56a5909d564e6fea1aee2aa6dc4}{UART\+\_\+\+LCR\+\_\+\+DLAB} before accessing these. }\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a7ff21e0cfc73a2db80c3907c5cac5a61}{UART\+\_\+\+DLL}}~0
+\item 
+\#define \mbox{\hyperlink{uart_8h_a63f95172026aa533407e357e73b04551}{UART\+\_\+\+DLM}}~1
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ LCR – Line Control Register bits}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a188095d9f4d69589f2b1efe645d1810e}{UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+5}}~0
+\item 
+\#define \mbox{\hyperlink{uart_8h_a40b48f81672263172fb494f862f808d7}{UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+6}}~BIT(0)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a72f453d720d9625a29b963beb4c83b85}{UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+7}}~BIT(1)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a85091c7cbf4a03aa96bbdfac4136898b}{UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+8}}~(BIT(1) \texorpdfstring{$\vert$}{|} BIT(0))
+\item 
+\#define \mbox{\hyperlink{uart_8h_ac2e0b56a5909d564e6fea1aee2aa6dc4}{UART\+\_\+\+LCR\+\_\+\+DLAB}}~BIT(7)
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ IER – Interrupt Enable Register bits}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_aa3ede8711d48b2b1fa23941dda0be995}{UART\+\_\+\+IER\+\_\+\+RDI}}~BIT(0)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a57a8e8e791af758a03e613dab9c1a3f7}{UART\+\_\+\+IER\+\_\+\+RLSI}}~BIT(2)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a7907a185b352b2cec382658abb119b56}{UART\+\_\+\+IER\+\_\+\+DISABLE}}~0x00
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ IIR – Interrupt Identification Register bits}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a667479fe75bda26bd25e1fcc8fe6acd0}{UART\+\_\+\+IIR\+\_\+\+NO\+\_\+\+INT}}~BIT(0)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a1aadabf5320b6edae19627e4e4fab8ec}{UART\+\_\+\+IIR\+\_\+\+ID\+\_\+\+MASK}}~(BIT(3)\texorpdfstring{$\vert$}{|}BIT(2)\texorpdfstring{$\vert$}{|}BIT(1))
+\item 
+\#define \mbox{\hyperlink{uart_8h_a8a0cd1e57face3a5ac397f15bb25b1a6}{UART\+\_\+\+IIR\+\_\+\+RLS}}~(BIT(2)\texorpdfstring{$\vert$}{|}BIT(1))
+\item 
+\#define \mbox{\hyperlink{uart_8h_a9896460f43c49cd668cc37077fb3bb2f}{UART\+\_\+\+IIR\+\_\+\+RDA}}~BIT(2)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a631e8b415756272668fe4a0ca1568bf3}{UART\+\_\+\+IIR\+\_\+\+CTI}}~(BIT(3)\texorpdfstring{$\vert$}{|}BIT(2))
+\item 
+\#define \mbox{\hyperlink{uart_8h_a29b20e73585acb416f112502d29554d7}{UART\+\_\+\+IIR\+\_\+\+FIFO\+\_\+\+EN}}~(BIT(7)\texorpdfstring{$\vert$}{|}BIT(6))
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ FCR – FIFO Control Register bits}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a787d83dbf59cc1a79a980dbdcec22b66}{UART\+\_\+\+FCR\+\_\+\+ENABLE}}~BIT(0)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a5ea27cb7903840d45579f7860796c63a}{UART\+\_\+\+FCR\+\_\+\+RXRST}}~BIT(1)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a7fd3afc2b9051b4e8c2c55936d1578a8}{UART\+\_\+\+FCR\+\_\+\+TXRST}}~BIT(2)
+\item 
+\#define \mbox{\hyperlink{uart_8h_ad882c5ca80f7e5a8665e8faa79e6b0fb}{UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+1}}~0
+\item 
+\#define \mbox{\hyperlink{uart_8h_aeb1a70e4404eef9c3d14be8fb8b1a550}{UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+4}}~BIT(6)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a430623e7a5479625e05e521ed2381213}{UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+8}}~BIT(7)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a9e95685870366b88fd43ea9d4e8ebc3d}{UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+14}}~(BIT(7)\texorpdfstring{$\vert$}{|}BIT(6))
+\item 
+\Hypertarget{uart_8h_a90cf43cb40a80cc41f7bdbf150a76757}\label{uart_8h_a90cf43cb40a80cc41f7bdbf150a76757} 
+\#define {\bfseries UART\+\_\+\+FCR\+\_\+\+INIT}~(\mbox{\hyperlink{uart_8h_a787d83dbf59cc1a79a980dbdcec22b66}{UART\+\_\+\+FCR\+\_\+\+ENABLE}} \texorpdfstring{$\vert$}{|} \mbox{\hyperlink{uart_8h_a5ea27cb7903840d45579f7860796c63a}{UART\+\_\+\+FCR\+\_\+\+RXRST}} \texorpdfstring{$\vert$}{|} \mbox{\hyperlink{uart_8h_a7fd3afc2b9051b4e8c2c55936d1578a8}{UART\+\_\+\+FCR\+\_\+\+TXRST}} \texorpdfstring{$\vert$}{|} \mbox{\hyperlink{uart_8h_aeb1a70e4404eef9c3d14be8fb8b1a550}{UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+4}})
+\begin{DoxyCompactList}\small\item\em Default FCR value\+: FIFOs on, both reset, 4-\/byte trigger threshold. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ MCR – Modem Control Register bits}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a792e69385c822a6189b106e8d848c5c7}{UART\+\_\+\+MCR\+\_\+\+OUT2}}~BIT(3)
+\item 
+\Hypertarget{uart_8h_aab8b38fe8c406c72e4dce38a382afbaa}\label{uart_8h_aab8b38fe8c406c72e4dce38a382afbaa} 
+\#define {\bfseries UART\+\_\+\+MCR\+\_\+\+INIT}~\mbox{\hyperlink{uart_8h_a792e69385c822a6189b106e8d848c5c7}{UART\+\_\+\+MCR\+\_\+\+OUT2}}
+\begin{DoxyCompactList}\small\item\em Default MCR\+: only OUT2 asserted. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ LSR – Line Status Register bits}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_a8cc7d49fde8f2b393a398e6ebf1fbc00}{UART\+\_\+\+LSR\+\_\+\+DR}}~BIT(0)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a85c4312a700f6033bf0a075ae41de57c}{UART\+\_\+\+LSR\+\_\+\+OE}}~BIT(1)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a3ae0ee26be22b855aa08d68a2801d3d2}{UART\+\_\+\+LSR\+\_\+\+PE}}~BIT(2)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a18b1661d7c37ab40c9310311dd4f647d}{UART\+\_\+\+LSR\+\_\+\+FE}}~BIT(3)
+\item 
+\#define \mbox{\hyperlink{uart_8h_ae05118527ef8873b9d7b1b0be0153019}{UART\+\_\+\+LSR\+\_\+\+THRE}}~BIT(5)
+\item 
+\#define \mbox{\hyperlink{uart_8h_a854812fad3a875bce44cfb0155782a7a}{UART\+\_\+\+LSR\+\_\+\+FIFOERR}}~BIT(7)
+\item 
+\Hypertarget{uart_8h_a5d4a3262e71e45544e52e8ec5aceae78}\label{uart_8h_a5d4a3262e71e45544e52e8ec5aceae78} 
+\#define {\bfseries UART\+\_\+\+LSR\+\_\+\+ERR\+\_\+\+MASK}~(\mbox{\hyperlink{uart_8h_a85c4312a700f6033bf0a075ae41de57c}{UART\+\_\+\+LSR\+\_\+\+OE}} \texorpdfstring{$\vert$}{|} \mbox{\hyperlink{uart_8h_a3ae0ee26be22b855aa08d68a2801d3d2}{UART\+\_\+\+LSR\+\_\+\+PE}} \texorpdfstring{$\vert$}{|} \mbox{\hyperlink{uart_8h_a18b1661d7c37ab40c9310311dd4f647d}{UART\+\_\+\+LSR\+\_\+\+FE}})
+\begin{DoxyCompactList}\small\item\em Mask covering all three receivable error bits. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Baud rate divisors}\par
+{\em Divisor = 115200 / desired\+\_\+baud. }\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{uart_8h_ae001c4ee4541bab328df3876e73808ab}{UART\+\_\+\+BAUD\+\_\+9600}}~12
+\item 
+\Hypertarget{uart_8h_a67405a6e6e4427b2fb7ca73182212bf1}\label{uart_8h_a67405a6e6e4427b2fb7ca73182212bf1} 
+\#define {\bfseries UART\+\_\+\+DEFAULT\+\_\+\+BAUD}~\mbox{\hyperlink{uart_8h_ae001c4ee4541bab328df3876e73808ab}{UART\+\_\+\+BAUD\+\_\+9600}}
+\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{uart_8h_a93aa1cb7deed905fc0a1056fc9bdc572}{uart\+\_\+init}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}bit\+\_\+no)
+\begin{DoxyCompactList}\small\item\em Initialises the UART hardware and software ring buffer. \end{DoxyCompactList}\item 
+\Hypertarget{uart_8h_ab4d1f87f4dc5c3f48340cf216c61c55e}\label{uart_8h_ab4d1f87f4dc5c3f48340cf216c61c55e} 
+void {\bfseries uart\+\_\+cleanup} (void)
+\begin{DoxyCompactList}\small\item\em Disables UART interrupts and releases the IRQ subscription. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{uart_8h_a73bd1f8a9f70a86e82f582f25a6b10b3}{uart\+\_\+ih}} (void)
+\begin{DoxyCompactList}\small\item\em UART interrupt handler — must be called from the IRQ dispatcher. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{uart_8h_a7cfbea398adb8df943122e69f2f6098a}{uart\+\_\+send\+\_\+byte}} (uint8\+\_\+t b)
+\begin{DoxyCompactList}\small\item\em Sends a single byte, blocking until the TX holding register is empty. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{uart_8h_aae1566bcc28e2cb32078e43350fce7cd}{uart\+\_\+send\+\_\+buf}} (const uint8\+\_\+t \texorpdfstring{$\ast$}{*}buf, uint8\+\_\+t len)
+\begin{DoxyCompactList}\small\item\em Sends a buffer of bytes sequentially via uart\+\_\+send\+\_\+byte. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{uart_8h_ac097192de266a1ae9f1410e34b74d216}{uart\+\_\+recv\+\_\+byte}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Reads one byte from the software RX ring buffer. \end{DoxyCompactList}\item 
+\Hypertarget{uart_8h_a85a0e0442e8944610520cd792cd75337}\label{uart_8h_a85a0e0442e8944610520cd792cd75337} 
+bool {\bfseries uart\+\_\+rx\+\_\+overflow} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if the RX ring buffer has overflowed since the last call to uart\+\_\+init (bytes were silently dropped). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+16550-\/compatible UART driver for COM1 serial communication. 
+
+Configures the UART at 9600 baud, 8-\/N-\/1, with FIFOs enabled and a 4-\/byte RX trigger threshold (matching the maximum protocol payload size). Received bytes are stored in a software ring buffer and consumed by uart\+\_\+recv\+\_\+byte.
+
+Typical usage\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint8\_t\ irq\_bit;}
+\DoxyCodeLine{uart\_init(\&irq\_bit);}
+\DoxyCodeLine{\textcolor{comment}{//\ ...\ subscribe\ to\ IRQ4,\ point\ handler\ to\ uart\_ih()\ ...}}
+\DoxyCodeLine{uart\_send\_byte(0x48);\ \ \ \textcolor{comment}{//\ 'H'}}
+\DoxyCodeLine{uint8\_t\ b;}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (uart\_recv\_byte(\&b))\ \{\ \textcolor{comment}{//\ process\ b\ \}}}
+\DoxyCodeLine{uart\_cleanup();}
+
+\end{DoxyCode}
+ 
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{uart_8h_ae001c4ee4541bab328df3876e73808ab}\label{uart_8h_ae001c4ee4541bab328df3876e73808ab} 
+\index{uart.h@{uart.h}!UART\_BAUD\_9600@{UART\_BAUD\_9600}}
+\index{UART\_BAUD\_9600@{UART\_BAUD\_9600}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_BAUD\_9600}{UART\_BAUD\_9600}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+BAUD\+\_\+9600~12}
+
+Divisor for 9600 baud. ~\newline
+ \Hypertarget{uart_8h_a5ffbb5f1d2742cab7bbc25b56be7171d}\label{uart_8h_a5ffbb5f1d2742cab7bbc25b56be7171d} 
+\index{uart.h@{uart.h}!UART\_COM1\_BASE@{UART\_COM1\_BASE}}
+\index{UART\_COM1\_BASE@{UART\_COM1\_BASE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_COM1\_BASE}{UART\_COM1\_BASE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+COM1\+\_\+\+BASE~0x3\+F8}
+
+I/O base address for COM1. \Hypertarget{uart_8h_a9a9f956b13f320742556368e4df12d7c}\label{uart_8h_a9a9f956b13f320742556368e4df12d7c} 
+\index{uart.h@{uart.h}!UART\_COM1\_IRQ@{UART\_COM1\_IRQ}}
+\index{UART\_COM1\_IRQ@{UART\_COM1\_IRQ}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_COM1\_IRQ}{UART\_COM1\_IRQ}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+COM1\+\_\+\+IRQ~4}
+
+IRQ line used by COM1. ~\newline
+ \Hypertarget{uart_8h_a7ff21e0cfc73a2db80c3907c5cac5a61}\label{uart_8h_a7ff21e0cfc73a2db80c3907c5cac5a61} 
+\index{uart.h@{uart.h}!UART\_DLL@{UART\_DLL}}
+\index{UART\_DLL@{UART\_DLL}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_DLL}{UART\_DLL}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+DLL~0}
+
+Divisor Latch – least significant byte. \Hypertarget{uart_8h_a63f95172026aa533407e357e73b04551}\label{uart_8h_a63f95172026aa533407e357e73b04551} 
+\index{uart.h@{uart.h}!UART\_DLM@{UART\_DLM}}
+\index{UART\_DLM@{UART\_DLM}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_DLM}{UART\_DLM}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+DLM~1}
+
+Divisor Latch – most significant byte. ~\newline
+ \Hypertarget{uart_8h_a220a678f91ca8244b30fe813200c26c1}\label{uart_8h_a220a678f91ca8244b30fe813200c26c1} 
+\index{uart.h@{uart.h}!UART\_FCR@{UART\_FCR}}
+\index{UART\_FCR@{UART\_FCR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR}{UART\_FCR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR~2}
+
+FIFO Control Register (write-\/only). ~\newline
+ \Hypertarget{uart_8h_a787d83dbf59cc1a79a980dbdcec22b66}\label{uart_8h_a787d83dbf59cc1a79a980dbdcec22b66} 
+\index{uart.h@{uart.h}!UART\_FCR\_ENABLE@{UART\_FCR\_ENABLE}}
+\index{UART\_FCR\_ENABLE@{UART\_FCR\_ENABLE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_ENABLE}{UART\_FCR\_ENABLE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+ENABLE~BIT(0)}
+
+Enable RX and TX FIFOs. ~\newline
+ \Hypertarget{uart_8h_a5ea27cb7903840d45579f7860796c63a}\label{uart_8h_a5ea27cb7903840d45579f7860796c63a} 
+\index{uart.h@{uart.h}!UART\_FCR\_RXRST@{UART\_FCR\_RXRST}}
+\index{UART\_FCR\_RXRST@{UART\_FCR\_RXRST}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_RXRST}{UART\_FCR\_RXRST}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+RXRST~BIT(1)}
+
+Reset RX FIFO (self-\/clearing). ~\newline
+ \Hypertarget{uart_8h_ad882c5ca80f7e5a8665e8faa79e6b0fb}\label{uart_8h_ad882c5ca80f7e5a8665e8faa79e6b0fb} 
+\index{uart.h@{uart.h}!UART\_FCR\_TRIG\_1@{UART\_FCR\_TRIG\_1}}
+\index{UART\_FCR\_TRIG\_1@{UART\_FCR\_TRIG\_1}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_TRIG\_1}{UART\_FCR\_TRIG\_1}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+1~0}
+
+RX interrupt trigger level\+: 1 byte. ~\newline
+ \Hypertarget{uart_8h_a9e95685870366b88fd43ea9d4e8ebc3d}\label{uart_8h_a9e95685870366b88fd43ea9d4e8ebc3d} 
+\index{uart.h@{uart.h}!UART\_FCR\_TRIG\_14@{UART\_FCR\_TRIG\_14}}
+\index{UART\_FCR\_TRIG\_14@{UART\_FCR\_TRIG\_14}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_TRIG\_14}{UART\_FCR\_TRIG\_14}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+14~(BIT(7)\texorpdfstring{$\vert$}{|}BIT(6))}
+
+RX interrupt trigger level\+: 14 bytes. ~\newline
+ \Hypertarget{uart_8h_aeb1a70e4404eef9c3d14be8fb8b1a550}\label{uart_8h_aeb1a70e4404eef9c3d14be8fb8b1a550} 
+\index{uart.h@{uart.h}!UART\_FCR\_TRIG\_4@{UART\_FCR\_TRIG\_4}}
+\index{UART\_FCR\_TRIG\_4@{UART\_FCR\_TRIG\_4}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_TRIG\_4}{UART\_FCR\_TRIG\_4}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+4~BIT(6)}
+
+RX interrupt trigger level\+: 4 bytes. ~\newline
+ \Hypertarget{uart_8h_a430623e7a5479625e05e521ed2381213}\label{uart_8h_a430623e7a5479625e05e521ed2381213} 
+\index{uart.h@{uart.h}!UART\_FCR\_TRIG\_8@{UART\_FCR\_TRIG\_8}}
+\index{UART\_FCR\_TRIG\_8@{UART\_FCR\_TRIG\_8}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_TRIG\_8}{UART\_FCR\_TRIG\_8}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+TRIG\+\_\+8~BIT(7)}
+
+RX interrupt trigger level\+: 8 bytes. ~\newline
+ \Hypertarget{uart_8h_a7fd3afc2b9051b4e8c2c55936d1578a8}\label{uart_8h_a7fd3afc2b9051b4e8c2c55936d1578a8} 
+\index{uart.h@{uart.h}!UART\_FCR\_TXRST@{UART\_FCR\_TXRST}}
+\index{UART\_FCR\_TXRST@{UART\_FCR\_TXRST}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_FCR\_TXRST}{UART\_FCR\_TXRST}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+FCR\+\_\+\+TXRST~BIT(2)}
+
+Reset TX FIFO (self-\/clearing). ~\newline
+ \Hypertarget{uart_8h_aaf7aaa372e86b3aa99e6c78242be2722}\label{uart_8h_aaf7aaa372e86b3aa99e6c78242be2722} 
+\index{uart.h@{uart.h}!UART\_IER@{UART\_IER}}
+\index{UART\_IER@{UART\_IER}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IER}{UART\_IER}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IER~1}
+
+Interrupt Enable Register (read/write). ~\newline
+ \Hypertarget{uart_8h_a7907a185b352b2cec382658abb119b56}\label{uart_8h_a7907a185b352b2cec382658abb119b56} 
+\index{uart.h@{uart.h}!UART\_IER\_DISABLE@{UART\_IER\_DISABLE}}
+\index{UART\_IER\_DISABLE@{UART\_IER\_DISABLE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IER\_DISABLE}{UART\_IER\_DISABLE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IER\+\_\+\+DISABLE~0x00}
+
+Mask to disable all UART interrupts. ~\newline
+ \Hypertarget{uart_8h_aa3ede8711d48b2b1fa23941dda0be995}\label{uart_8h_aa3ede8711d48b2b1fa23941dda0be995} 
+\index{uart.h@{uart.h}!UART\_IER\_RDI@{UART\_IER\_RDI}}
+\index{UART\_IER\_RDI@{UART\_IER\_RDI}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IER\_RDI}{UART\_IER\_RDI}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IER\+\_\+\+RDI~BIT(0)}
+
+Enable interrupt on received data available. \Hypertarget{uart_8h_a57a8e8e791af758a03e613dab9c1a3f7}\label{uart_8h_a57a8e8e791af758a03e613dab9c1a3f7} 
+\index{uart.h@{uart.h}!UART\_IER\_RLSI@{UART\_IER\_RLSI}}
+\index{UART\_IER\_RLSI@{UART\_IER\_RLSI}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IER\_RLSI}{UART\_IER\_RLSI}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IER\+\_\+\+RLSI~BIT(2)}
+
+Enable interrupt on receiver line status. ~\newline
+ \Hypertarget{uart_8h_a16add7e6b9f91a6698c5910704111b68}\label{uart_8h_a16add7e6b9f91a6698c5910704111b68} 
+\index{uart.h@{uart.h}!UART\_IIR@{UART\_IIR}}
+\index{UART\_IIR@{UART\_IIR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR}{UART\_IIR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR~2}
+
+Interrupt Identification Reg. (read-\/only). ~\newline
+ \Hypertarget{uart_8h_a631e8b415756272668fe4a0ca1568bf3}\label{uart_8h_a631e8b415756272668fe4a0ca1568bf3} 
+\index{uart.h@{uart.h}!UART\_IIR\_CTI@{UART\_IIR\_CTI}}
+\index{UART\_IIR\_CTI@{UART\_IIR\_CTI}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR\_CTI}{UART\_IIR\_CTI}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR\+\_\+\+CTI~(BIT(3)\texorpdfstring{$\vert$}{|}BIT(2))}
+
+Character Timeout Indication. ~\newline
+ \Hypertarget{uart_8h_a29b20e73585acb416f112502d29554d7}\label{uart_8h_a29b20e73585acb416f112502d29554d7} 
+\index{uart.h@{uart.h}!UART\_IIR\_FIFO\_EN@{UART\_IIR\_FIFO\_EN}}
+\index{UART\_IIR\_FIFO\_EN@{UART\_IIR\_FIFO\_EN}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR\_FIFO\_EN}{UART\_IIR\_FIFO\_EN}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR\+\_\+\+FIFO\+\_\+\+EN~(BIT(7)\texorpdfstring{$\vert$}{|}BIT(6))}
+
+Both bits set when FIFOs are enabled. ~\newline
+ \Hypertarget{uart_8h_a1aadabf5320b6edae19627e4e4fab8ec}\label{uart_8h_a1aadabf5320b6edae19627e4e4fab8ec} 
+\index{uart.h@{uart.h}!UART\_IIR\_ID\_MASK@{UART\_IIR\_ID\_MASK}}
+\index{UART\_IIR\_ID\_MASK@{UART\_IIR\_ID\_MASK}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR\_ID\_MASK}{UART\_IIR\_ID\_MASK}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR\+\_\+\+ID\+\_\+\+MASK~(BIT(3)\texorpdfstring{$\vert$}{|}BIT(2)\texorpdfstring{$\vert$}{|}BIT(1))}
+
+Mask for the interrupt type field. ~\newline
+ \Hypertarget{uart_8h_a667479fe75bda26bd25e1fcc8fe6acd0}\label{uart_8h_a667479fe75bda26bd25e1fcc8fe6acd0} 
+\index{uart.h@{uart.h}!UART\_IIR\_NO\_INT@{UART\_IIR\_NO\_INT}}
+\index{UART\_IIR\_NO\_INT@{UART\_IIR\_NO\_INT}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR\_NO\_INT}{UART\_IIR\_NO\_INT}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR\+\_\+\+NO\+\_\+\+INT~BIT(0)}
+
+Set when no interrupt is pending. ~\newline
+ \Hypertarget{uart_8h_a9896460f43c49cd668cc37077fb3bb2f}\label{uart_8h_a9896460f43c49cd668cc37077fb3bb2f} 
+\index{uart.h@{uart.h}!UART\_IIR\_RDA@{UART\_IIR\_RDA}}
+\index{UART\_IIR\_RDA@{UART\_IIR\_RDA}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR\_RDA}{UART\_IIR\_RDA}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR\+\_\+\+RDA~BIT(2)}
+
+Received Data Available. ~\newline
+ \Hypertarget{uart_8h_a8a0cd1e57face3a5ac397f15bb25b1a6}\label{uart_8h_a8a0cd1e57face3a5ac397f15bb25b1a6} 
+\index{uart.h@{uart.h}!UART\_IIR\_RLS@{UART\_IIR\_RLS}}
+\index{UART\_IIR\_RLS@{UART\_IIR\_RLS}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_IIR\_RLS}{UART\_IIR\_RLS}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+IIR\+\_\+\+RLS~(BIT(2)\texorpdfstring{$\vert$}{|}BIT(1))}
+
+Receiver Line Status (highest priority). \Hypertarget{uart_8h_a36c30861e332468c7f1998648e706740}\label{uart_8h_a36c30861e332468c7f1998648e706740} 
+\index{uart.h@{uart.h}!UART\_LCR@{UART\_LCR}}
+\index{UART\_LCR@{UART\_LCR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LCR}{UART\_LCR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LCR~3}
+
+Line Control Register (read/write). ~\newline
+ \Hypertarget{uart_8h_ac2e0b56a5909d564e6fea1aee2aa6dc4}\label{uart_8h_ac2e0b56a5909d564e6fea1aee2aa6dc4} 
+\index{uart.h@{uart.h}!UART\_LCR\_DLAB@{UART\_LCR\_DLAB}}
+\index{UART\_LCR\_DLAB@{UART\_LCR\_DLAB}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LCR\_DLAB}{UART\_LCR\_DLAB}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LCR\+\_\+\+DLAB~BIT(7)}
+
+Divisor Latch Access Bit. ~\newline
+ \Hypertarget{uart_8h_a188095d9f4d69589f2b1efe645d1810e}\label{uart_8h_a188095d9f4d69589f2b1efe645d1810e} 
+\index{uart.h@{uart.h}!UART\_LCR\_WLS\_5@{UART\_LCR\_WLS\_5}}
+\index{UART\_LCR\_WLS\_5@{UART\_LCR\_WLS\_5}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LCR\_WLS\_5}{UART\_LCR\_WLS\_5}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+5~0}
+
+5 data bits. ~\newline
+ \Hypertarget{uart_8h_a40b48f81672263172fb494f862f808d7}\label{uart_8h_a40b48f81672263172fb494f862f808d7} 
+\index{uart.h@{uart.h}!UART\_LCR\_WLS\_6@{UART\_LCR\_WLS\_6}}
+\index{UART\_LCR\_WLS\_6@{UART\_LCR\_WLS\_6}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LCR\_WLS\_6}{UART\_LCR\_WLS\_6}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+6~BIT(0)}
+
+6 data bits. ~\newline
+ \Hypertarget{uart_8h_a72f453d720d9625a29b963beb4c83b85}\label{uart_8h_a72f453d720d9625a29b963beb4c83b85} 
+\index{uart.h@{uart.h}!UART\_LCR\_WLS\_7@{UART\_LCR\_WLS\_7}}
+\index{UART\_LCR\_WLS\_7@{UART\_LCR\_WLS\_7}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LCR\_WLS\_7}{UART\_LCR\_WLS\_7}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+7~BIT(1)}
+
+7 data bits. ~\newline
+ \Hypertarget{uart_8h_a85091c7cbf4a03aa96bbdfac4136898b}\label{uart_8h_a85091c7cbf4a03aa96bbdfac4136898b} 
+\index{uart.h@{uart.h}!UART\_LCR\_WLS\_8@{UART\_LCR\_WLS\_8}}
+\index{UART\_LCR\_WLS\_8@{UART\_LCR\_WLS\_8}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LCR\_WLS\_8}{UART\_LCR\_WLS\_8}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LCR\+\_\+\+WLS\+\_\+8~(BIT(1) \texorpdfstring{$\vert$}{|} BIT(0))}
+
+8 data bits (default). ~\newline
+ \Hypertarget{uart_8h_a0f8ac527073d763bac90daba987361c6}\label{uart_8h_a0f8ac527073d763bac90daba987361c6} 
+\index{uart.h@{uart.h}!UART\_LSR@{UART\_LSR}}
+\index{UART\_LSR@{UART\_LSR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR}{UART\_LSR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR~5}
+
+Line Status Register (read-\/only). ~\newline
+ \Hypertarget{uart_8h_a8cc7d49fde8f2b393a398e6ebf1fbc00}\label{uart_8h_a8cc7d49fde8f2b393a398e6ebf1fbc00} 
+\index{uart.h@{uart.h}!UART\_LSR\_DR@{UART\_LSR\_DR}}
+\index{UART\_LSR\_DR@{UART\_LSR\_DR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR\_DR}{UART\_LSR\_DR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR\+\_\+\+DR~BIT(0)}
+
+Data ready in RBR or RX FIFO. ~\newline
+ \Hypertarget{uart_8h_a18b1661d7c37ab40c9310311dd4f647d}\label{uart_8h_a18b1661d7c37ab40c9310311dd4f647d} 
+\index{uart.h@{uart.h}!UART\_LSR\_FE@{UART\_LSR\_FE}}
+\index{UART\_LSR\_FE@{UART\_LSR\_FE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR\_FE}{UART\_LSR\_FE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR\+\_\+\+FE~BIT(3)}
+
+Framing error. ~\newline
+ \Hypertarget{uart_8h_a854812fad3a875bce44cfb0155782a7a}\label{uart_8h_a854812fad3a875bce44cfb0155782a7a} 
+\index{uart.h@{uart.h}!UART\_LSR\_FIFOERR@{UART\_LSR\_FIFOERR}}
+\index{UART\_LSR\_FIFOERR@{UART\_LSR\_FIFOERR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR\_FIFOERR}{UART\_LSR\_FIFOERR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR\+\_\+\+FIFOERR~BIT(7)}
+
+At least one error in the RX FIFO. ~\newline
+ \Hypertarget{uart_8h_a85c4312a700f6033bf0a075ae41de57c}\label{uart_8h_a85c4312a700f6033bf0a075ae41de57c} 
+\index{uart.h@{uart.h}!UART\_LSR\_OE@{UART\_LSR\_OE}}
+\index{UART\_LSR\_OE@{UART\_LSR\_OE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR\_OE}{UART\_LSR\_OE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR\+\_\+\+OE~BIT(1)}
+
+Overrun error. ~\newline
+ \Hypertarget{uart_8h_a3ae0ee26be22b855aa08d68a2801d3d2}\label{uart_8h_a3ae0ee26be22b855aa08d68a2801d3d2} 
+\index{uart.h@{uart.h}!UART\_LSR\_PE@{UART\_LSR\_PE}}
+\index{UART\_LSR\_PE@{UART\_LSR\_PE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR\_PE}{UART\_LSR\_PE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR\+\_\+\+PE~BIT(2)}
+
+Parity error. ~\newline
+ \Hypertarget{uart_8h_ae05118527ef8873b9d7b1b0be0153019}\label{uart_8h_ae05118527ef8873b9d7b1b0be0153019} 
+\index{uart.h@{uart.h}!UART\_LSR\_THRE@{UART\_LSR\_THRE}}
+\index{UART\_LSR\_THRE@{UART\_LSR\_THRE}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_LSR\_THRE}{UART\_LSR\_THRE}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+LSR\+\_\+\+THRE~BIT(5)}
+
+TX Holding Register empty – safe to write. ~\newline
+ \Hypertarget{uart_8h_a8ef39bc0942ddd0411d87001d12224f4}\label{uart_8h_a8ef39bc0942ddd0411d87001d12224f4} 
+\index{uart.h@{uart.h}!UART\_MCR@{UART\_MCR}}
+\index{UART\_MCR@{UART\_MCR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_MCR}{UART\_MCR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+MCR~4}
+
+Modem Control Register (read/write). ~\newline
+ \Hypertarget{uart_8h_a792e69385c822a6189b106e8d848c5c7}\label{uart_8h_a792e69385c822a6189b106e8d848c5c7} 
+\index{uart.h@{uart.h}!UART\_MCR\_OUT2@{UART\_MCR\_OUT2}}
+\index{UART\_MCR\_OUT2@{UART\_MCR\_OUT2}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_MCR\_OUT2}{UART\_MCR\_OUT2}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+MCR\+\_\+\+OUT2~BIT(3)}
+
+Gates UART IRQ through the PIC — must be set. \Hypertarget{uart_8h_a3eb7d5a767dae7774aa2b4be28e20a7e}\label{uart_8h_a3eb7d5a767dae7774aa2b4be28e20a7e} 
+\index{uart.h@{uart.h}!UART\_RBR@{UART\_RBR}}
+\index{UART\_RBR@{UART\_RBR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_RBR}{UART\_RBR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+RBR~0}
+
+Receiver Buffer Register (read-\/only). ~\newline
+ \Hypertarget{uart_8h_a7a676f075475e46d27eb878977b867ec}\label{uart_8h_a7a676f075475e46d27eb878977b867ec} 
+\index{uart.h@{uart.h}!UART\_THR@{UART\_THR}}
+\index{UART\_THR@{UART\_THR}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{UART\_THR}{UART\_THR}}
+{\footnotesize\ttfamily \#define UART\+\_\+\+THR~0}
+
+Transmitter Holding Register (write-\/only). ~\newline
+ 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{uart_8h_a73bd1f8a9f70a86e82f582f25a6b10b3}\label{uart_8h_a73bd1f8a9f70a86e82f582f25a6b10b3} 
+\index{uart.h@{uart.h}!uart\_ih@{uart\_ih}}
+\index{uart\_ih@{uart\_ih}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{uart\_ih()}{uart\_ih()}}
+{\footnotesize\ttfamily void uart\+\_\+ih (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+UART interrupt handler — must be called from the IRQ dispatcher. 
+
+Reads all available bytes from the hardware FIFO into the software ring buffer and handles RLS/\+CTI interrupt causes. \Hypertarget{uart_8h_a93aa1cb7deed905fc0a1056fc9bdc572}\label{uart_8h_a93aa1cb7deed905fc0a1056fc9bdc572} 
+\index{uart.h@{uart.h}!uart\_init@{uart\_init}}
+\index{uart\_init@{uart\_init}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{uart\_init()}{uart\_init()}}
+{\footnotesize\ttfamily int uart\+\_\+init (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{bit\+\_\+no }\end{DoxyParamCaption})}
+
+
+
+Initialises the UART hardware and software ring buffer. 
+
+Programs the baud rate divisor, line format, FIFOs, and interrupts, then subscribes the IRQ.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bit\+\_\+no} & Output\+: the IRQ bit position assigned by the LCF layer, needed to call {\ttfamily lcf\+\_\+irq\+\_\+subscribe}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on failure. 
+\end{DoxyReturn}
+\Hypertarget{uart_8h_ac097192de266a1ae9f1410e34b74d216}\label{uart_8h_ac097192de266a1ae9f1410e34b74d216} 
+\index{uart.h@{uart.h}!uart\_recv\_byte@{uart\_recv\_byte}}
+\index{uart\_recv\_byte@{uart\_recv\_byte}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{uart\_recv\_byte()}{uart\_recv\_byte()}}
+{\footnotesize\ttfamily bool uart\+\_\+recv\+\_\+byte (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})}
+
+
+
+Reads one byte from the software RX ring buffer. 
+
+Non-\/blocking\+: returns immediately if the buffer is empty.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Pointer to store the received byte. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if a byte was available and written to {\ttfamily b}. 
+\end{DoxyReturn}
+\Hypertarget{uart_8h_aae1566bcc28e2cb32078e43350fce7cd}\label{uart_8h_aae1566bcc28e2cb32078e43350fce7cd} 
+\index{uart.h@{uart.h}!uart\_send\_buf@{uart\_send\_buf}}
+\index{uart\_send\_buf@{uart\_send\_buf}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{uart\_send\_buf()}{uart\_send\_buf()}}
+{\footnotesize\ttfamily int uart\+\_\+send\+\_\+buf (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{buf,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Sends a buffer of bytes sequentially via uart\+\_\+send\+\_\+byte. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to send. \\
+\hline
+{\em len} & Number of bytes to send. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on the first send failure. 
+\end{DoxyReturn}
+\Hypertarget{uart_8h_a7cfbea398adb8df943122e69f2f6098a}\label{uart_8h_a7cfbea398adb8df943122e69f2f6098a} 
+\index{uart.h@{uart.h}!uart\_send\_byte@{uart\_send\_byte}}
+\index{uart\_send\_byte@{uart\_send\_byte}!uart.h@{uart.h}}
+\doxysubsubsection{\texorpdfstring{uart\_send\_byte()}{uart\_send\_byte()}}
+{\footnotesize\ttfamily int uart\+\_\+send\+\_\+byte (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{b }\end{DoxyParamCaption})}
+
+
+
+Sends a single byte, blocking until the TX holding register is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Byte to transmit. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero if the LSR could not be read. 
+\end{DoxyReturn}

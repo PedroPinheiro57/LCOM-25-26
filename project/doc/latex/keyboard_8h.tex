@@ -1,0 +1,30 @@
+\doxysection{model/keyboard.h File Reference}
+\hypertarget{keyboard_8h}{}\label{keyboard_8h}\index{model/keyboard.h@{model/keyboard.h}}
+
+
+KBC (Keyboard Controller) register definitions and status helpers.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for keyboard.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{keyboard_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+union \mbox{\hyperlink{unionkbc__status__t}{kbc\+\_\+status\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Overlay for the KBC status register (port 0x64). \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields}{kbc\+\_\+status\+\_\+t\+::kbc\+\_\+status\+\_\+fields}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+KBC (Keyboard Controller) register definitions and status helpers. 
+
+Provides a bitfield overlay for the KBC status register so individual flags can be read without manual bit-\/masking. 

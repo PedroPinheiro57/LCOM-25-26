@@ -1,0 +1,86 @@
+\doxysection{ship\+\_\+t Struct Reference}
+\hypertarget{structship__t}{}\label{structship__t}\index{ship\_t@{ship\_t}}
+
+
+All data associated with a single ship.  
+
+
+
+
+{\ttfamily \#include $<$board.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structship__t_ae104f0ac2abe99963a297b199aa29395}{col}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structship__t_ae3fbc8bc7b57056496c63714cf12710d}{row}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structship__t_a79e8d87a3823ea24ef88600e7e453e67}{size}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structship__t_a15444d8df3a02760babe2d7161f76fc1}{type\+\_\+idx}}
+\item 
+\mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}} \mbox{\hyperlink{structship__t_ab7fa1d85167ce726e7f98ad8cc832c66}{orient}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structship__t_a4ed4abb8fc191cd256c35e07d70cc600}{hits}}
+\item 
+bool \mbox{\hyperlink{structship__t_a76e2152adc27a5bf2205f94293c9c4c4}{sunk}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+All data associated with a single ship. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structship__t_ae104f0ac2abe99963a297b199aa29395}\label{structship__t_ae104f0ac2abe99963a297b199aa29395} 
+\index{ship\_t@{ship\_t}!col@{col}}
+\index{col@{col}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{col}{col}}
+{\footnotesize\ttfamily uint8\+\_\+t ship\+\_\+t\+::col}
+
+Grid column of the ship\textquotesingle{}s top-\/left cell. \Hypertarget{structship__t_a4ed4abb8fc191cd256c35e07d70cc600}\label{structship__t_a4ed4abb8fc191cd256c35e07d70cc600} 
+\index{ship\_t@{ship\_t}!hits@{hits}}
+\index{hits@{hits}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{hits}{hits}}
+{\footnotesize\ttfamily uint8\+\_\+t ship\+\_\+t\+::hits}
+
+Number of cells hit so far. ~\newline
+ \Hypertarget{structship__t_ab7fa1d85167ce726e7f98ad8cc832c66}\label{structship__t_ab7fa1d85167ce726e7f98ad8cc832c66} 
+\index{ship\_t@{ship\_t}!orient@{orient}}
+\index{orient@{orient}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{orient}{orient}}
+{\footnotesize\ttfamily \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}} ship\+\_\+t\+::orient}
+
+Horizontal or vertical placement. ~\newline
+ \Hypertarget{structship__t_ae3fbc8bc7b57056496c63714cf12710d}\label{structship__t_ae3fbc8bc7b57056496c63714cf12710d} 
+\index{ship\_t@{ship\_t}!row@{row}}
+\index{row@{row}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{row}{row}}
+{\footnotesize\ttfamily uint8\+\_\+t ship\+\_\+t\+::row}
+
+Grid row of the ship\textquotesingle{}s top-\/left cell. ~\newline
+ \Hypertarget{structship__t_a79e8d87a3823ea24ef88600e7e453e67}\label{structship__t_a79e8d87a3823ea24ef88600e7e453e67} 
+\index{ship\_t@{ship\_t}!size@{size}}
+\index{size@{size}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily uint8\+\_\+t ship\+\_\+t\+::size}
+
+Number of cells this ship occupies. ~\newline
+ \Hypertarget{structship__t_a76e2152adc27a5bf2205f94293c9c4c4}\label{structship__t_a76e2152adc27a5bf2205f94293c9c4c4} 
+\index{ship\_t@{ship\_t}!sunk@{sunk}}
+\index{sunk@{sunk}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{sunk}{sunk}}
+{\footnotesize\ttfamily bool ship\+\_\+t\+::sunk}
+
+{\ttfamily true} once all cells have been hit. ~\newline
+ \Hypertarget{structship__t_a15444d8df3a02760babe2d7161f76fc1}\label{structship__t_a15444d8df3a02760babe2d7161f76fc1} 
+\index{ship\_t@{ship\_t}!type\_idx@{type\_idx}}
+\index{type\_idx@{type\_idx}!ship\_t@{ship\_t}}
+\doxysubsubsection{\texorpdfstring{type\_idx}{type\_idx}}
+{\footnotesize\ttfamily uint8\+\_\+t ship\+\_\+t\+::type\+\_\+idx}
+
+Index into SHIP\+\_\+\+SIZES / sprite arrays. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{board_8h}{board.\+h}}\end{DoxyCompactItemize}

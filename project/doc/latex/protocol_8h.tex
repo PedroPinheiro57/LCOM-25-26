@@ -1,0 +1,384 @@
+\doxysection{serial/protocol.h File Reference}
+\hypertarget{protocol_8h}{}\label{protocol_8h}\index{serial/protocol.h@{serial/protocol.h}}
+
+
+Serial communication protocol for the two-\/\+VM Battleship session.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for protocol.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{protocol_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=183pt]{protocol_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structserial__msg__t}{serial\+\_\+msg\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em A fully decoded serial message ready for the game to consume. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Incremental receive state for the protocol parser. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{protocol_8h_a7a1b14c6089364e05b3ea85c2c6472b2}\label{protocol_8h_a7a1b14c6089364e05b3ea85c2c6472b2} 
+\#define {\bfseries MSG\+\_\+\+MAX\+\_\+\+PAYLOAD}~4
+\begin{DoxyCompactList}\small\item\em Maximum payload size across all message types. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Message type bytes}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_afe3d280cf3696225b6a6316df92238a2}{MSG\+\_\+\+HELLO}}~\textquotesingle{}H\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a3ac53aae36d80fc39c9245b97e85e6c1}{MSG\+\_\+\+HELLO\+\_\+\+ACK}}~\textquotesingle{}A\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_acebb45f6d9740063956da4fc574b2b04}{MSG\+\_\+\+KEY}}~\textquotesingle{}K\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a51d422b24fe00d604e6f25e8f58525ea}{MSG\+\_\+\+MOUSE}}~\textquotesingle{}M\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a764a1fd418b4cef307617488a923fa1e}{MSG\+\_\+\+SHIP\+\_\+\+PLACE}}~\textquotesingle{}P\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a0791b6112a8862c43dc15529e9dd2b06}{MSG\+\_\+\+ATTACK}}~\textquotesingle{}T\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a5e31eaaf39839a5dc03012593dba0439}{MSG\+\_\+\+CURSOR}}~\textquotesingle{}C\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a24b50eaf64edf80a93adb695b1a712f5}{MSG\+\_\+\+STATE}}~\textquotesingle{}S\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_aaa8b107c2b05f22ffab153a52a9a659a}{MSG\+\_\+\+COUNTDOWN}}~\textquotesingle{}D\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a2824e03acbda847502f3e59ea63442ce}{MSG\+\_\+\+WINNER}}~\textquotesingle{}W\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_afbfb0ec23b85b6fb0b75d4d87d7331f3}{MSG\+\_\+\+DONE\+\_\+\+PLACING}}~\textquotesingle{}F\textquotesingle{}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_abbcdbc7b6d51efc021db0a0e0ee9cd18}{MSG\+\_\+\+CLIENT\+\_\+\+QUIT}}~\textquotesingle{}Q\textquotesingle{}
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Payload lengths (bytes after the type byte)}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{protocol_8h_ab7b36f588a793cbfbcfcc2643f62fcd9}\label{protocol_8h_ab7b36f588a793cbfbcfcc2643f62fcd9} 
+\#define {\bfseries MSG\+\_\+\+HELLO\+\_\+\+LEN}~0
+\item 
+\Hypertarget{protocol_8h_ac6842635aa92d504c5def86106679d3a}\label{protocol_8h_ac6842635aa92d504c5def86106679d3a} 
+\#define {\bfseries MSG\+\_\+\+HELLO\+\_\+\+ACK\+\_\+\+LEN}~0
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a5e44308525c8969fa4cba193b2a13304}{MSG\+\_\+\+KEY\+\_\+\+LEN}}~1
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a5392fc09f280539385393a4b6e1b726c}{MSG\+\_\+\+MOUSE\+\_\+\+LEN}}~3
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a2d92f87eefdfdc319a0288191c4208bb}{MSG\+\_\+\+SHIP\+\_\+\+PLACE\+\_\+\+LEN}}~4
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a4a0954169c9634d5398154b2110d6c68}{MSG\+\_\+\+ATTACK\+\_\+\+LEN}}~3
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a3600d4248ef0d27f242fa30096a0893c}{MSG\+\_\+\+CURSOR\+\_\+\+LEN}}~2
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a819f3ec4294378cbcd6451524f2d00e8}{MSG\+\_\+\+STATE\+\_\+\+LEN}}~1
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a9ddfd1eaa67dad26302a67fde51fcaec}{MSG\+\_\+\+COUNTDOWN\+\_\+\+LEN}}~1
+\item 
+\#define \mbox{\hyperlink{protocol_8h_ab2c80abb31d9a2765f5c38af7f1b7241}{MSG\+\_\+\+WINNER\+\_\+\+LEN}}~1
+\item 
+\Hypertarget{protocol_8h_aede3c24dbde6548f48f84eeb85a75efc}\label{protocol_8h_aede3c24dbde6548f48f84eeb85a75efc} 
+\#define {\bfseries MSG\+\_\+\+DONE\+\_\+\+PLACING\+\_\+\+LEN}~0
+\item 
+\Hypertarget{protocol_8h_a863fc48553fc23889544b5c21bb4c5dc}\label{protocol_8h_a863fc48553fc23889544b5c21bb4c5dc} 
+\#define {\bfseries MSG\+\_\+\+CLIENT\+\_\+\+QUIT\+\_\+\+LEN}~0
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Attack result codes (used in @c MSG\+\_\+\+ATTACK payload)}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a337bd4ceba3e5eb2fd011abbf4d87d76}{ATTACK\+\_\+\+MISS}}~0
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a0ab6359b017d3a64b03b29c8be68a59a}{ATTACK\+\_\+\+HIT}}~1
+\item 
+\#define \mbox{\hyperlink{protocol_8h_a98157ec9f9f89c5174874dd400618599}{ATTACK\+\_\+\+SUNK}}~2
+\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721}{get\+\_\+rx\+\_\+state}} (void)
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the global receive state singleton. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{protocol_8h_af5cc84158e0926a9c0add64b4bdb5557}{proto\+\_\+rx\+\_\+reset}} (\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Resets the receive state so the parser is ready for the next message. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17}{proto\+\_\+feed\+\_\+byte}} (\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}s, uint8\+\_\+t b, \mbox{\hyperlink{structserial__msg__t}{serial\+\_\+msg\+\_\+t}} \texorpdfstring{$\ast$}{*}msg\+\_\+out)
+\begin{DoxyCompactList}\small\item\em Feeds one byte into the protocol parser. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ Message senders — convenience wrappers around uart\+\_\+send\+\_\+buf()}\par
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{protocol_8h_ae575db97ed542705955351ab8ee02fd1}\label{protocol_8h_ae575db97ed542705955351ab8ee02fd1} 
+void {\bfseries proto\+\_\+send\+\_\+hello} (void)
+\item 
+\Hypertarget{protocol_8h_a9646d28e567010cfb92fdec836945d38}\label{protocol_8h_a9646d28e567010cfb92fdec836945d38} 
+void {\bfseries proto\+\_\+send\+\_\+hello\+\_\+ack} (void)
+\item 
+\Hypertarget{protocol_8h_ac532c3510e17ad14064484e148de1671}\label{protocol_8h_ac532c3510e17ad14064484e148de1671} 
+void {\bfseries proto\+\_\+send\+\_\+key} (uint8\+\_\+t scancode)
+\begin{DoxyCompactList}\small\item\em Sends the keyboard scancode forwarded from the client. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_aed6400d029afabd3d03df06dbc079cac}\label{protocol_8h_aed6400d029afabd3d03df06dbc079cac} 
+void {\bfseries proto\+\_\+send\+\_\+mouse} (uint8\+\_\+t pkt\mbox{[}3\mbox{]})
+\begin{DoxyCompactList}\small\item\em Forwards a raw three-\/byte PS/2 mouse packet. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_a0bc580ae49a3fd81a980d03c02c55720}\label{protocol_8h_a0bc580ae49a3fd81a980d03c02c55720} 
+void {\bfseries proto\+\_\+send\+\_\+ship\+\_\+place} (uint8\+\_\+t col, uint8\+\_\+t row, uint8\+\_\+t size, uint8\+\_\+t type\+\_\+idx, uint8\+\_\+t orient)
+\begin{DoxyCompactList}\small\item\em Notifies the host of a ship placement decision. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_af9951aec7b11e9699d5f1bc2a2384733}\label{protocol_8h_af9951aec7b11e9699d5f1bc2a2384733} 
+void {\bfseries proto\+\_\+send\+\_\+attack} (uint8\+\_\+t col, uint8\+\_\+t row, uint8\+\_\+t result)
+\begin{DoxyCompactList}\small\item\em Sends an attack at (col, row) with its resolved result. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_a4049149428a2b0d31cd2e719b76078e5}\label{protocol_8h_a4049149428a2b0d31cd2e719b76078e5} 
+void {\bfseries proto\+\_\+send\+\_\+cursor} (uint8\+\_\+t col, uint8\+\_\+t row)
+\begin{DoxyCompactList}\small\item\em Broadcasts the sender\textquotesingle{}s current cursor position. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_aaf2e6409b671db395f04dd945b8cab72}\label{protocol_8h_aaf2e6409b671db395f04dd945b8cab72} 
+void {\bfseries proto\+\_\+send\+\_\+state} (uint8\+\_\+t state)
+\begin{DoxyCompactList}\small\item\em Pushes the current game-\/state tag to the remote side. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_a3197c39523808dee171e52403d0ffe2e}\label{protocol_8h_a3197c39523808dee171e52403d0ffe2e} 
+void {\bfseries proto\+\_\+send\+\_\+countdown} (uint8\+\_\+t seconds)
+\begin{DoxyCompactList}\small\item\em Pushes the current countdown value (seconds remaining). \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_a4bd42bc1a5f52cc3fc1796d5f8118fbf}\label{protocol_8h_a4bd42bc1a5f52cc3fc1796d5f8118fbf} 
+void {\bfseries proto\+\_\+send\+\_\+winner} (uint8\+\_\+t winner)
+\begin{DoxyCompactList}\small\item\em Announces which player has won the game. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_a5d6a311882611da698297c004cb15309}\label{protocol_8h_a5d6a311882611da698297c004cb15309} 
+void {\bfseries proto\+\_\+send\+\_\+done\+\_\+placing} (void)
+\begin{DoxyCompactList}\small\item\em Signals that all ships have been placed; waiting for the opponent. \end{DoxyCompactList}\item 
+\Hypertarget{protocol_8h_aedee5c447e8fa692c2b406e0d2dab83e}\label{protocol_8h_aedee5c447e8fa692c2b406e0d2dab83e} 
+void {\bfseries proto\+\_\+send\+\_\+client\+\_\+quit} (void)
+\begin{DoxyCompactList}\small\item\em Signals that the client player has exited the session. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+Serial communication protocol for the two-\/\+VM Battleship session. 
+
+Each message consists of a single-\/byte type tag followed by a fixed-\/ length payload (which may be zero bytes for simple signals). The receiver assembles bytes through proto\+\_\+feed\+\_\+byte until a complete message is available.
+
+Message flow overview\+:
+\begin{DoxyItemize}
+\item Host and client exchange {\ttfamily MSG\+\_\+\+HELLO} / {\ttfamily MSG\+\_\+\+HELLO\+\_\+\+ACK} to establish the connection.
+\item During ship placement the client mirrors its actions via {\ttfamily MSG\+\_\+\+SHIP\+\_\+\+PLACE} and signals completion with {\ttfamily MSG\+\_\+\+DONE\+\_\+\+PLACING}.
+\item During combat, the active player sends {\ttfamily MSG\+\_\+\+ATTACK}; the host replies with the result embedded in the same message type.
+\item Cursor positions are streamed with {\ttfamily MSG\+\_\+\+CURSOR} so each side can show where the other player is hovering. 
+\end{DoxyItemize}
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{protocol_8h_a0ab6359b017d3a64b03b29c8be68a59a}\label{protocol_8h_a0ab6359b017d3a64b03b29c8be68a59a} 
+\index{protocol.h@{protocol.h}!ATTACK\_HIT@{ATTACK\_HIT}}
+\index{ATTACK\_HIT@{ATTACK\_HIT}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{ATTACK\_HIT}{ATTACK\_HIT}}
+{\footnotesize\ttfamily \#define ATTACK\+\_\+\+HIT~1}
+
+Shot hit a ship (not yet sunk). ~\newline
+ \Hypertarget{protocol_8h_a337bd4ceba3e5eb2fd011abbf4d87d76}\label{protocol_8h_a337bd4ceba3e5eb2fd011abbf4d87d76} 
+\index{protocol.h@{protocol.h}!ATTACK\_MISS@{ATTACK\_MISS}}
+\index{ATTACK\_MISS@{ATTACK\_MISS}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{ATTACK\_MISS}{ATTACK\_MISS}}
+{\footnotesize\ttfamily \#define ATTACK\+\_\+\+MISS~0}
+
+Shot landed in empty water. ~\newline
+ \Hypertarget{protocol_8h_a98157ec9f9f89c5174874dd400618599}\label{protocol_8h_a98157ec9f9f89c5174874dd400618599} 
+\index{protocol.h@{protocol.h}!ATTACK\_SUNK@{ATTACK\_SUNK}}
+\index{ATTACK\_SUNK@{ATTACK\_SUNK}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{ATTACK\_SUNK}{ATTACK\_SUNK}}
+{\footnotesize\ttfamily \#define ATTACK\+\_\+\+SUNK~2}
+
+Shot sank the last remaining cell of a ship. \Hypertarget{protocol_8h_a0791b6112a8862c43dc15529e9dd2b06}\label{protocol_8h_a0791b6112a8862c43dc15529e9dd2b06} 
+\index{protocol.h@{protocol.h}!MSG\_ATTACK@{MSG\_ATTACK}}
+\index{MSG\_ATTACK@{MSG\_ATTACK}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_ATTACK}{MSG\_ATTACK}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+ATTACK~\textquotesingle{}T\textquotesingle{}}
+
+Bidirectional\+: attack a cell / return result. ~\newline
+ \Hypertarget{protocol_8h_a4a0954169c9634d5398154b2110d6c68}\label{protocol_8h_a4a0954169c9634d5398154b2110d6c68} 
+\index{protocol.h@{protocol.h}!MSG\_ATTACK\_LEN@{MSG\_ATTACK\_LEN}}
+\index{MSG\_ATTACK\_LEN@{MSG\_ATTACK\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_ATTACK\_LEN}{MSG\_ATTACK\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+ATTACK\+\_\+\+LEN~3}
+
+\mbox{[}col, row, result\mbox{]} ~\newline
+ \Hypertarget{protocol_8h_abbcdbc7b6d51efc021db0a0e0ee9cd18}\label{protocol_8h_abbcdbc7b6d51efc021db0a0e0ee9cd18} 
+\index{protocol.h@{protocol.h}!MSG\_CLIENT\_QUIT@{MSG\_CLIENT\_QUIT}}
+\index{MSG\_CLIENT\_QUIT@{MSG\_CLIENT\_QUIT}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_CLIENT\_QUIT}{MSG\_CLIENT\_QUIT}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+CLIENT\+\_\+\+QUIT~\textquotesingle{}Q\textquotesingle{}}
+
+Client → Host\+: player quit the game. ~\newline
+ \Hypertarget{protocol_8h_aaa8b107c2b05f22ffab153a52a9a659a}\label{protocol_8h_aaa8b107c2b05f22ffab153a52a9a659a} 
+\index{protocol.h@{protocol.h}!MSG\_COUNTDOWN@{MSG\_COUNTDOWN}}
+\index{MSG\_COUNTDOWN@{MSG\_COUNTDOWN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_COUNTDOWN}{MSG\_COUNTDOWN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+COUNTDOWN~\textquotesingle{}D\textquotesingle{}}
+
+Host → Client\+: current countdown value (seconds). \Hypertarget{protocol_8h_a9ddfd1eaa67dad26302a67fde51fcaec}\label{protocol_8h_a9ddfd1eaa67dad26302a67fde51fcaec} 
+\index{protocol.h@{protocol.h}!MSG\_COUNTDOWN\_LEN@{MSG\_COUNTDOWN\_LEN}}
+\index{MSG\_COUNTDOWN\_LEN@{MSG\_COUNTDOWN\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_COUNTDOWN\_LEN}{MSG\_COUNTDOWN\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+COUNTDOWN\+\_\+\+LEN~1}
+
+\mbox{[}seconds\mbox{]} ~\newline
+ \Hypertarget{protocol_8h_a5e31eaaf39839a5dc03012593dba0439}\label{protocol_8h_a5e31eaaf39839a5dc03012593dba0439} 
+\index{protocol.h@{protocol.h}!MSG\_CURSOR@{MSG\_CURSOR}}
+\index{MSG\_CURSOR@{MSG\_CURSOR}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_CURSOR}{MSG\_CURSOR}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+CURSOR~\textquotesingle{}C\textquotesingle{}}
+
+Bidirectional\+: report current cursor cell. ~\newline
+ \Hypertarget{protocol_8h_a3600d4248ef0d27f242fa30096a0893c}\label{protocol_8h_a3600d4248ef0d27f242fa30096a0893c} 
+\index{protocol.h@{protocol.h}!MSG\_CURSOR\_LEN@{MSG\_CURSOR\_LEN}}
+\index{MSG\_CURSOR\_LEN@{MSG\_CURSOR\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_CURSOR\_LEN}{MSG\_CURSOR\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+CURSOR\+\_\+\+LEN~2}
+
+\mbox{[}col, row\mbox{]} ~\newline
+ \Hypertarget{protocol_8h_afbfb0ec23b85b6fb0b75d4d87d7331f3}\label{protocol_8h_afbfb0ec23b85b6fb0b75d4d87d7331f3} 
+\index{protocol.h@{protocol.h}!MSG\_DONE\_PLACING@{MSG\_DONE\_PLACING}}
+\index{MSG\_DONE\_PLACING@{MSG\_DONE\_PLACING}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_DONE\_PLACING}{MSG\_DONE\_PLACING}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+DONE\+\_\+\+PLACING~\textquotesingle{}F\textquotesingle{}}
+
+Client → Host\+: all ships have been placed. ~\newline
+ \Hypertarget{protocol_8h_afe3d280cf3696225b6a6316df92238a2}\label{protocol_8h_afe3d280cf3696225b6a6316df92238a2} 
+\index{protocol.h@{protocol.h}!MSG\_HELLO@{MSG\_HELLO}}
+\index{MSG\_HELLO@{MSG\_HELLO}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_HELLO}{MSG\_HELLO}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+HELLO~\textquotesingle{}H\textquotesingle{}}
+
+Client → Host\+: initiate handshake. ~\newline
+ \Hypertarget{protocol_8h_a3ac53aae36d80fc39c9245b97e85e6c1}\label{protocol_8h_a3ac53aae36d80fc39c9245b97e85e6c1} 
+\index{protocol.h@{protocol.h}!MSG\_HELLO\_ACK@{MSG\_HELLO\_ACK}}
+\index{MSG\_HELLO\_ACK@{MSG\_HELLO\_ACK}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_HELLO\_ACK}{MSG\_HELLO\_ACK}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+HELLO\+\_\+\+ACK~\textquotesingle{}A\textquotesingle{}}
+
+Host → Client\+: handshake acknowledged. ~\newline
+ \Hypertarget{protocol_8h_acebb45f6d9740063956da4fc574b2b04}\label{protocol_8h_acebb45f6d9740063956da4fc574b2b04} 
+\index{protocol.h@{protocol.h}!MSG\_KEY@{MSG\_KEY}}
+\index{MSG\_KEY@{MSG\_KEY}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_KEY}{MSG\_KEY}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+KEY~\textquotesingle{}K\textquotesingle{}}
+
+Client → Host\+: forward a keyboard scancode. ~\newline
+ \Hypertarget{protocol_8h_a5e44308525c8969fa4cba193b2a13304}\label{protocol_8h_a5e44308525c8969fa4cba193b2a13304} 
+\index{protocol.h@{protocol.h}!MSG\_KEY\_LEN@{MSG\_KEY\_LEN}}
+\index{MSG\_KEY\_LEN@{MSG\_KEY\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_KEY\_LEN}{MSG\_KEY\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+KEY\+\_\+\+LEN~1}
+
+\mbox{[}scancode\mbox{]} ~\newline
+ \Hypertarget{protocol_8h_a51d422b24fe00d604e6f25e8f58525ea}\label{protocol_8h_a51d422b24fe00d604e6f25e8f58525ea} 
+\index{protocol.h@{protocol.h}!MSG\_MOUSE@{MSG\_MOUSE}}
+\index{MSG\_MOUSE@{MSG\_MOUSE}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_MOUSE}{MSG\_MOUSE}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+MOUSE~\textquotesingle{}M\textquotesingle{}}
+
+Client → Host\+: forward a raw PS/2 mouse packet. ~\newline
+ \Hypertarget{protocol_8h_a5392fc09f280539385393a4b6e1b726c}\label{protocol_8h_a5392fc09f280539385393a4b6e1b726c} 
+\index{protocol.h@{protocol.h}!MSG\_MOUSE\_LEN@{MSG\_MOUSE\_LEN}}
+\index{MSG\_MOUSE\_LEN@{MSG\_MOUSE\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_MOUSE\_LEN}{MSG\_MOUSE\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+MOUSE\+\_\+\+LEN~3}
+
+\mbox{[}byte0, byte1, byte2\mbox{]} – raw PS/2 packet ~\newline
+ \Hypertarget{protocol_8h_a764a1fd418b4cef307617488a923fa1e}\label{protocol_8h_a764a1fd418b4cef307617488a923fa1e} 
+\index{protocol.h@{protocol.h}!MSG\_SHIP\_PLACE@{MSG\_SHIP\_PLACE}}
+\index{MSG\_SHIP\_PLACE@{MSG\_SHIP\_PLACE}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_SHIP\_PLACE}{MSG\_SHIP\_PLACE}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+SHIP\+\_\+\+PLACE~\textquotesingle{}P\textquotesingle{}}
+
+Client → Host\+: place a ship on the board. ~\newline
+ \Hypertarget{protocol_8h_a2d92f87eefdfdc319a0288191c4208bb}\label{protocol_8h_a2d92f87eefdfdc319a0288191c4208bb} 
+\index{protocol.h@{protocol.h}!MSG\_SHIP\_PLACE\_LEN@{MSG\_SHIP\_PLACE\_LEN}}
+\index{MSG\_SHIP\_PLACE\_LEN@{MSG\_SHIP\_PLACE\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_SHIP\_PLACE\_LEN}{MSG\_SHIP\_PLACE\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+SHIP\+\_\+\+PLACE\+\_\+\+LEN~4}
+
+\mbox{[}col, row, size, type\+\_\+idx\texorpdfstring{$\vert$}{|}orient\mbox{]} ~\newline
+ \Hypertarget{protocol_8h_a24b50eaf64edf80a93adb695b1a712f5}\label{protocol_8h_a24b50eaf64edf80a93adb695b1a712f5} 
+\index{protocol.h@{protocol.h}!MSG\_STATE@{MSG\_STATE}}
+\index{MSG\_STATE@{MSG\_STATE}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_STATE}{MSG\_STATE}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+STATE~\textquotesingle{}S\textquotesingle{}}
+
+Host → Client\+: push a new game-\/state tag. ~\newline
+ \Hypertarget{protocol_8h_a819f3ec4294378cbcd6451524f2d00e8}\label{protocol_8h_a819f3ec4294378cbcd6451524f2d00e8} 
+\index{protocol.h@{protocol.h}!MSG\_STATE\_LEN@{MSG\_STATE\_LEN}}
+\index{MSG\_STATE\_LEN@{MSG\_STATE\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_STATE\_LEN}{MSG\_STATE\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+STATE\+\_\+\+LEN~1}
+
+\mbox{[}state\mbox{]} ~\newline
+ \Hypertarget{protocol_8h_a2824e03acbda847502f3e59ea63442ce}\label{protocol_8h_a2824e03acbda847502f3e59ea63442ce} 
+\index{protocol.h@{protocol.h}!MSG\_WINNER@{MSG\_WINNER}}
+\index{MSG\_WINNER@{MSG\_WINNER}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_WINNER}{MSG\_WINNER}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+WINNER~\textquotesingle{}W\textquotesingle{}}
+
+Host → Client\+: game-\/over with winning player. ~\newline
+ \Hypertarget{protocol_8h_ab2c80abb31d9a2765f5c38af7f1b7241}\label{protocol_8h_ab2c80abb31d9a2765f5c38af7f1b7241} 
+\index{protocol.h@{protocol.h}!MSG\_WINNER\_LEN@{MSG\_WINNER\_LEN}}
+\index{MSG\_WINNER\_LEN@{MSG\_WINNER\_LEN}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{MSG\_WINNER\_LEN}{MSG\_WINNER\_LEN}}
+{\footnotesize\ttfamily \#define MSG\+\_\+\+WINNER\+\_\+\+LEN~1}
+
+\mbox{[}winner player index\mbox{]} ~\newline
+ 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721}\label{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721} 
+\index{protocol.h@{protocol.h}!get\_rx\_state@{get\_rx\_state}}
+\index{get\_rx\_state@{get\_rx\_state}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{get\_rx\_state()}{get\_rx\_state()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+rx\+\_\+state (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns a pointer to the global receive state singleton. 
+
+There is normally only one UART, so a single shared state is sufficient. \Hypertarget{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17}\label{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17} 
+\index{protocol.h@{protocol.h}!proto\_feed\_byte@{proto\_feed\_byte}}
+\index{proto\_feed\_byte@{proto\_feed\_byte}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{proto\_feed\_byte()}{proto\_feed\_byte()}}
+{\footnotesize\ttfamily bool proto\+\_\+feed\+\_\+byte (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{s,  }\item[{uint8\+\_\+t}]{b,  }\item[{\mbox{\hyperlink{structserial__msg__t}{serial\+\_\+msg\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{msg\+\_\+out }\end{DoxyParamCaption})}
+
+
+
+Feeds one byte into the protocol parser. 
+
+Call this from the UART interrupt handler for every received byte. When the function returns {\ttfamily true} a complete, decoded message has been written to {\ttfamily msg\+\_\+out} and the state has been reset automatically.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Parser state (call get\+\_\+rx\+\_\+state for the singleton). \\
+\hline
+{\em b} & Byte just received from the UART. \\
+\hline
+{\em msg\+\_\+out} & Filled with the decoded message when the return value is {\ttfamily true}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if a full message is ready, {\ttfamily false} if more bytes are needed. 
+\end{DoxyReturn}
+\Hypertarget{protocol_8h_af5cc84158e0926a9c0add64b4bdb5557}\label{protocol_8h_af5cc84158e0926a9c0add64b4bdb5557} 
+\index{protocol.h@{protocol.h}!proto\_rx\_reset@{proto\_rx\_reset}}
+\index{proto\_rx\_reset@{proto\_rx\_reset}!protocol.h@{protocol.h}}
+\doxysubsubsection{\texorpdfstring{proto\_rx\_reset()}{proto\_rx\_reset()}}
+{\footnotesize\ttfamily void proto\+\_\+rx\+\_\+reset (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{s }\end{DoxyParamCaption})}
+
+
+
+Resets the receive state so the parser is ready for the next message. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Receive state to reset. \\
+\hline
+\end{DoxyParams}

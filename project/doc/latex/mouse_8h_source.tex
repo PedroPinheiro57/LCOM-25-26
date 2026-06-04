@@ -1,0 +1,51 @@
+\doxysection{mouse.\+h}
+\hypertarget{mouse_8h_source}{}\label{mouse_8h_source}\index{model/mouse.h@{model/mouse.h}}
+\mbox{\hyperlink{mouse_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{00020\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a57e086a5ea93724a86f994f1de1ab881}{val}};\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a94affceebad9e3269c42e3b7755b583c}{lb}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a17498bcd3318e347e825c58344f8142e}{rb}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a370df7d0a3234d8c02eec4e500f4a761}{mb}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_ae85ee0a78788a98932a545d3bf17abfc}{sync}}\ \ \ :\ 1;\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a5e7fa01a2964bd2a156fb11d5fba0e3a}{x\_sign}}\ :\ 1;\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a3fe314c06540e62805cb49605b382a3e}{y\_sign}}\ :\ 1;\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_a6b2ec8bedbc99a899480dd0c4385fb08}{x\_ovf}}\ \ :\ 1;\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionmouse__byte1__t_ab5fa9fa8c85b499a3a952b8ec110f8ec}{y\_ovf}}\ \ :\ 1;\ }
+\DoxyCodeLine{00031\ \ \ \ \ \}\ fields;}
+\DoxyCodeLine{00032\ \}\ \mbox{\hyperlink{unionmouse__byte1__t}{mouse\_byte1\_t}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00041\ \ \ \ \ int16\_t\ x,\ \mbox{\hyperlink{structmouse__state__t_a41e064a2a4bef28b44ac5a5bd41d5ead}{y}};\ \ \ \ \ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structmouse__state__t_ad55467219e1ce990293ea8bfd7dfcfc8}{lb}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structmouse__state__t_ad0571b8633eced2e303c8283b1effa69}{rb}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structmouse__state__t_a3e541dab0d82d8134ac8ba688a2f9811}{mb}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structmouse__state__t_a10cf75d2cd9c66588ef088e27a232b99}{clicked}};\ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structmouse__state__t_ac36813d96801001329934450d5f75f63}{released}};\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structmouse__state__t_ab80ace700ee0460a88d7df52a6edc14f}{moved}};\ \ \ \ }
+\DoxyCodeLine{00048\ \}\ \mbox{\hyperlink{structmouse__state__t}{mouse\_state\_t}};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{mouse_8h_a329ff35dc8130300b4757ff701095ea3}{mouse\_state\_init}}(\mbox{\hyperlink{structmouse__state__t}{mouse\_state\_t}}\ *ms,\ int16\_t\ start\_x,\ int16\_t\ start\_y);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00071\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{mouse_8h_a40ac2559a2d74449c26564527fe43991}{mouse\_state\_update}}(\mbox{\hyperlink{structmouse__state__t}{mouse\_state\_t}}\ *ms,\ uint8\_t\ buf[3],}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ hres,\ uint16\_t\ vres);}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00075\ \mbox{\hyperlink{structmouse__state__t}{mouse\_state\_t}}\ *\mbox{\hyperlink{mouse_8h_a5a4618be4f1e994102fb98957059764c}{get\_mouse\_state}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00078\ uint8\_t\ \ \ \ \ \ \ *\mbox{\hyperlink{mouse_8h_ab6af0cc0bb82363c1d6beb9468129dbd}{get\_mouse\_buf}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00081\ uint8\_t\ \ \ \ \ \ \ \ \mbox{\hyperlink{mouse_8h_a2552022422e16579799b93b5f865c76e}{get\_mouse\_idx}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00087\ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{mouse_8h_afb0bae2367c5681e6f6e0c57fd574fd4}{get\_mouse\_packet\_ready}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00090\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{mouse_8h_adfee038e9ab01b9f136e5b7ce3ebe285}{set\_mouse\_idx}}(uint8\_t\ val);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00093\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{mouse_8h_a6bf1b30b5265132abb75a68427b8d179}{set\_mouse\_packet\_ready}}(\textcolor{keywordtype}{bool}\ val);}
+
+\end{DoxyCode}

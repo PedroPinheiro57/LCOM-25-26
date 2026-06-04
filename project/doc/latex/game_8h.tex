@@ -1,0 +1,336 @@
+\doxysection{controller/game.h File Reference}
+\hypertarget{game_8h}{}\label{game_8h}\index{controller/game.h@{controller/game.h}}
+
+
+Central game-\/state machine\+: structs, state tags, and controller API.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}../model/mouse.\+h"{}}\newline
+{\ttfamily \#include "{}../model/rtc.\+h"{}}\newline
+{\ttfamily \#include "{}../serial/protocol.\+h"{}}\newline
+{\ttfamily \#include "{}../model/board.\+h"{}}\newline
+Include dependency graph for game.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=183pt]{game_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structgame__t}{game\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em The complete game state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{game_8h_a4a0c770328891d8916c1142a26481e4a}\label{game_8h_a4a0c770328891d8916c1142a26481e4a} 
+\#define {\bfseries TICKS\+\_\+\+PER\+\_\+\+SEC}~30
+\begin{DoxyCompactList}\small\item\em Timer ticks generated per second by the hardware timer. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_a2b5f3cdada392dfc73422e30dc494bde}\label{game_8h_a2b5f3cdada392dfc73422e30dc494bde} 
+\#define {\bfseries COUNTDOWN\+\_\+\+START}~5
+\begin{DoxyCompactList}\small\item\em Seconds shown on the pre-\/combat countdown screen. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_a73bdaed6449cf6059295b416fd91b7df}\label{game_8h_a73bdaed6449cf6059295b416fd91b7df} 
+\#define {\bfseries POST\+\_\+\+ATTACK\+\_\+\+WAIT\+\_\+\+TICKS}~60
+\begin{DoxyCompactList}\small\item\em Ticks to wait after an attack animation before resuming input. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}} \{ \mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968aeda41dc02475f156c305bae8a3fc5f3c}{ROLE\+\_\+\+HOST}}
+, \mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968a0920fc51e4f7ed29494f726852437ff3}{ROLE\+\_\+\+CLIENT}}
+ \}
+\begin{DoxyCompactList}\small\item\em Identifies which of the two VMs this instance is running as. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state\+\_\+t}} \{ \newline
+\mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da9a7c7ff6e6a8231adf458fec27311819}{STATE\+\_\+\+MAIN\+\_\+\+MENU}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414daaf8dfc2ee0c1d615ac43d10027062033}{STATE\+\_\+\+INSTRUCTIONS}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da81fc7ce250040faf94b8c0b19d37a089}{STATE\+\_\+\+WAITING\+\_\+\+CONNECT}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da9de8490b65754712af5c28707045d40d}{STATE\+\_\+\+PLACE\+\_\+\+SHIPS\+\_\+\+P1}}
+, \newline
+\mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da75d83e2fe86c57df670f63dd79276f32}{STATE\+\_\+\+HANDOVER\+\_\+\+P2}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da617b38c603568cc2686b5d4fe5d32582}{STATE\+\_\+\+PLACE\+\_\+\+SHIPS\+\_\+\+P2}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da922c7ffc5ccde7d2c811e1d87fe5a728}{STATE\+\_\+\+HANDOVER\+\_\+\+P1}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da5cc5d95fd6104a08ae9e200d088bf1f7}{STATE\+\_\+\+PLACE\+\_\+\+SHIPS\+\_\+\+WAITING}}
+, \newline
+\mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414daa2bc8b2b5f05d3ebd0bf81def3619f8c}{STATE\+\_\+\+COUNTDOWN}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da6d3cc9e08de927c179d271cf7a634806}{STATE\+\_\+\+TURN\+\_\+\+P1}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414daff6330c7a34c5605f980fcf98afd771e}{STATE\+\_\+\+TURN\+\_\+\+P2}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da6291ce9aab12208cc66968c97a1ce7dd}{STATE\+\_\+\+PAUSED}}
+, \newline
+\mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da0f76ed984e8b06e62cddac03843a9544}{STATE\+\_\+\+GAME\+\_\+\+OVER}}
+, \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414da6a14bcf2a972a6b9e3d4459512082c26}{STATE\+\_\+\+EXIT}}
+ \}
+\begin{DoxyCompactList}\small\item\em All possible states the game state machine can be in. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{game_8h_a3053a148777dea2c02c0406de704f885}{game\+\_\+init}} (\mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}} role)
+\begin{DoxyCompactList}\small\item\em Initialises all game state and subscribes hardware interrupts. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_a677fc186acdade9af8025dada0bcfc46}\label{game_8h_a677fc186acdade9af8025dada0bcfc46} 
+void {\bfseries game\+\_\+handle\+\_\+timer} (void)
+\begin{DoxyCompactList}\small\item\em Advances the game clock by one tick; drives animations and timeouts. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a6e2d1b55217187771bf7fc677ecbbe41}{game\+\_\+handle\+\_\+keyboard}} (uint8\+\_\+t scancode)
+\begin{DoxyCompactList}\small\item\em Processes a keyboard event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_abfcaa5d0d538a2c0897b3646accc34a5}{game\+\_\+handle\+\_\+mouse}} (\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}ms)
+\begin{DoxyCompactList}\small\item\em Processes a mouse event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}{game\+\_\+draw}} (const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*}g)
+\begin{DoxyCompactList}\small\item\em Renders the current game state to the framebuffer. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_a090678970f9729da24d0de89049b9f1d}\label{game_8h_a090678970f9729da24d0de89049b9f1d} 
+void {\bfseries game\+\_\+erase\+\_\+cursor} (void)
+\begin{DoxyCompactList}\small\item\em Erases the cursor sprite from its last drawn position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a0e7a4a92b0ddc1feeb5d18601cecc6e6}{game\+\_\+save\+\_\+cursor}} (int16\+\_\+t x, int16\+\_\+t y)
+\begin{DoxyCompactList}\small\item\em Records the cursor\textquotesingle{}s current pixel position for the next erase call. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_af97cd03e337953062dd79885856ec382}\label{game_8h_af97cd03e337953062dd79885856ec382} 
+bool {\bfseries game\+\_\+is\+\_\+over} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when the game has reached \doxylink{game_8h_a4edce1ca040716922b6e4a79be4e414da0f76ed984e8b06e62cddac03843a9544}{STATE\+\_\+\+GAME\+\_\+\+OVER} or \doxylink{game_8h_a4edce1ca040716922b6e4a79be4e414da6a14bcf2a972a6b9e3d4459512082c26}{STATE\+\_\+\+EXIT}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a8a4ada913db6efa9e5b45edf07e2dfe1}{game\+\_\+handle\+\_\+serial\+\_\+msg}} (const \mbox{\hyperlink{structserial__msg__t}{serial\+\_\+msg\+\_\+t}} \texorpdfstring{$\ast$}{*}msg)
+\begin{DoxyCompactList}\small\item\em Dispatches an incoming serial message to the appropriate handler. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_a59b8d47e743618cda74eb66a29f757a7}\label{game_8h_a59b8d47e743618cda74eb66a29f757a7} 
+bool {\bfseries game\+\_\+is\+\_\+waiting\+\_\+connect} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} while the game is waiting for the remote VM to connect. \end{DoxyCompactList}\item 
+\Hypertarget{game_8h_a6ecfcd831dd3790e98ed619077f99b8a}\label{game_8h_a6ecfcd831dd3790e98ed619077f99b8a} 
+bool {\bfseries game\+\_\+is\+\_\+connected} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} once the serial handshake has completed. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{game_8h_a120d8c6e6c11dfad90d5242067732a10}{game\+\_\+is\+\_\+client\+\_\+turn}} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when it is the client VM\textquotesingle{}s turn to act. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{game_8h_af0668155364e48b2e8b1e25f9d9091d3}{game\+\_\+get\+\_\+state}} (void)
+\begin{DoxyCompactList}\small\item\em Returns a read-\/only pointer to the current game state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Central game-\/state machine\+: structs, state tags, and controller API. 
+
+The game is split across two VMs. The {\itshape host} owns the authoritative game state and drives the logic; the {\itshape client} forwards raw input over the serial link and renders whatever the host reports back.
+
+All state transitions happen through the functions declared here. External code should treat \doxylink{structgame__t}{game\+\_\+t} as read-\/only and access it only via game\+\_\+get\+\_\+state. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{game_8h_ae64e36463cddb927d9f55a15244a6968}\label{game_8h_ae64e36463cddb927d9f55a15244a6968} 
+\index{game.h@{game.h}!game\_role\_t@{game\_role\_t}}
+\index{game\_role\_t@{game\_role\_t}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_role\_t}{game\_role\_t}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}}}
+
+
+
+Identifies which of the two VMs this instance is running as. 
+
+Set once at startup and never changed during a session. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ROLE\_HOST@{ROLE\_HOST}!game.h@{game.h}}\index{game.h@{game.h}!ROLE\_HOST@{ROLE\_HOST}}}\Hypertarget{game_8h_ae64e36463cddb927d9f55a15244a6968aeda41dc02475f156c305bae8a3fc5f3c}\label{game_8h_ae64e36463cddb927d9f55a15244a6968aeda41dc02475f156c305bae8a3fc5f3c} 
+ROLE\+\_\+\+HOST&Original VM\+: runs all game logic, sends state to the client. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ROLE\_CLIENT@{ROLE\_CLIENT}!game.h@{game.h}}\index{game.h@{game.h}!ROLE\_CLIENT@{ROLE\_CLIENT}}}\Hypertarget{game_8h_ae64e36463cddb927d9f55a15244a6968a0920fc51e4f7ed29494f726852437ff3}\label{game_8h_ae64e36463cddb927d9f55a15244a6968a0920fc51e4f7ed29494f726852437ff3} 
+ROLE\+\_\+\+CLIENT&Cloned VM\+: forwards input upstream, renders from host data. ~\newline
+ \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414d}\label{game_8h_a4edce1ca040716922b6e4a79be4e414d} 
+\index{game.h@{game.h}!game\_state\_t@{game\_state\_t}}
+\index{game\_state\_t@{game\_state\_t}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_state\_t}{game\_state\_t}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state\+\_\+t}}}
+
+
+
+All possible states the game state machine can be in. 
+
+The state drives both what is rendered on screen and which input events are meaningful at any given moment. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_MAIN\_MENU@{STATE\_MAIN\_MENU}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_MAIN\_MENU@{STATE\_MAIN\_MENU}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da9a7c7ff6e6a8231adf458fec27311819}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da9a7c7ff6e6a8231adf458fec27311819} 
+STATE\+\_\+\+MAIN\+\_\+\+MENU&Startup menu (Play / Instructions / Exit). ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_INSTRUCTIONS@{STATE\_INSTRUCTIONS}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_INSTRUCTIONS@{STATE\_INSTRUCTIONS}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414daaf8dfc2ee0c1d615ac43d10027062033}\label{game_8h_a4edce1ca040716922b6e4a79be4e414daaf8dfc2ee0c1d615ac43d10027062033} 
+STATE\+\_\+\+INSTRUCTIONS&Instructions / help screen. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_WAITING\_CONNECT@{STATE\_WAITING\_CONNECT}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_WAITING\_CONNECT@{STATE\_WAITING\_CONNECT}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da81fc7ce250040faf94b8c0b19d37a089}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da81fc7ce250040faf94b8c0b19d37a089} 
+STATE\+\_\+\+WAITING\+\_\+\+CONNECT&Waiting for the other VM to connect via serial. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_PLACE\_SHIPS\_P1@{STATE\_PLACE\_SHIPS\_P1}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_PLACE\_SHIPS\_P1@{STATE\_PLACE\_SHIPS\_P1}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da9de8490b65754712af5c28707045d40d}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da9de8490b65754712af5c28707045d40d} 
+STATE\+\_\+\+PLACE\+\_\+\+SHIPS\+\_\+\+P1&Player 1 is placing ships. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_HANDOVER\_P2@{STATE\_HANDOVER\_P2}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_HANDOVER\_P2@{STATE\_HANDOVER\_P2}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da75d83e2fe86c57df670f63dd79276f32}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da75d83e2fe86c57df670f63dd79276f32} 
+STATE\+\_\+\+HANDOVER\+\_\+\+P2&Transition screen asking P1 to hand over to P2. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_PLACE\_SHIPS\_P2@{STATE\_PLACE\_SHIPS\_P2}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_PLACE\_SHIPS\_P2@{STATE\_PLACE\_SHIPS\_P2}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da617b38c603568cc2686b5d4fe5d32582}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da617b38c603568cc2686b5d4fe5d32582} 
+STATE\+\_\+\+PLACE\+\_\+\+SHIPS\+\_\+\+P2&Player 2 is placing ships. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_HANDOVER\_P1@{STATE\_HANDOVER\_P1}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_HANDOVER\_P1@{STATE\_HANDOVER\_P1}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da922c7ffc5ccde7d2c811e1d87fe5a728}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da922c7ffc5ccde7d2c811e1d87fe5a728} 
+STATE\+\_\+\+HANDOVER\+\_\+\+P1&Transition screen asking P2 to hand back to P1. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_PLACE\_SHIPS\_WAITING@{STATE\_PLACE\_SHIPS\_WAITING}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_PLACE\_SHIPS\_WAITING@{STATE\_PLACE\_SHIPS\_WAITING}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da5cc5d95fd6104a08ae9e200d088bf1f7}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da5cc5d95fd6104a08ae9e200d088bf1f7} 
+STATE\+\_\+\+PLACE\+\_\+\+SHIPS\+\_\+\+WAITING&Host is waiting for the client to finish placing. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_COUNTDOWN@{STATE\_COUNTDOWN}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_COUNTDOWN@{STATE\_COUNTDOWN}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414daa2bc8b2b5f05d3ebd0bf81def3619f8c}\label{game_8h_a4edce1ca040716922b6e4a79be4e414daa2bc8b2b5f05d3ebd0bf81def3619f8c} 
+STATE\+\_\+\+COUNTDOWN&Pre-\/combat countdown animation. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_TURN\_P1@{STATE\_TURN\_P1}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_TURN\_P1@{STATE\_TURN\_P1}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da6d3cc9e08de927c179d271cf7a634806}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da6d3cc9e08de927c179d271cf7a634806} 
+STATE\+\_\+\+TURN\+\_\+\+P1&Player 1\textquotesingle{}s attack turn. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_TURN\_P2@{STATE\_TURN\_P2}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_TURN\_P2@{STATE\_TURN\_P2}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414daff6330c7a34c5605f980fcf98afd771e}\label{game_8h_a4edce1ca040716922b6e4a79be4e414daff6330c7a34c5605f980fcf98afd771e} 
+STATE\+\_\+\+TURN\+\_\+\+P2&Player 2\textquotesingle{}s attack turn. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_PAUSED@{STATE\_PAUSED}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_PAUSED@{STATE\_PAUSED}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da6291ce9aab12208cc66968c97a1ce7dd}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da6291ce9aab12208cc66968c97a1ce7dd} 
+STATE\+\_\+\+PAUSED&Game is paused (pause menu visible). ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_GAME\_OVER@{STATE\_GAME\_OVER}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_GAME\_OVER@{STATE\_GAME\_OVER}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da0f76ed984e8b06e62cddac03843a9544}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da0f76ed984e8b06e62cddac03843a9544} 
+STATE\+\_\+\+GAME\+\_\+\+OVER&One player\textquotesingle{}s fleet has been entirely sunk. ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_EXIT@{STATE\_EXIT}!game.h@{game.h}}\index{game.h@{game.h}!STATE\_EXIT@{STATE\_EXIT}}}\Hypertarget{game_8h_a4edce1ca040716922b6e4a79be4e414da6a14bcf2a972a6b9e3d4459512082c26}\label{game_8h_a4edce1ca040716922b6e4a79be4e414da6a14bcf2a972a6b9e3d4459512082c26} 
+STATE\+\_\+\+EXIT&Application is shutting down. ~\newline
+ \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}\label{game_8h_a6491bcc04031f5d74d7c05e5bd9aad1c} 
+\index{game.h@{game.h}!game\_draw@{game\_draw}}
+\index{game\_draw@{game\_draw}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_draw()}{game\_draw()}}
+{\footnotesize\ttfamily void game\+\_\+draw (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{g }\end{DoxyParamCaption})}
+
+
+
+Renders the current game state to the framebuffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Game state to draw (typically from game\+\_\+get\+\_\+state). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_af0668155364e48b2e8b1e25f9d9091d3}\label{game_8h_af0668155364e48b2e8b1e25f9d9091d3} 
+\index{game.h@{game.h}!game\_get\_state@{game\_get\_state}}
+\index{game\_get\_state@{game\_get\_state}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_get\_state()}{game\_get\_state()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*} game\+\_\+get\+\_\+state (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns a read-\/only pointer to the current game state. 
+
+The returned pointer is valid until the next call to any game function. Do not store it across ticks. \Hypertarget{game_8h_a6e2d1b55217187771bf7fc677ecbbe41}\label{game_8h_a6e2d1b55217187771bf7fc677ecbbe41} 
+\index{game.h@{game.h}!game\_handle\_keyboard@{game\_handle\_keyboard}}
+\index{game\_handle\_keyboard@{game\_handle\_keyboard}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_handle\_keyboard()}{game\_handle\_keyboard()}}
+{\footnotesize\ttfamily void game\+\_\+handle\+\_\+keyboard (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{scancode }\end{DoxyParamCaption})}
+
+
+
+Processes a keyboard event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em scancode} & Raw scancode from the KBC. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_abfcaa5d0d538a2c0897b3646accc34a5}\label{game_8h_abfcaa5d0d538a2c0897b3646accc34a5} 
+\index{game.h@{game.h}!game\_handle\_mouse@{game\_handle\_mouse}}
+\index{game\_handle\_mouse@{game\_handle\_mouse}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_handle\_mouse()}{game\_handle\_mouse()}}
+{\footnotesize\ttfamily void game\+\_\+handle\+\_\+mouse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ms }\end{DoxyParamCaption})}
+
+
+
+Processes a mouse event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & Current mouse state (position, buttons, edge flags). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a8a4ada913db6efa9e5b45edf07e2dfe1}\label{game_8h_a8a4ada913db6efa9e5b45edf07e2dfe1} 
+\index{game.h@{game.h}!game\_handle\_serial\_msg@{game\_handle\_serial\_msg}}
+\index{game\_handle\_serial\_msg@{game\_handle\_serial\_msg}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_handle\_serial\_msg()}{game\_handle\_serial\_msg()}}
+{\footnotesize\ttfamily void game\+\_\+handle\+\_\+serial\+\_\+msg (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structserial__msg__t}{serial\+\_\+msg\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{msg }\end{DoxyParamCaption})}
+
+
+
+Dispatches an incoming serial message to the appropriate handler. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Fully-\/decoded message from proto\+\_\+feed\+\_\+byte. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a3053a148777dea2c02c0406de704f885}\label{game_8h_a3053a148777dea2c02c0406de704f885} 
+\index{game.h@{game.h}!game\_init@{game\_init}}
+\index{game\_init@{game\_init}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_init()}{game\_init()}}
+{\footnotesize\ttfamily void game\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}}}]{role }\end{DoxyParamCaption})}
+
+
+
+Initialises all game state and subscribes hardware interrupts. 
+
+Must be called once before any other game function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em role} & Whether this instance is the host or the client. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a120d8c6e6c11dfad90d5242067732a10}\label{game_8h_a120d8c6e6c11dfad90d5242067732a10} 
+\index{game.h@{game.h}!game\_is\_client\_turn@{game\_is\_client\_turn}}
+\index{game\_is\_client\_turn@{game\_is\_client\_turn}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_is\_client\_turn()}{game\_is\_client\_turn()}}
+{\footnotesize\ttfamily bool game\+\_\+is\+\_\+client\+\_\+turn (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns {\ttfamily true} when it is the client VM\textquotesingle{}s turn to act. 
+
+Used by the client to decide whether to forward input or process it locally. \Hypertarget{game_8h_a0e7a4a92b0ddc1feeb5d18601cecc6e6}\label{game_8h_a0e7a4a92b0ddc1feeb5d18601cecc6e6} 
+\index{game.h@{game.h}!game\_save\_cursor@{game\_save\_cursor}}
+\index{game\_save\_cursor@{game\_save\_cursor}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_save\_cursor()}{game\_save\_cursor()}}
+{\footnotesize\ttfamily void game\+\_\+save\+\_\+cursor (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{x,  }\item[{int16\+\_\+t}]{y }\end{DoxyParamCaption})}
+
+
+
+Records the cursor\textquotesingle{}s current pixel position for the next erase call. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Cursor X in pixels. \\
+\hline
+{\em y} & Cursor Y in pixels. \\
+\hline
+\end{DoxyParams}

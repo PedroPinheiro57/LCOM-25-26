@@ -1,0 +1,65 @@
+\doxysection{renderer.\+h}
+\hypertarget{renderer_8h_source}{}\label{renderer_8h_source}\index{view/renderer.h@{view/renderer.h}}
+\mbox{\hyperlink{renderer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}../model/board.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}../controller/game.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{sprites_8h}{sprites.h}}"{}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ RTC\_X\ 650}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ RTC\_Y\ 20}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ C\_EMPTY\ \ \ \ 0x1a3a5c}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ C\_SHIP\ \ \ \ \ 0x808080}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ C\_HIT\ \ \ \ \ \ 0xFF4500}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ C\_MISS\ \ \ \ \ 0x00BFFF}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ C\_SUNK\ \ \ \ \ 0x8B0000}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ C\_VALID\ \ \ \ 0x00FF00}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ C\_INVALID\ \ 0xFF0000}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ C\_HOVER\ \ \ \ 0xFFFF00}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ C\_REMOTE\ \ \ 0xFF8C00}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00051\ \mbox{\hyperlink{structsprite__t}{sprite\_t}}\ *\mbox{\hyperlink{renderer_8h_aa14f367a20b2995c725254db615219cb}{get\_ship\_sprite}}(\textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00061\ \mbox{\hyperlink{structsprite__t}{sprite\_t}}\ *\mbox{\hyperlink{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065}{get\_ship\_dead\_sprite}}(\textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00068\ \mbox{\hyperlink{structanimated__sprite__t}{animated\_sprite\_t}}\ *\mbox{\hyperlink{renderer_8h_a307dc3748d2225b04f9365d6e49fa34e}{get\_anim\_flame}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00075\ \mbox{\hyperlink{structanimated__sprite__t}{animated\_sprite\_t}}\ *\mbox{\hyperlink{renderer_8h_a3ec2bf7b5110378afaabb921f99b6f56}{get\_anim\_explosion}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_abec597460eb6d8edfe925d18d14061df}{board\_draw}}(\mbox{\hyperlink{structboard__t}{board\_t}}\ *b,\ \textcolor{keywordtype}{bool}\ hide\_ships);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00102\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_ae103c3ebf7543a333db3dd282667585d}{board\_draw\_preview}}(\mbox{\hyperlink{structboard__t}{board\_t}}\ *b,\ \textcolor{keywordtype}{int}\ col,\ \textcolor{keywordtype}{int}\ row,}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ size,\ \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\_t}}\ orient);}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00113\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a038ec21e3b51095a9cb9e677e28f6bf6}{board\_highlight\_cell}}(\textcolor{keywordtype}{int}\ col,\ \textcolor{keywordtype}{int}\ row);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00124\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_ae76e1824a9c915076a7628f0a1143ef0}{board\_highlight\_remote\_cursor}}(\textcolor{keywordtype}{int}\ col,\ \textcolor{keywordtype}{int}\ row);}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00135\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a82845a15625ea9d420e9bb9869a60c06}{draw\_hud\_place}}(\textcolor{keywordtype}{int}\ player,\ \textcolor{keywordtype}{int}\ ship\_idx);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00146\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab}{draw\_hud\_attack}}(\textcolor{keywordtype}{int}\ player,\ \mbox{\hyperlink{structboard__t}{board\_t}}\ *enemy);}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00154\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a5c70121f01bc0632efb08a163aa24108}{init\_game\_sprites}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00161\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{renderer_8h_a6db41e811667f146d2886ad57b1a2749}{renderer\_is\_exploding}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00170\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{renderer_8h_aebcf03c84db0b015be1083ee5e913b2d}{renderer\_explosion\_finished}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00183\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a7b257d81a7140208c292eaf092b34b18}{start\_explosion}}(\textcolor{keywordtype}{int}\ col,\ \textcolor{keywordtype}{int}\ row,\ \textcolor{keywordtype}{bool}\ is\_hit);}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00190\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_aa280d4d5b1686635d80804357866d376}{update\_animations}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00199\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{renderer_8h_ac068dd81b6d39a7b0bc8ecfc88b41fff}{renderer\_get\_expl\_col}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00208\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{renderer_8h_a59e730b6282be7a35362a3501df187e9}{renderer\_get\_expl\_row}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00219\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}{game\_draw}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structgame__t}{game\_t}}\ *g);}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00227\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{renderer_8h_a4e564d58f2fd8f83601a83e048c21f3f}{renderer\_reset}}(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}

@@ -1,0 +1,5 @@
+<map id="kbc_status_t" name="kbc_status_t">
+<area shape="rect" id="Node000001" title="Overlay for the KBC status register (port 0x64)." alt="" coords="45,108,149,133"/>
+<area shape="rect" id="Node000002" href="$structkbc__status__t_1_1kbc__status__fields.html" title=" " alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,59,99,108,94,108,94,59"/>
+</map>

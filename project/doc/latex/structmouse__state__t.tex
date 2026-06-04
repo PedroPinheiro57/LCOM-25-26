@@ -1,0 +1,93 @@
+\doxysection{mouse\+\_\+state\+\_\+t Struct Reference}
+\hypertarget{structmouse__state__t}{}\label{structmouse__state__t}\index{mouse\_state\_t@{mouse\_state\_t}}
+
+
+Aggregated mouse state, updated every time a full packet arrives.  
+
+
+
+
+{\ttfamily \#include $<$mouse.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structmouse__state__t_a89df4de276860bfdd2d10f600752edeb}\label{structmouse__state__t_a89df4de276860bfdd2d10f600752edeb} 
+int16\+\_\+t {\bfseries x}
+\item 
+int16\+\_\+t \mbox{\hyperlink{structmouse__state__t_a41e064a2a4bef28b44ac5a5bd41d5ead}{y}}
+\item 
+bool \mbox{\hyperlink{structmouse__state__t_ad55467219e1ce990293ea8bfd7dfcfc8}{lb}}
+\item 
+bool \mbox{\hyperlink{structmouse__state__t_ad0571b8633eced2e303c8283b1effa69}{rb}}
+\item 
+bool \mbox{\hyperlink{structmouse__state__t_a3e541dab0d82d8134ac8ba688a2f9811}{mb}}
+\item 
+bool \mbox{\hyperlink{structmouse__state__t_a10cf75d2cd9c66588ef088e27a232b99}{clicked}}
+\item 
+bool \mbox{\hyperlink{structmouse__state__t_ac36813d96801001329934450d5f75f63}{released}}
+\item 
+bool \mbox{\hyperlink{structmouse__state__t_ab80ace700ee0460a88d7df52a6edc14f}{moved}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Aggregated mouse state, updated every time a full packet arrives. 
+
+The {\ttfamily clicked} and {\ttfamily released} fields are edge-\/triggered\+: they are only {\ttfamily true} for the single packet in which the left button transitions. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structmouse__state__t_a10cf75d2cd9c66588ef088e27a232b99}\label{structmouse__state__t_a10cf75d2cd9c66588ef088e27a232b99} 
+\index{mouse\_state\_t@{mouse\_state\_t}!clicked@{clicked}}
+\index{clicked@{clicked}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{clicked}{clicked}}
+{\footnotesize\ttfamily bool mouse\+\_\+state\+\_\+t\+::clicked}
+
+Left button went down this packet (rising edge). ~\newline
+ \Hypertarget{structmouse__state__t_ad55467219e1ce990293ea8bfd7dfcfc8}\label{structmouse__state__t_ad55467219e1ce990293ea8bfd7dfcfc8} 
+\index{mouse\_state\_t@{mouse\_state\_t}!lb@{lb}}
+\index{lb@{lb}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{lb}{lb}}
+{\footnotesize\ttfamily bool mouse\+\_\+state\+\_\+t\+::lb}
+
+Left button is currently held down. ~\newline
+ \Hypertarget{structmouse__state__t_a3e541dab0d82d8134ac8ba688a2f9811}\label{structmouse__state__t_a3e541dab0d82d8134ac8ba688a2f9811} 
+\index{mouse\_state\_t@{mouse\_state\_t}!mb@{mb}}
+\index{mb@{mb}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{mb}{mb}}
+{\footnotesize\ttfamily bool mouse\+\_\+state\+\_\+t\+::mb}
+
+Middle button is currently held down. ~\newline
+ \Hypertarget{structmouse__state__t_ab80ace700ee0460a88d7df52a6edc14f}\label{structmouse__state__t_ab80ace700ee0460a88d7df52a6edc14f} 
+\index{mouse\_state\_t@{mouse\_state\_t}!moved@{moved}}
+\index{moved@{moved}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{moved}{moved}}
+{\footnotesize\ttfamily bool mouse\+\_\+state\+\_\+t\+::moved}
+
+Cursor position changed this packet. ~\newline
+ \Hypertarget{structmouse__state__t_ad0571b8633eced2e303c8283b1effa69}\label{structmouse__state__t_ad0571b8633eced2e303c8283b1effa69} 
+\index{mouse\_state\_t@{mouse\_state\_t}!rb@{rb}}
+\index{rb@{rb}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{rb}{rb}}
+{\footnotesize\ttfamily bool mouse\+\_\+state\+\_\+t\+::rb}
+
+Right button is currently held down. ~\newline
+ \Hypertarget{structmouse__state__t_ac36813d96801001329934450d5f75f63}\label{structmouse__state__t_ac36813d96801001329934450d5f75f63} 
+\index{mouse\_state\_t@{mouse\_state\_t}!released@{released}}
+\index{released@{released}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{released}{released}}
+{\footnotesize\ttfamily bool mouse\+\_\+state\+\_\+t\+::released}
+
+Left button went up this packet (falling edge). ~\newline
+ \Hypertarget{structmouse__state__t_a41e064a2a4bef28b44ac5a5bd41d5ead}\label{structmouse__state__t_a41e064a2a4bef28b44ac5a5bd41d5ead} 
+\index{mouse\_state\_t@{mouse\_state\_t}!y@{y}}
+\index{y@{y}!mouse\_state\_t@{mouse\_state\_t}}
+\doxysubsubsection{\texorpdfstring{y}{y}}
+{\footnotesize\ttfamily int16\+\_\+t mouse\+\_\+state\+\_\+t\+::y}
+
+Current cursor position in screen pixels. ~\newline
+ 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{mouse_8h}{mouse.\+h}}\end{DoxyCompactItemize}

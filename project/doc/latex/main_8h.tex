@@ -1,0 +1,35 @@
+\doxysection{main.\+h File Reference}
+\hypertarget{main_8h}{}\label{main_8h}\index{main.h@{main.h}}
+
+
+Top-\/level declarations shared across the application entry point.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{main_8h_a3e82153dc9f2465eeca670505b717d3b}{role\+\_\+is\+\_\+client}} (void)
+\begin{DoxyCompactList}\small\item\em Returns whether this instance is running as the client (non-\/host) role. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Top-\/level declarations shared across the application entry point. 
+
+The application is launched as either the {\itshape host} or the {\itshape client} VM. The role is parsed from the command-\/line arguments in {\ttfamily main()} and stored in a module-\/level variable that this header exposes. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8h_a3e82153dc9f2465eeca670505b717d3b}\label{main_8h_a3e82153dc9f2465eeca670505b717d3b} 
+\index{main.h@{main.h}!role\_is\_client@{role\_is\_client}}
+\index{role\_is\_client@{role\_is\_client}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{role\_is\_client()}{role\_is\_client()}}
+{\footnotesize\ttfamily bool role\+\_\+is\+\_\+client (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns whether this instance is running as the client (non-\/host) role. 
+
+The role is determined at startup from the command-\/line arguments. Use this anywhere a quick role check is needed without pulling in the full game state.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this VM was launched as the client, {\ttfamily false} if it is the host. 
+\end{DoxyReturn}

@@ -1,0 +1,107 @@
+\doxysection{model/mouse.h File Reference}
+\hypertarget{mouse_8h}{}\label{mouse_8h}\index{model/mouse.h@{model/mouse.h}}
+
+
+PS/2 mouse packet parsing and cursor-\/state tracking.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for mouse.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{mouse_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=183pt]{mouse_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+union \mbox{\hyperlink{unionmouse__byte1__t}{mouse\+\_\+byte1\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Bitfield overlay for the first byte of a PS/2 mouse packet. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Aggregated mouse state, updated every time a full packet arrives. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{mouse_8h_a329ff35dc8130300b4757ff701095ea3}{mouse\+\_\+state\+\_\+init}} (\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}ms, int16\+\_\+t start\+\_\+x, int16\+\_\+t start\+\_\+y)
+\begin{DoxyCompactList}\small\item\em Initialises a mouse state struct and places the cursor at the given screen coordinates. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{mouse_8h_a40ac2559a2d74449c26564527fe43991}{mouse\+\_\+state\+\_\+update}} (\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}ms, uint8\+\_\+t buf\mbox{[}3\mbox{]}, uint16\+\_\+t hres, uint16\+\_\+t vres)
+\begin{DoxyCompactList}\small\item\em Decodes a raw three-\/byte PS/2 packet and updates the mouse state. \end{DoxyCompactList}\item 
+\Hypertarget{mouse_8h_a5a4618be4f1e994102fb98957059764c}\label{mouse_8h_a5a4618be4f1e994102fb98957059764c} 
+\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+mouse\+\_\+state} (void)
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the global mouse state. \end{DoxyCompactList}\item 
+\Hypertarget{mouse_8h_ab6af0cc0bb82363c1d6beb9468129dbd}\label{mouse_8h_ab6af0cc0bb82363c1d6beb9468129dbd} 
+uint8\+\_\+t \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+mouse\+\_\+buf} (void)
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the three-\/byte PS/2 receive buffer. \end{DoxyCompactList}\item 
+\Hypertarget{mouse_8h_a2552022422e16579799b93b5f865c76e}\label{mouse_8h_a2552022422e16579799b93b5f865c76e} 
+uint8\+\_\+t {\bfseries get\+\_\+mouse\+\_\+idx} (void)
+\begin{DoxyCompactList}\small\item\em Returns the current write index into the PS/2 receive buffer. \end{DoxyCompactList}\item 
+\Hypertarget{mouse_8h_afb0bae2367c5681e6f6e0c57fd574fd4}\label{mouse_8h_afb0bae2367c5681e6f6e0c57fd574fd4} 
+bool {\bfseries get\+\_\+mouse\+\_\+packet\+\_\+ready} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when a complete three-\/byte packet has been assembled and is ready to be decoded. \end{DoxyCompactList}\item 
+\Hypertarget{mouse_8h_adfee038e9ab01b9f136e5b7ce3ebe285}\label{mouse_8h_adfee038e9ab01b9f136e5b7ce3ebe285} 
+void {\bfseries set\+\_\+mouse\+\_\+idx} (uint8\+\_\+t val)
+\begin{DoxyCompactList}\small\item\em Sets the write index into the PS/2 receive buffer. \end{DoxyCompactList}\item 
+\Hypertarget{mouse_8h_a6bf1b30b5265132abb75a68427b8d179}\label{mouse_8h_a6bf1b30b5265132abb75a68427b8d179} 
+void {\bfseries set\+\_\+mouse\+\_\+packet\+\_\+ready} (bool val)
+\begin{DoxyCompactList}\small\item\em Marks whether a full PS/2 packet is waiting to be processed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+PS/2 mouse packet parsing and cursor-\/state tracking. 
+
+Decodes the three-\/byte PS/2 mouse packets into a high-\/level \doxylink{structmouse__state__t}{mouse\+\_\+state\+\_\+t} that the rest of the game reads each tick. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{mouse_8h_a329ff35dc8130300b4757ff701095ea3}\label{mouse_8h_a329ff35dc8130300b4757ff701095ea3} 
+\index{mouse.h@{mouse.h}!mouse\_state\_init@{mouse\_state\_init}}
+\index{mouse\_state\_init@{mouse\_state\_init}!mouse.h@{mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_state\_init()}{mouse\_state\_init()}}
+{\footnotesize\ttfamily void mouse\+\_\+state\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ms,  }\item[{int16\+\_\+t}]{start\+\_\+x,  }\item[{int16\+\_\+t}]{start\+\_\+y }\end{DoxyParamCaption})}
+
+
+
+Initialises a mouse state struct and places the cursor at the given screen coordinates. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & State struct to initialise. \\
+\hline
+{\em start\+\_\+x} & Initial X position. \\
+\hline
+{\em start\+\_\+y} & Initial Y position. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{mouse_8h_a40ac2559a2d74449c26564527fe43991}\label{mouse_8h_a40ac2559a2d74449c26564527fe43991} 
+\index{mouse.h@{mouse.h}!mouse\_state\_update@{mouse\_state\_update}}
+\index{mouse\_state\_update@{mouse\_state\_update}!mouse.h@{mouse.h}}
+\doxysubsubsection{\texorpdfstring{mouse\_state\_update()}{mouse\_state\_update()}}
+{\footnotesize\ttfamily void mouse\+\_\+state\+\_\+update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmouse__state__t}{mouse\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ms,  }\item[{uint8\+\_\+t}]{buf\mbox{[}3\mbox{]},  }\item[{uint16\+\_\+t}]{hres,  }\item[{uint16\+\_\+t}]{vres }\end{DoxyParamCaption})}
+
+
+
+Decodes a raw three-\/byte PS/2 packet and updates the mouse state. 
+
+Clamps the resulting position to the screen boundaries defined by {\ttfamily hres} and {\ttfamily vres}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms} & Mouse state to update. \\
+\hline
+{\em buf} & Three-\/byte PS/2 packet (bytes 0–2). \\
+\hline
+{\em hres} & Screen width used for X clamping. \\
+\hline
+{\em vres} & Screen height used for Y clamping. \\
+\hline
+\end{DoxyParams}

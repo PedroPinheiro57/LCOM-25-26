@@ -1,0 +1,127 @@
+\doxysection{serial\+\_\+msg\+\_\+t Struct Reference}
+\hypertarget{structserial__msg__t}{}\label{structserial__msg__t}\index{serial\_msg\_t@{serial\_msg\_t}}
+
+
+A fully decoded serial message ready for the game to consume.  
+
+
+
+
+{\ttfamily \#include $<$protocol.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structserial__msg__t_a8458ba42bcd82c9ca35a2dca6b06d3f6}{type}}
+\item 
+\Hypertarget{structserial__msg__t_a63ad961a57e8496e07bcd39cceb23752}\label{structserial__msg__t_a63ad961a57e8496e07bcd39cceb23752} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries scancode}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_a4194ecd52142c98cb4a2959d2fe5fbc1}{key}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries pkt} \mbox{[}3\mbox{]}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_a96db555675f407d3e42e824bedc6dd54}{mouse}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries col}\\
+\>\>uint8\_t {\bfseries row}\\
+\>\>uint8\_t {\bfseries size}\\
+\>\>uint8\_t {\bfseries type\_orient}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_a620266ea8210aa03a98847dbe824f7b3}{ship}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries col}\\
+\>\>uint8\_t {\bfseries row}\\
+\>\>uint8\_t {\bfseries result}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_aec89cc238456b42927e77ef89b51721d}{attack}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries col}\\
+\>\>uint8\_t {\bfseries row}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_a0ee7f030065abed79e7c016e8ef7e0d9}{cursor}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries state}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_a29d64921c1ce0c879de216bb206a7329}{state}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries seconds}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_af2f52eaba4a1df4bc829a3accc31d517}{countdown}}\\
+\>struct \{\\
+\>\>uint8\_t {\bfseries winner}\\
+\>\} \mbox{\hyperlink{structserial__msg__t_ab89efd6ec20f0fb9339bd6b372c2ad90}{winner}}\\
+\} {\bfseries payload}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A fully decoded serial message ready for the game to consume. 
+
+The active union member is determined by {\ttfamily type}. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structserial__msg__t_aec89cc238456b42927e77ef89b51721d}\label{structserial__msg__t_aec89cc238456b42927e77ef89b51721d} 
+\index{serial\_msg\_t@{serial\_msg\_t}!attack@{attack}}
+\index{attack@{attack}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::attack}
+
+Valid when type == MSG\+\_\+\+ATTACK. ~\newline
+ \Hypertarget{structserial__msg__t_af2f52eaba4a1df4bc829a3accc31d517}\label{structserial__msg__t_af2f52eaba4a1df4bc829a3accc31d517} 
+\index{serial\_msg\_t@{serial\_msg\_t}!countdown@{countdown}}
+\index{countdown@{countdown}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::countdown}
+
+Valid when type == MSG\+\_\+\+COUNTDOWN. ~\newline
+ \Hypertarget{structserial__msg__t_a0ee7f030065abed79e7c016e8ef7e0d9}\label{structserial__msg__t_a0ee7f030065abed79e7c016e8ef7e0d9} 
+\index{serial\_msg\_t@{serial\_msg\_t}!cursor@{cursor}}
+\index{cursor@{cursor}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::cursor}
+
+Valid when type == MSG\+\_\+\+CURSOR. ~\newline
+ \Hypertarget{structserial__msg__t_a4194ecd52142c98cb4a2959d2fe5fbc1}\label{structserial__msg__t_a4194ecd52142c98cb4a2959d2fe5fbc1} 
+\index{serial\_msg\_t@{serial\_msg\_t}!key@{key}}
+\index{key@{key}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::key}
+
+Valid when type == MSG\+\_\+\+KEY. ~\newline
+ \Hypertarget{structserial__msg__t_a96db555675f407d3e42e824bedc6dd54}\label{structserial__msg__t_a96db555675f407d3e42e824bedc6dd54} 
+\index{serial\_msg\_t@{serial\_msg\_t}!mouse@{mouse}}
+\index{mouse@{mouse}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::mouse}
+
+Valid when type == MSG\+\_\+\+MOUSE. ~\newline
+ \Hypertarget{structserial__msg__t_a620266ea8210aa03a98847dbe824f7b3}\label{structserial__msg__t_a620266ea8210aa03a98847dbe824f7b3} 
+\index{serial\_msg\_t@{serial\_msg\_t}!ship@{ship}}
+\index{ship@{ship}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::ship}
+
+Valid when type == MSG\+\_\+\+SHIP\+\_\+\+PLACE. \Hypertarget{structserial__msg__t_a29d64921c1ce0c879de216bb206a7329}\label{structserial__msg__t_a29d64921c1ce0c879de216bb206a7329} 
+\index{serial\_msg\_t@{serial\_msg\_t}!state@{state}}
+\index{state@{state}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::state}
+
+Valid when type == MSG\+\_\+\+STATE. ~\newline
+ \Hypertarget{structserial__msg__t_a8458ba42bcd82c9ca35a2dca6b06d3f6}\label{structserial__msg__t_a8458ba42bcd82c9ca35a2dca6b06d3f6} 
+\index{serial\_msg\_t@{serial\_msg\_t}!type@{type}}
+\index{type@{type}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily uint8\+\_\+t serial\+\_\+msg\+\_\+t\+::type}
+
+One of the {\ttfamily MSG\+\_\+\texorpdfstring{$\ast$}{*}} type constants. \Hypertarget{structserial__msg__t_ab89efd6ec20f0fb9339bd6b372c2ad90}\label{structserial__msg__t_ab89efd6ec20f0fb9339bd6b372c2ad90} 
+\index{serial\_msg\_t@{serial\_msg\_t}!winner@{winner}}
+\index{winner@{winner}!serial\_msg\_t@{serial\_msg\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  serial\+\_\+msg\+\_\+t\+::winner}
+
+Valid when type == MSG\+\_\+\+WINNER. ~\newline
+ 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+serial/\mbox{\hyperlink{protocol_8h}{protocol.\+h}}\end{DoxyCompactItemize}

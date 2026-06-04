@@ -1,0 +1,78 @@
+\doxysection{controller/handlers.h File Reference}
+\hypertarget{handlers_8h}{}\label{handlers_8h}\index{controller/handlers.h@{controller/handlers.h}}
+
+
+Top-\/level interrupt and event dispatch stubs.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+Include dependency graph for handlers.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=197pt]{handlers_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{handlers_8h_abc4dcc06fdd93fe8ef2f85cc42fcbcbb}{handle\+\_\+timer}} (void)
+\begin{DoxyCompactList}\small\item\em Handles a hardware timer interrupt. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{handlers_8h_a0d866fb71b29982fd0e2bcb49982bd8c}{handle\+\_\+keyboard}} (void)
+\begin{DoxyCompactList}\small\item\em Handles a keyboard (KBC) interrupt. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{handlers_8h_ab041efd8efc8cc354c541a2aa5bca589}{handle\+\_\+mouse}} (void)
+\begin{DoxyCompactList}\small\item\em Handles a PS/2 mouse interrupt. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{handlers_8h_a8fad5e24a5c66d318804f019248996d8}{handle\+\_\+serial}} (void)
+\begin{DoxyCompactList}\small\item\em Handles a UART (serial) receive interrupt. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Top-\/level interrupt and event dispatch stubs. 
+
+Each function is called from the main event loop whenever the corresponding interrupt bit fires. They read raw hardware data, update the relevant device model (keyboard, mouse, UART), and then forward the decoded event to the game controller via the game\+\_\+handle\+\_\+\texorpdfstring{$\ast$}{*} family of functions.
+
+These are thin glue routines; all game logic lives in \doxylink{game_8h}{controller/game.\+h}. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{handlers_8h_a0d866fb71b29982fd0e2bcb49982bd8c}\label{handlers_8h_a0d866fb71b29982fd0e2bcb49982bd8c} 
+\index{handlers.h@{handlers.h}!handle\_keyboard@{handle\_keyboard}}
+\index{handle\_keyboard@{handle\_keyboard}!handlers.h@{handlers.h}}
+\doxysubsubsection{\texorpdfstring{handle\_keyboard()}{handle\_keyboard()}}
+{\footnotesize\ttfamily void handle\+\_\+keyboard (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Handles a keyboard (KBC) interrupt. 
+
+Reads the scancode from the KBC output buffer and forwards it to game\+\_\+handle\+\_\+keyboard. On the client VM the scancode is also serialised and sent to the host via proto\+\_\+send\+\_\+key. \Hypertarget{handlers_8h_ab041efd8efc8cc354c541a2aa5bca589}\label{handlers_8h_ab041efd8efc8cc354c541a2aa5bca589} 
+\index{handlers.h@{handlers.h}!handle\_mouse@{handle\_mouse}}
+\index{handle\_mouse@{handle\_mouse}!handlers.h@{handlers.h}}
+\doxysubsubsection{\texorpdfstring{handle\_mouse()}{handle\_mouse()}}
+{\footnotesize\ttfamily void handle\+\_\+mouse (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Handles a PS/2 mouse interrupt. 
+
+Accumulates incoming PS/2 bytes into the three-\/byte packet buffer. When a complete packet is ready it calls mouse\+\_\+state\+\_\+update and then game\+\_\+handle\+\_\+mouse. On the client VM the raw packet is also forwarded to the host via proto\+\_\+send\+\_\+mouse. \Hypertarget{handlers_8h_a8fad5e24a5c66d318804f019248996d8}\label{handlers_8h_a8fad5e24a5c66d318804f019248996d8} 
+\index{handlers.h@{handlers.h}!handle\_serial@{handle\_serial}}
+\index{handle\_serial@{handle\_serial}!handlers.h@{handlers.h}}
+\doxysubsubsection{\texorpdfstring{handle\_serial()}{handle\_serial()}}
+{\footnotesize\ttfamily void handle\+\_\+serial (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Handles a UART (serial) receive interrupt. 
+
+Calls uart\+\_\+ih to drain the hardware FIFO into the software ring buffer, then feeds each byte through proto\+\_\+feed\+\_\+byte. When a complete message is assembled it is dispatched to game\+\_\+handle\+\_\+serial\+\_\+msg. \Hypertarget{handlers_8h_abc4dcc06fdd93fe8ef2f85cc42fcbcbb}\label{handlers_8h_abc4dcc06fdd93fe8ef2f85cc42fcbcbb} 
+\index{handlers.h@{handlers.h}!handle\_timer@{handle\_timer}}
+\index{handle\_timer@{handle\_timer}!handlers.h@{handlers.h}}
+\doxysubsubsection{\texorpdfstring{handle\_timer()}{handle\_timer()}}
+{\footnotesize\ttfamily void handle\+\_\+timer (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Handles a hardware timer interrupt. 
+
+Acknowledges the interrupt and calls game\+\_\+handle\+\_\+timer to advance the game clock by one tick. 

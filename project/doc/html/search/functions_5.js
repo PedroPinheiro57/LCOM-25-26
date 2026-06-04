@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['game_5fdraw_0',['game_draw',['../renderer_8h.html#a6491bcc04031f5d74d7c05e5bd9aad1c',1,'game_draw(const game_t *g):&#160;renderer.c'],['../game_8h.html#a6491bcc04031f5d74d7c05e5bd9aad1c',1,'game_draw(const game_t *g):&#160;renderer.c']]],
+  ['game_5ferase_5fcursor_1',['game_erase_cursor',['../game_8h.html#a090678970f9729da24d0de89049b9f1d',1,'game.c']]],
+  ['game_5fget_5fstate_2',['game_get_state',['../game_8h.html#af0668155364e48b2e8b1e25f9d9091d3',1,'game.c']]],
+  ['game_5fhandle_5fkeyboard_3',['game_handle_keyboard',['../game_8h.html#a6e2d1b55217187771bf7fc677ecbbe41',1,'game.c']]],
+  ['game_5fhandle_5fmouse_4',['game_handle_mouse',['../game_8h.html#abfcaa5d0d538a2c0897b3646accc34a5',1,'game.c']]],
+  ['game_5fhandle_5fserial_5fmsg_5',['game_handle_serial_msg',['../game_8h.html#a8a4ada913db6efa9e5b45edf07e2dfe1',1,'game.c']]],
+  ['game_5fhandle_5ftimer_6',['game_handle_timer',['../game_8h.html#a677fc186acdade9af8025dada0bcfc46',1,'game.c']]],
+  ['game_5finit_7',['game_init',['../game_8h.html#a3053a148777dea2c02c0406de704f885',1,'game.c']]],
+  ['game_5fis_5fclient_5fturn_8',['game_is_client_turn',['../game_8h.html#a120d8c6e6c11dfad90d5242067732a10',1,'game.c']]],
+  ['game_5fis_5fconnected_9',['game_is_connected',['../game_8h.html#a6ecfcd831dd3790e98ed619077f99b8a',1,'game.c']]],
+  ['game_5fis_5fover_10',['game_is_over',['../game_8h.html#af97cd03e337953062dd79885856ec382',1,'game.c']]],
+  ['game_5fis_5fwaiting_5fconnect_11',['game_is_waiting_connect',['../game_8h.html#a59b8d47e743618cda74eb66a29f757a7',1,'game.c']]],
+  ['game_5fsave_5fcursor_12',['game_save_cursor',['../game_8h.html#a0e7a4a92b0ddc1feeb5d18601cecc6e6',1,'game.c']]],
+  ['get_5fanim_5fexplosion_13',['get_anim_explosion',['../renderer_8h.html#a3ec2bf7b5110378afaabb921f99b6f56',1,'renderer.c']]],
+  ['get_5fanim_5fflame_14',['get_anim_flame',['../renderer_8h.html#a307dc3748d2225b04f9365d6e49fa34e',1,'renderer.c']]],
+  ['get_5fmouse_5fbuf_15',['get_mouse_buf',['../mouse_8h.html#ab6af0cc0bb82363c1d6beb9468129dbd',1,'mouse.c']]],
+  ['get_5fmouse_5fidx_16',['get_mouse_idx',['../mouse_8h.html#a2552022422e16579799b93b5f865c76e',1,'mouse.c']]],
+  ['get_5fmouse_5fpacket_5fready_17',['get_mouse_packet_ready',['../mouse_8h.html#afb0bae2367c5681e6f6e0c57fd574fd4',1,'mouse.c']]],
+  ['get_5fmouse_5fstate_18',['get_mouse_state',['../mouse_8h.html#a5a4618be4f1e994102fb98957059764c',1,'mouse.c']]],
+  ['get_5frx_5fstate_19',['get_rx_state',['../protocol_8h.html#aa509e5bca5a4e6ddaf6a0d4761bb9721',1,'handlers.c']]],
+  ['get_5fship_5fdead_5fsprite_20',['get_ship_dead_sprite',['../renderer_8h.html#a2730c683af15d3d381eec5f0bc4cd065',1,'renderer.c']]],
+  ['get_5fship_5fsprite_21',['get_ship_sprite',['../renderer_8h.html#aa14f367a20b2995c725254db615219cb',1,'renderer.c']]]
+];

@@ -1,0 +1,364 @@
+\doxysection{model/board.h File Reference}
+\hypertarget{board_8h}{}\label{board_8h}\index{model/board.h@{model/board.h}}
+
+
+Battleship game board\+: data model and grid logic.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for board.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{board_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{board_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structship__t}{ship\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em All data associated with a single ship. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structboard__t}{board\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em The full board state for one player. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{board_8h_a8d325fa33dd590065a0ddb96e687f528}\label{board_8h_a8d325fa33dd590065a0ddb96e687f528} 
+\#define {\bfseries BOARD\+\_\+\+COLS}~10
+\begin{DoxyCompactList}\small\item\em Number of columns on the grid. \end{DoxyCompactList}\item 
+\Hypertarget{board_8h_afdeabcf1ceb950f88253cd775bacc441}\label{board_8h_afdeabcf1ceb950f88253cd775bacc441} 
+\#define {\bfseries BOARD\+\_\+\+ROWS}~10
+\begin{DoxyCompactList}\small\item\em Number of rows on the grid. \end{DoxyCompactList}\item 
+\Hypertarget{board_8h_a7a4127f14f16563da90eb3c836bc404f}\label{board_8h_a7a4127f14f16563da90eb3c836bc404f} 
+\#define {\bfseries CELL\+\_\+\+SIZE}~45
+\begin{DoxyCompactList}\small\item\em Side length of a single cell in pixels. \end{DoxyCompactList}\item 
+\Hypertarget{board_8h_ab2f84c36c2d0595ec55832062bd0ebf2}\label{board_8h_ab2f84c36c2d0595ec55832062bd0ebf2} 
+\#define {\bfseries BOARD\+\_\+X}~175
+\begin{DoxyCompactList}\small\item\em X pixel coordinate of the grid\textquotesingle{}s top-\/left corner. \end{DoxyCompactList}\item 
+\Hypertarget{board_8h_a22de5dc5f2b1c9d3dfedd2e9b5f83017}\label{board_8h_a22de5dc5f2b1c9d3dfedd2e9b5f83017} 
+\#define {\bfseries BOARD\+\_\+Y}~90
+\begin{DoxyCompactList}\small\item\em Y pixel coordinate of the grid\textquotesingle{}s top-\/left corner. \end{DoxyCompactList}\item 
+\Hypertarget{board_8h_af9992741e35ee0a950cb076062d965c2}\label{board_8h_af9992741e35ee0a950cb076062d965c2} 
+\#define {\bfseries NUM\+\_\+\+SHIPS}~5
+\begin{DoxyCompactList}\small\item\em Total number of ships per player. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474}{cell\+\_\+state\+\_\+t}} \{ \newline
+\mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a3d2f96279e71e38dbbd9782b48bf12fa}{CELL\+\_\+\+EMPTY}}
+, \mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a2ce80813385553b4244297e70c533c96}{CELL\+\_\+\+SHIP}}
+, \mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474ac702909598174a07e00c41af7b0a6561}{CELL\+\_\+\+HIT}}
+, \mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a773d36d0c0eb001982245848598d57fc}{CELL\+\_\+\+MISS}}
+, \newline
+\mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474aba74b77e4ca0eb62c1f331894954143f}{CELL\+\_\+\+SUNK}}
+ \}
+\begin{DoxyCompactList}\small\item\em Possible states for a single grid cell. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}} \{ \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784a4dd51ad73508d6fc83a502966779e48e}{HORIZONTAL}}
+, \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784a1a88641fcd39f2ed3e58a18526e97138}{VERTICAL}}
+ \}
+\begin{DoxyCompactList}\small\item\em Ship orientation on the grid. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{board_8h_a82c8ddc02a6c3b7217c32ef45d81d41a}{board\+\_\+init}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Clears the board to an all-\/empty state. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{board_8h_ac8718bcf9d2a2ecd7c33bf3b5d1a87b1}{board\+\_\+can\+\_\+place}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b, uint8\+\_\+t col, uint8\+\_\+t row, uint8\+\_\+t size, \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}} orient)
+\begin{DoxyCompactList}\small\item\em Checks whether a ship can legally be placed at the given position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{board_8h_a9b03276da32d06a8733ebd03bd2cf248}{board\+\_\+place\+\_\+ship}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b, uint8\+\_\+t col, uint8\+\_\+t row, uint8\+\_\+t size, uint8\+\_\+t type\+\_\+idx, \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}} orient)
+\begin{DoxyCompactList}\small\item\em Commits a ship to the board, marking its cells as \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a2ce80813385553b4244297e70c533c96}{CELL\+\_\+\+SHIP}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{board_8h_a25cdfa6e3e11db7888962c4d87539595}{board\+\_\+attack}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b, uint8\+\_\+t col, uint8\+\_\+t row)
+\begin{DoxyCompactList}\small\item\em Resolves an attack on the given cell. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{board_8h_a7cfa46d8ac75f43eb103352d5cfa8c31}{board\+\_\+already\+\_\+attacked}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b, uint8\+\_\+t col, uint8\+\_\+t row)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if the cell has already been attacked (hit or miss). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{board_8h_acc078d565ee266b249e6cb534b6b67e0}{board\+\_\+all\+\_\+sunk}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when every ship on the board has been sunk. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{board_8h_a8946c22c8005ba5d3e521bec81bb21bb}{board\+\_\+pixel\+\_\+to\+\_\+cell}} (uint16\+\_\+t px, uint16\+\_\+t py, int \texorpdfstring{$\ast$}{*}col, int \texorpdfstring{$\ast$}{*}row)
+\begin{DoxyCompactList}\small\item\em Converts a pixel coordinate to the corresponding grid cell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{board_8h_a990d7e6e5f0e3cf0c4278266d47f6b3f}{board\+\_\+cell\+\_\+to\+\_\+pixel}} (uint8\+\_\+t col, uint8\+\_\+t row, uint16\+\_\+t \texorpdfstring{$\ast$}{*}px, uint16\+\_\+t \texorpdfstring{$\ast$}{*}py)
+\begin{DoxyCompactList}\small\item\em Converts a grid cell to the pixel coordinate of its top-\/left corner. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{board_8h_a7e8d0be2c53b42a67a3bd0d9eea401c2}{board\+\_\+count\+\_\+hits}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Counts the total number of \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474ac702909598174a07e00c41af7b0a6561}{CELL\+\_\+\+HIT} cells on the board. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{board_8h_aa8df8f28dd3b6ac2f6e17b5fb6a47a77}{board\+\_\+count\+\_\+misses}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b)
+\begin{DoxyCompactList}\small\item\em Counts the total number of \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a773d36d0c0eb001982245848598d57fc}{CELL\+\_\+\+MISS} cells on the board. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Battleship game board\+: data model and grid logic. 
+
+Defines the 10×10 grid, ship placement, attack resolution, and pixel↔cell coordinate conversion used by both the renderer and the game controller. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474}\label{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474} 
+\index{board.h@{board.h}!cell\_state\_t@{cell\_state\_t}}
+\index{cell\_state\_t@{cell\_state\_t}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{cell\_state\_t}{cell\_state\_t}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474}{cell\+\_\+state\+\_\+t}}}
+
+
+
+Possible states for a single grid cell. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CELL\_EMPTY@{CELL\_EMPTY}!board.h@{board.h}}\index{board.h@{board.h}!CELL\_EMPTY@{CELL\_EMPTY}}}\Hypertarget{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a3d2f96279e71e38dbbd9782b48bf12fa}\label{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a3d2f96279e71e38dbbd9782b48bf12fa} 
+CELL\+\_\+\+EMPTY&Untouched water. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CELL\_SHIP@{CELL\_SHIP}!board.h@{board.h}}\index{board.h@{board.h}!CELL\_SHIP@{CELL\_SHIP}}}\Hypertarget{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a2ce80813385553b4244297e70c533c96}\label{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a2ce80813385553b4244297e70c533c96} 
+CELL\+\_\+\+SHIP&Part of a ship that has not been hit yet. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CELL\_HIT@{CELL\_HIT}!board.h@{board.h}}\index{board.h@{board.h}!CELL\_HIT@{CELL\_HIT}}}\Hypertarget{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474ac702909598174a07e00c41af7b0a6561}\label{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474ac702909598174a07e00c41af7b0a6561} 
+CELL\+\_\+\+HIT&A ship cell that was hit. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CELL\_MISS@{CELL\_MISS}!board.h@{board.h}}\index{board.h@{board.h}!CELL\_MISS@{CELL\_MISS}}}\Hypertarget{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a773d36d0c0eb001982245848598d57fc}\label{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a773d36d0c0eb001982245848598d57fc} 
+CELL\+\_\+\+MISS&An attack that landed on empty water. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CELL\_SUNK@{CELL\_SUNK}!board.h@{board.h}}\index{board.h@{board.h}!CELL\_SUNK@{CELL\_SUNK}}}\Hypertarget{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474aba74b77e4ca0eb62c1f331894954143f}\label{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474aba74b77e4ca0eb62c1f331894954143f} 
+CELL\+\_\+\+SUNK&Part of a fully-\/sunk ship. \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{board_8h_a89a9f4249b37811d52876bf3497a2784}\label{board_8h_a89a9f4249b37811d52876bf3497a2784} 
+\index{board.h@{board.h}!orientation\_t@{orientation\_t}}
+\index{orientation\_t@{orientation\_t}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{orientation\_t}{orientation\_t}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}}}
+
+
+
+Ship orientation on the grid. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{HORIZONTAL@{HORIZONTAL}!board.h@{board.h}}\index{board.h@{board.h}!HORIZONTAL@{HORIZONTAL}}}\Hypertarget{board_8h_a89a9f4249b37811d52876bf3497a2784a4dd51ad73508d6fc83a502966779e48e}\label{board_8h_a89a9f4249b37811d52876bf3497a2784a4dd51ad73508d6fc83a502966779e48e} 
+HORIZONTAL&Ship spans columns left-\/to-\/right. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{VERTICAL@{VERTICAL}!board.h@{board.h}}\index{board.h@{board.h}!VERTICAL@{VERTICAL}}}\Hypertarget{board_8h_a89a9f4249b37811d52876bf3497a2784a1a88641fcd39f2ed3e58a18526e97138}\label{board_8h_a89a9f4249b37811d52876bf3497a2784a1a88641fcd39f2ed3e58a18526e97138} 
+VERTICAL&Ship spans rows top-\/to-\/bottom. ~\newline
+ \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{board_8h_acc078d565ee266b249e6cb534b6b67e0}\label{board_8h_acc078d565ee266b249e6cb534b6b67e0} 
+\index{board.h@{board.h}!board\_all\_sunk@{board\_all\_sunk}}
+\index{board\_all\_sunk@{board\_all\_sunk}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_all\_sunk()}{board\_all\_sunk()}}
+{\footnotesize\ttfamily bool board\+\_\+all\+\_\+sunk (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})}
+
+
+
+Returns {\ttfamily true} when every ship on the board has been sunk. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to inspect. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{board_8h_a7cfa46d8ac75f43eb103352d5cfa8c31}\label{board_8h_a7cfa46d8ac75f43eb103352d5cfa8c31} 
+\index{board.h@{board.h}!board\_already\_attacked@{board\_already\_attacked}}
+\index{board\_already\_attacked@{board\_already\_attacked}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_already\_attacked()}{board\_already\_attacked()}}
+{\footnotesize\ttfamily bool board\+\_\+already\+\_\+attacked (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b,  }\item[{uint8\+\_\+t}]{col,  }\item[{uint8\+\_\+t}]{row }\end{DoxyParamCaption})}
+
+
+
+Returns {\ttfamily true} if the cell has already been attacked (hit or miss). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to query. \\
+\hline
+{\em col} & Target column. \\
+\hline
+{\em row} & Target row. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{board_8h_a25cdfa6e3e11db7888962c4d87539595}\label{board_8h_a25cdfa6e3e11db7888962c4d87539595} 
+\index{board.h@{board.h}!board\_attack@{board\_attack}}
+\index{board\_attack@{board\_attack}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_attack()}{board\_attack()}}
+{\footnotesize\ttfamily bool board\+\_\+attack (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b,  }\item[{uint8\+\_\+t}]{col,  }\item[{uint8\+\_\+t}]{row }\end{DoxyParamCaption})}
+
+
+
+Resolves an attack on the given cell. 
+
+Updates the cell to \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474ac702909598174a07e00c41af7b0a6561}{CELL\+\_\+\+HIT} or \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a773d36d0c0eb001982245848598d57fc}{CELL\+\_\+\+MISS}, increments the ship\textquotesingle{}s hit counter, and marks it as sunk when all cells are hit.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board being attacked. \\
+\hline
+{\em col} & Target column. \\
+\hline
+{\em row} & Target row. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the attack hit a ship. 
+\end{DoxyReturn}
+\Hypertarget{board_8h_ac8718bcf9d2a2ecd7c33bf3b5d1a87b1}\label{board_8h_ac8718bcf9d2a2ecd7c33bf3b5d1a87b1} 
+\index{board.h@{board.h}!board\_can\_place@{board\_can\_place}}
+\index{board\_can\_place@{board\_can\_place}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_can\_place()}{board\_can\_place()}}
+{\footnotesize\ttfamily bool board\+\_\+can\+\_\+place (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b,  }\item[{uint8\+\_\+t}]{col,  }\item[{uint8\+\_\+t}]{row,  }\item[{uint8\+\_\+t}]{size,  }\item[{\mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}}}]{orient }\end{DoxyParamCaption})}
+
+
+
+Checks whether a ship can legally be placed at the given position. 
+
+Returns {\ttfamily false} if any cell the ship would occupy is already taken or if the ship would extend beyond the grid boundaries.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to check against. \\
+\hline
+{\em col} & Column of the top-\/left cell. \\
+\hline
+{\em row} & Row of the top-\/left cell. \\
+\hline
+{\em size} & Number of cells the ship occupies. \\
+\hline
+{\em orient} & Placement direction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the placement is valid. 
+\end{DoxyReturn}
+\Hypertarget{board_8h_a990d7e6e5f0e3cf0c4278266d47f6b3f}\label{board_8h_a990d7e6e5f0e3cf0c4278266d47f6b3f} 
+\index{board.h@{board.h}!board\_cell\_to\_pixel@{board\_cell\_to\_pixel}}
+\index{board\_cell\_to\_pixel@{board\_cell\_to\_pixel}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_cell\_to\_pixel()}{board\_cell\_to\_pixel()}}
+{\footnotesize\ttfamily void board\+\_\+cell\+\_\+to\+\_\+pixel (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{col,  }\item[{uint8\+\_\+t}]{row,  }\item[{uint16\+\_\+t \texorpdfstring{$\ast$}{*}}]{px,  }\item[{uint16\+\_\+t \texorpdfstring{$\ast$}{*}}]{py }\end{DoxyParamCaption})}
+
+
+
+Converts a grid cell to the pixel coordinate of its top-\/left corner. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Grid column. \\
+\hline
+{\em row} & Grid row. \\
+\hline
+{\em px} & Output pixel X. \\
+\hline
+{\em py} & Output pixel Y. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{board_8h_a7e8d0be2c53b42a67a3bd0d9eea401c2}\label{board_8h_a7e8d0be2c53b42a67a3bd0d9eea401c2} 
+\index{board.h@{board.h}!board\_count\_hits@{board\_count\_hits}}
+\index{board\_count\_hits@{board\_count\_hits}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_count\_hits()}{board\_count\_hits()}}
+{\footnotesize\ttfamily uint8\+\_\+t board\+\_\+count\+\_\+hits (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})}
+
+
+
+Counts the total number of \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474ac702909598174a07e00c41af7b0a6561}{CELL\+\_\+\+HIT} cells on the board. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to inspect. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of hits. 
+\end{DoxyReturn}
+\Hypertarget{board_8h_aa8df8f28dd3b6ac2f6e17b5fb6a47a77}\label{board_8h_aa8df8f28dd3b6ac2f6e17b5fb6a47a77} 
+\index{board.h@{board.h}!board\_count\_misses@{board\_count\_misses}}
+\index{board\_count\_misses@{board\_count\_misses}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_count\_misses()}{board\_count\_misses()}}
+{\footnotesize\ttfamily uint8\+\_\+t board\+\_\+count\+\_\+misses (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})}
+
+
+
+Counts the total number of \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a773d36d0c0eb001982245848598d57fc}{CELL\+\_\+\+MISS} cells on the board. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to inspect. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Number of misses. 
+\end{DoxyReturn}
+\Hypertarget{board_8h_a82c8ddc02a6c3b7217c32ef45d81d41a}\label{board_8h_a82c8ddc02a6c3b7217c32ef45d81d41a} 
+\index{board.h@{board.h}!board\_init@{board\_init}}
+\index{board\_init@{board\_init}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_init()}{board\_init()}}
+{\footnotesize\ttfamily void board\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b }\end{DoxyParamCaption})}
+
+
+
+Clears the board to an all-\/empty state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to initialise. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{board_8h_a8946c22c8005ba5d3e521bec81bb21bb}\label{board_8h_a8946c22c8005ba5d3e521bec81bb21bb} 
+\index{board.h@{board.h}!board\_pixel\_to\_cell@{board\_pixel\_to\_cell}}
+\index{board\_pixel\_to\_cell@{board\_pixel\_to\_cell}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_pixel\_to\_cell()}{board\_pixel\_to\_cell()}}
+{\footnotesize\ttfamily void board\+\_\+pixel\+\_\+to\+\_\+cell (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{px,  }\item[{uint16\+\_\+t}]{py,  }\item[{int \texorpdfstring{$\ast$}{*}}]{col,  }\item[{int \texorpdfstring{$\ast$}{*}}]{row }\end{DoxyParamCaption})}
+
+
+
+Converts a pixel coordinate to the corresponding grid cell. 
+
+The output values may be negative or \texorpdfstring{$>$}{>}= \doxylink{board_8h_a8d325fa33dd590065a0ddb96e687f528}{BOARD\+\_\+\+COLS} / \doxylink{board_8h_afdeabcf1ceb950f88253cd775bacc441}{BOARD\+\_\+\+ROWS} if the pixel is outside the board area — callers should validate.
+
+
+\begin{DoxyParams}{Parameters}
+{\em px} & Pixel X coordinate. \\
+\hline
+{\em py} & Pixel Y coordinate. \\
+\hline
+{\em col} & Output column index. \\
+\hline
+{\em row} & Output row index. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{board_8h_a9b03276da32d06a8733ebd03bd2cf248}\label{board_8h_a9b03276da32d06a8733ebd03bd2cf248} 
+\index{board.h@{board.h}!board\_place\_ship@{board\_place\_ship}}
+\index{board\_place\_ship@{board\_place\_ship}!board.h@{board.h}}
+\doxysubsubsection{\texorpdfstring{board\_place\_ship()}{board\_place\_ship()}}
+{\footnotesize\ttfamily void board\+\_\+place\+\_\+ship (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b,  }\item[{uint8\+\_\+t}]{col,  }\item[{uint8\+\_\+t}]{row,  }\item[{uint8\+\_\+t}]{size,  }\item[{uint8\+\_\+t}]{type\+\_\+idx,  }\item[{\mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}}}]{orient }\end{DoxyParamCaption})}
+
+
+
+Commits a ship to the board, marking its cells as \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a2ce80813385553b4244297e70c533c96}{CELL\+\_\+\+SHIP}. 
+
+Does not validate the placement — call board\+\_\+can\+\_\+place first.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Target board. \\
+\hline
+{\em col} & Column of the top-\/left cell. \\
+\hline
+{\em row} & Row of the top-\/left cell. \\
+\hline
+{\em size} & Ship length in cells. \\
+\hline
+{\em type\+\_\+idx} & Ship type index (used to pick the correct sprite). \\
+\hline
+{\em orient} & Placement orientation. \\
+\hline
+\end{DoxyParams}

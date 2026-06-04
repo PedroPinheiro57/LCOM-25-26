@@ -114,10 +114,13 @@ void uart_cleanup(void) {
 
 
 void uart_ih(void) {
+    /* (slide 23 do powerpoint) */
     uint8_t iir = uart_read_reg(UART_IIR);
 
+    /* if no interrupt pending */
     if (iir & UART_IIR_NO_INT) return;
 
+    /* interrupt pending, there is a priority order */
     uint8_t int_id = iir & UART_IIR_ID_MASK;
 
     /* Case 1: Receiver Line Status (priority 1) */
@@ -133,9 +136,8 @@ void uart_ih(void) {
             rxbuf_overflowed = true;
         }
 
-        /* Drain FIFO to deassert IRQ, discarding every byte
-         * because we cannot trust any of them after a line error. */
-        while (lsr & UART_LSR_DR) {
+        /* Drain FIFO because we cannot trust any of them after a line error */
+        while (lsr & UART_LSR_DR) { 
             uart_read_reg(UART_RBR);
             lsr = uart_read_reg(UART_LSR);
         }
@@ -146,6 +148,7 @@ void uart_ih(void) {
     /* Drain the entire RX FIFO */
     if (int_id == UART_IIR_RDA || int_id == UART_IIR_CTI) {
         uint8_t lsr = uart_read_reg(UART_LSR);
+        /* while there is data */
         while (lsr & UART_LSR_DR) {
             uint8_t b = uart_read_reg(UART_RBR);
             if (lsr & UART_LSR_ERR_MASK) {
@@ -153,6 +156,7 @@ void uart_ih(void) {
                 rxbuf_discard_all();
                 rxbuf_overflowed = true;
             } else {
+                /* add to the queue */
                 rxbuf_push(b);
             }
             lsr = uart_read_reg(UART_LSR);
@@ -162,7 +166,7 @@ void uart_ih(void) {
 }
 
 int uart_send_byte(uint8_t b) {
-    int attempts = 10000;
+    int attempts = 10;
     while (attempts--) {
         if (uart_read_reg(UART_LSR) & UART_LSR_THRE) {
             uart_write_reg(UART_THR, b);

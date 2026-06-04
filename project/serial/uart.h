@@ -129,8 +129,9 @@
  * Divisor = 115200 / desired_baud.
  * @{
  */
-#define UART_BAUD_9600      12 /**< Divisor for 9600 baud.  */
-#define UART_DEFAULT_BAUD   UART_BAUD_9600
+#define UART_BAUD_115200     1  /**< Divisor for 115200 baud (maximum speed for smooth gameplay). */
+
+#define UART_DEFAULT_BAUD    UART_BAUD_115200
 /** @} */
 
 /** @brief Default line format: 8 data bits, no parity, 1 stop bit. */

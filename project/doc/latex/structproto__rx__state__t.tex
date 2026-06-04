@@ -1,0 +1,70 @@
+\doxysection{proto\+\_\+rx\+\_\+state\+\_\+t Struct Reference}
+\hypertarget{structproto__rx__state__t}{}\label{structproto__rx__state__t}\index{proto\_rx\_state\_t@{proto\_rx\_state\_t}}
+
+
+Incremental receive state for the protocol parser.  
+
+
+
+
+{\ttfamily \#include $<$protocol.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structproto__rx__state__t_a3db894524d3c1389186aa5c95ebdcfe4}{type}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structproto__rx__state__t_a483b83e5f672bc28b7b645ec23c0ec39}{buf}} \mbox{[}\mbox{\hyperlink{protocol_8h_a7a1b14c6089364e05b3ea85c2c6472b2}{MSG\+\_\+\+MAX\+\_\+\+PAYLOAD}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structproto__rx__state__t_ad217e833f75208dec142a378fe20c987}{collected}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structproto__rx__state__t_a7f5b61e1db5dee0213418286b19ab61f}{expected}}
+\item 
+bool \mbox{\hyperlink{structproto__rx__state__t_a68d4a2b18feb14b87c18ebc5b6a0126f}{have\+\_\+type}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Incremental receive state for the protocol parser. 
+
+Feed incoming bytes one at a time via \doxylink{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17}{proto\+\_\+feed\+\_\+byte}. When a complete message has been assembled the function returns {\ttfamily true} and populates the caller\textquotesingle{}s \doxylink{structserial__msg__t}{serial\+\_\+msg\+\_\+t}. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structproto__rx__state__t_a483b83e5f672bc28b7b645ec23c0ec39}\label{structproto__rx__state__t_a483b83e5f672bc28b7b645ec23c0ec39} 
+\index{proto\_rx\_state\_t@{proto\_rx\_state\_t}!buf@{buf}}
+\index{buf@{buf}!proto\_rx\_state\_t@{proto\_rx\_state\_t}}
+\doxysubsubsection{\texorpdfstring{buf}{buf}}
+{\footnotesize\ttfamily uint8\+\_\+t proto\+\_\+rx\+\_\+state\+\_\+t\+::buf\mbox{[}\mbox{\hyperlink{protocol_8h_a7a1b14c6089364e05b3ea85c2c6472b2}{MSG\+\_\+\+MAX\+\_\+\+PAYLOAD}}\mbox{]}}
+
+Raw payload bytes accumulated so far. ~\newline
+ \Hypertarget{structproto__rx__state__t_ad217e833f75208dec142a378fe20c987}\label{structproto__rx__state__t_ad217e833f75208dec142a378fe20c987} 
+\index{proto\_rx\_state\_t@{proto\_rx\_state\_t}!collected@{collected}}
+\index{collected@{collected}!proto\_rx\_state\_t@{proto\_rx\_state\_t}}
+\doxysubsubsection{\texorpdfstring{collected}{collected}}
+{\footnotesize\ttfamily uint8\+\_\+t proto\+\_\+rx\+\_\+state\+\_\+t\+::collected}
+
+Number of payload bytes collected. ~\newline
+ \Hypertarget{structproto__rx__state__t_a7f5b61e1db5dee0213418286b19ab61f}\label{structproto__rx__state__t_a7f5b61e1db5dee0213418286b19ab61f} 
+\index{proto\_rx\_state\_t@{proto\_rx\_state\_t}!expected@{expected}}
+\index{expected@{expected}!proto\_rx\_state\_t@{proto\_rx\_state\_t}}
+\doxysubsubsection{\texorpdfstring{expected}{expected}}
+{\footnotesize\ttfamily uint8\+\_\+t proto\+\_\+rx\+\_\+state\+\_\+t\+::expected}
+
+Number of payload bytes expected for this message type. \Hypertarget{structproto__rx__state__t_a68d4a2b18feb14b87c18ebc5b6a0126f}\label{structproto__rx__state__t_a68d4a2b18feb14b87c18ebc5b6a0126f} 
+\index{proto\_rx\_state\_t@{proto\_rx\_state\_t}!have\_type@{have\_type}}
+\index{have\_type@{have\_type}!proto\_rx\_state\_t@{proto\_rx\_state\_t}}
+\doxysubsubsection{\texorpdfstring{have\_type}{have\_type}}
+{\footnotesize\ttfamily bool proto\+\_\+rx\+\_\+state\+\_\+t\+::have\+\_\+type}
+
+{\ttfamily true} once the type byte has been received. ~\newline
+ \Hypertarget{structproto__rx__state__t_a3db894524d3c1389186aa5c95ebdcfe4}\label{structproto__rx__state__t_a3db894524d3c1389186aa5c95ebdcfe4} 
+\index{proto\_rx\_state\_t@{proto\_rx\_state\_t}!type@{type}}
+\index{type@{type}!proto\_rx\_state\_t@{proto\_rx\_state\_t}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily uint8\+\_\+t proto\+\_\+rx\+\_\+state\+\_\+t\+::type}
+
+Type byte received at the start of the current message. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+serial/\mbox{\hyperlink{protocol_8h}{protocol.\+h}}\end{DoxyCompactItemize}

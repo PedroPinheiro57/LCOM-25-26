@@ -1,0 +1,417 @@
+\doxysection{view/renderer.h File Reference}
+\hypertarget{renderer_8h}{}\label{renderer_8h}\index{view/renderer.h@{view/renderer.h}}
+
+
+Board and HUD rendering, sprite management, and explosion effects.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}../model/board.\+h"{}}\newline
+{\ttfamily \#include "{}../controller/game.\+h"{}}\newline
+{\ttfamily \#include "{}sprites.\+h"{}}\newline
+Include dependency graph for renderer.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{renderer_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{renderer_8h_a6a9cbde91174035bb93240fa9396927d}\label{renderer_8h_a6a9cbde91174035bb93240fa9396927d} 
+\#define {\bfseries RTC\+\_\+X}~650
+\begin{DoxyCompactList}\small\item\em X pixel coordinate where the RTC clock string is drawn. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_a26e353d01a6f6cb64c5ee78954b4c332}\label{renderer_8h_a26e353d01a6f6cb64c5ee78954b4c332} 
+\#define {\bfseries RTC\+\_\+Y}~20
+\begin{DoxyCompactList}\small\item\em Y pixel coordinate where the RTC clock string is drawn. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_af9a33fe770f8caec53c0c49716303103}\label{renderer_8h_af9a33fe770f8caec53c0c49716303103} 
+\#define {\bfseries C\+\_\+\+EMPTY}~0x1a3a5c
+\begin{DoxyCompactList}\small\item\em Cell fill colour for an empty (unattacked) water cell. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_ace52ababd35031404c7dabad1d98b8b7}\label{renderer_8h_ace52ababd35031404c7dabad1d98b8b7} 
+\#define {\bfseries C\+\_\+\+SHIP}~0x808080
+\begin{DoxyCompactList}\small\item\em Cell fill colour for a cell containing an un-\/hit ship segment. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_aa55f2c8da9efcb376930c458de5b3cee}\label{renderer_8h_aa55f2c8da9efcb376930c458de5b3cee} 
+\#define {\bfseries C\+\_\+\+HIT}~0x\+FF4500
+\begin{DoxyCompactList}\small\item\em Cell fill colour for a cell that has been hit. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_a7b1df022462698a7f7d50843ea3a599a}\label{renderer_8h_a7b1df022462698a7f7d50843ea3a599a} 
+\#define {\bfseries C\+\_\+\+MISS}~0x00\+BFFF
+\begin{DoxyCompactList}\small\item\em Cell fill colour for a cell where a shot missed (open water). \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_acce549f84f9232b11540afcfc7205fbb}\label{renderer_8h_acce549f84f9232b11540afcfc7205fbb} 
+\#define {\bfseries C\+\_\+\+SUNK}~0x8\+B0000
+\begin{DoxyCompactList}\small\item\em Cell fill colour for a cell belonging to a fully sunk ship. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_a33f640067b5b9295d273c2eb389b8d89}\label{renderer_8h_a33f640067b5b9295d273c2eb389b8d89} 
+\#define {\bfseries C\+\_\+\+VALID}~0x00\+FF00
+\begin{DoxyCompactList}\small\item\em Preview overlay colour indicating a valid ship placement. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_a6369c8486bb7ea65eeaed4c8156dd334}\label{renderer_8h_a6369c8486bb7ea65eeaed4c8156dd334} 
+\#define {\bfseries C\+\_\+\+INVALID}~0x\+FF0000
+\begin{DoxyCompactList}\small\item\em Preview overlay colour indicating an invalid ship placement. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_a6d057a7721a1b338428bf7e9e909d31f}\label{renderer_8h_a6d057a7721a1b338428bf7e9e909d31f} 
+\#define {\bfseries C\+\_\+\+HOVER}~0x\+FFFF00
+\begin{DoxyCompactList}\small\item\em Highlight colour for the local player\textquotesingle{}s attack cursor. \end{DoxyCompactList}\item 
+\Hypertarget{renderer_8h_ab69359a5695d79dd274cdc4defb1a4ff}\label{renderer_8h_ab69359a5695d79dd274cdc4defb1a4ff} 
+\#define {\bfseries C\+\_\+\+REMOTE}~0x\+FF8\+C00
+\begin{DoxyCompactList}\small\item\em Highlight colour for the remote player\textquotesingle{}s cursor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_aa14f367a20b2995c725254db615219cb}{get\+\_\+ship\+\_\+sprite}} (int index)
+\begin{DoxyCompactList}\small\item\em Returns the live-\/ship sprite for the given ship type index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065}{get\+\_\+ship\+\_\+dead\+\_\+sprite}} (int index)
+\begin{DoxyCompactList}\small\item\em Returns the destroyed-\/ship sprite for the given ship type index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_a307dc3748d2225b04f9365d6e49fa34e}{get\+\_\+anim\+\_\+flame}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the animated flame sprite used for burning ships. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_a3ec2bf7b5110378afaabb921f99b6f56}{get\+\_\+anim\+\_\+explosion}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the animated explosion sprite used after a successful hit. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_abec597460eb6d8edfe925d18d14061df}{board\+\_\+draw}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b, bool hide\+\_\+ships)
+\begin{DoxyCompactList}\small\item\em Draws the complete board state for one player. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_ae103c3ebf7543a333db3dd282667585d}{board\+\_\+draw\+\_\+preview}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b, int col, int row, uint8\+\_\+t size, \mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}} orient)
+\begin{DoxyCompactList}\small\item\em Draws a ghost preview of the ship currently being placed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a038ec21e3b51095a9cb9e677e28f6bf6}{board\+\_\+highlight\+\_\+cell}} (int col, int row)
+\begin{DoxyCompactList}\small\item\em Highlights the cell under the local player\textquotesingle{}s attack cursor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_ae76e1824a9c915076a7628f0a1143ef0}{board\+\_\+highlight\+\_\+remote\+\_\+cursor}} (int col, int row)
+\begin{DoxyCompactList}\small\item\em Highlights the cell reported by the remote player\textquotesingle{}s cursor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a82845a15625ea9d420e9bb9869a60c06}{draw\+\_\+hud\+\_\+place}} (int player, int ship\+\_\+idx)
+\begin{DoxyCompactList}\small\item\em Draws the HUD overlay shown during the ship-\/placement phase. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab}{draw\+\_\+hud\+\_\+attack}} (int player, \mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}enemy)
+\begin{DoxyCompactList}\small\item\em Draws the HUD overlay shown during the attack phase. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a5c70121f01bc0632efb08a163aa24108}{init\+\_\+game\+\_\+sprites}} (void)
+\begin{DoxyCompactList}\small\item\em Loads all game sprite sheets from their XPM sources into memory. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{renderer_8h_a6db41e811667f146d2886ad57b1a2749}{renderer\+\_\+is\+\_\+exploding}} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} while an explosion animation is in progress. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{renderer_8h_aebcf03c84db0b015be1083ee5e913b2d}{renderer\+\_\+explosion\+\_\+finished}} (void)
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} once a running explosion animation has played through all of its frames. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a7b257d81a7140208c292eaf092b34b18}{start\+\_\+explosion}} (int col, int row, bool is\+\_\+hit)
+\begin{DoxyCompactList}\small\item\em Starts a hit or miss explosion animation at the given grid cell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_aa280d4d5b1686635d80804357866d376}{update\+\_\+animations}} (void)
+\begin{DoxyCompactList}\small\item\em Advances all active animation frame counters by one tick. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{renderer_8h_ac068dd81b6d39a7b0bc8ecfc88b41fff}{renderer\+\_\+get\+\_\+expl\+\_\+col}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the grid column of the currently active explosion. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{renderer_8h_a59e730b6282be7a35362a3501df187e9}{renderer\+\_\+get\+\_\+expl\+\_\+row}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the grid row of the currently active explosion. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}{game\+\_\+draw}} (const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*}g)
+\begin{DoxyCompactList}\small\item\em Renders the complete game view for the current state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a4e564d58f2fd8f83601a83e048c21f3f}{renderer\+\_\+reset}} (void)
+\begin{DoxyCompactList}\small\item\em Resets all renderer-\/side state to its initial values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Board and HUD rendering, sprite management, and explosion effects. 
+
+Owns the lifetime of all in-\/game sprite and animated-\/sprite objects and exposes the drawing routines used by \doxylink{game_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}{game\+\_\+draw} to compose each frame.
+
+The renderer maintains a small state machine for the post-\/attack explosion animation\+: start\+\_\+explosion kicks it off, update\+\_\+animations advances it each tick, and renderer\+\_\+explosion\+\_\+finished signals when the sequence is complete so the game can resume input. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{renderer_8h_abec597460eb6d8edfe925d18d14061df}\label{renderer_8h_abec597460eb6d8edfe925d18d14061df} 
+\index{renderer.h@{renderer.h}!board\_draw@{board\_draw}}
+\index{board\_draw@{board\_draw}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{board\_draw()}{board\_draw()}}
+{\footnotesize\ttfamily void board\+\_\+draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b,  }\item[{bool}]{hide\+\_\+ships }\end{DoxyParamCaption})}
+
+
+
+Draws the complete board state for one player. 
+
+Iterates every cell and renders the appropriate colour or ship sprite. When {\ttfamily hide\+\_\+ships} is {\ttfamily true}, \doxylink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474a2ce80813385553b4244297e70c533c96}{CELL\+\_\+\+SHIP} cells are drawn as \doxylink{renderer_8h_af9a33fe770f8caec53c0c49716303103}{C\+\_\+\+EMPTY} so the opponent cannot see where ships are located.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Board to draw. \\
+\hline
+{\em hide\+\_\+ships} & Pass {\ttfamily true} when drawing the opponent\textquotesingle{}s board during the attack phase. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_ae103c3ebf7543a333db3dd282667585d}\label{renderer_8h_ae103c3ebf7543a333db3dd282667585d} 
+\index{renderer.h@{renderer.h}!board\_draw\_preview@{board\_draw\_preview}}
+\index{board\_draw\_preview@{board\_draw\_preview}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{board\_draw\_preview()}{board\_draw\_preview()}}
+{\footnotesize\ttfamily void board\+\_\+draw\+\_\+preview (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{b,  }\item[{int}]{col,  }\item[{int}]{row,  }\item[{uint8\+\_\+t}]{size,  }\item[{\mbox{\hyperlink{board_8h_a89a9f4249b37811d52876bf3497a2784}{orientation\+\_\+t}}}]{orient }\end{DoxyParamCaption})}
+
+
+
+Draws a ghost preview of the ship currently being placed. 
+
+Fills the cells the ship would occupy with \doxylink{renderer_8h_a33f640067b5b9295d273c2eb389b8d89}{C\+\_\+\+VALID} (green) if the placement is legal, or \doxylink{renderer_8h_a6369c8486bb7ea65eeaed4c8156dd334}{C\+\_\+\+INVALID} (red) if it is not.
+
+
+\begin{DoxyParams}{Parameters}
+{\em b} & Player\textquotesingle{}s board (used to check for collisions). \\
+\hline
+{\em col} & Grid column of the ship\textquotesingle{}s top-\/left cell. \\
+\hline
+{\em row} & Grid row of the ship\textquotesingle{}s top-\/left cell. \\
+\hline
+{\em size} & Length of the ship in cells. \\
+\hline
+{\em orient} & Orientation of the ship being placed. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_a038ec21e3b51095a9cb9e677e28f6bf6}\label{renderer_8h_a038ec21e3b51095a9cb9e677e28f6bf6} 
+\index{renderer.h@{renderer.h}!board\_highlight\_cell@{board\_highlight\_cell}}
+\index{board\_highlight\_cell@{board\_highlight\_cell}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{board\_highlight\_cell()}{board\_highlight\_cell()}}
+{\footnotesize\ttfamily void board\+\_\+highlight\+\_\+cell (\begin{DoxyParamCaption}\item[{int}]{col,  }\item[{int}]{row }\end{DoxyParamCaption})}
+
+
+
+Highlights the cell under the local player\textquotesingle{}s attack cursor. 
+
+Draws a \doxylink{renderer_8h_a6d057a7721a1b338428bf7e9e909d31f}{C\+\_\+\+HOVER} (yellow) overlay on the specified cell.
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Grid column of the cursor. \\
+\hline
+{\em row} & Grid row of the cursor. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_ae76e1824a9c915076a7628f0a1143ef0}\label{renderer_8h_ae76e1824a9c915076a7628f0a1143ef0} 
+\index{renderer.h@{renderer.h}!board\_highlight\_remote\_cursor@{board\_highlight\_remote\_cursor}}
+\index{board\_highlight\_remote\_cursor@{board\_highlight\_remote\_cursor}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{board\_highlight\_remote\_cursor()}{board\_highlight\_remote\_cursor()}}
+{\footnotesize\ttfamily void board\+\_\+highlight\+\_\+remote\+\_\+cursor (\begin{DoxyParamCaption}\item[{int}]{col,  }\item[{int}]{row }\end{DoxyParamCaption})}
+
+
+
+Highlights the cell reported by the remote player\textquotesingle{}s cursor. 
+
+Draws a \doxylink{renderer_8h_ab69359a5695d79dd274cdc4defb1a4ff}{C\+\_\+\+REMOTE} (orange) overlay on the specified cell so the local player can see where the opponent is hovering.
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Grid column of the remote cursor. \\
+\hline
+{\em row} & Grid row of the remote cursor. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab}\label{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab} 
+\index{renderer.h@{renderer.h}!draw\_hud\_attack@{draw\_hud\_attack}}
+\index{draw\_hud\_attack@{draw\_hud\_attack}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{draw\_hud\_attack()}{draw\_hud\_attack()}}
+{\footnotesize\ttfamily void draw\+\_\+hud\+\_\+attack (\begin{DoxyParamCaption}\item[{int}]{player,  }\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{enemy }\end{DoxyParamCaption})}
+
+
+
+Draws the HUD overlay shown during the attack phase. 
+
+Displays the active player\textquotesingle{}s turn indicator together with hit and miss counters derived from the enemy board.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Active attacking player index (1 or 2). \\
+\hline
+{\em enemy} & Pointer to the opponent\textquotesingle{}s board (used to count hits/misses). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_a82845a15625ea9d420e9bb9869a60c06}\label{renderer_8h_a82845a15625ea9d420e9bb9869a60c06} 
+\index{renderer.h@{renderer.h}!draw\_hud\_place@{draw\_hud\_place}}
+\index{draw\_hud\_place@{draw\_hud\_place}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{draw\_hud\_place()}{draw\_hud\_place()}}
+{\footnotesize\ttfamily void draw\+\_\+hud\+\_\+place (\begin{DoxyParamCaption}\item[{int}]{player,  }\item[{int}]{ship\+\_\+idx }\end{DoxyParamCaption})}
+
+
+
+Draws the HUD overlay shown during the ship-\/placement phase. 
+
+Displays which player is placing and which ship is currently being positioned (name and remaining ships).
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Active player index (1 or 2). \\
+\hline
+{\em ship\+\_\+idx} & Index of the ship being placed (0–\doxylink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS} − 1). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}\label{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c} 
+\index{renderer.h@{renderer.h}!game\_draw@{game\_draw}}
+\index{game\_draw@{game\_draw}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{game\_draw()}{game\_draw()}}
+{\footnotesize\ttfamily void game\+\_\+draw (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{g }\end{DoxyParamCaption})}
+
+
+
+Renders the complete game view for the current state. 
+
+Dispatches to the appropriate sub-\/renderers (board, HUD, menus, overlays) based on {\ttfamily g-\/\texorpdfstring{$>$}{>}tag}. Should be called once per tick after all state updates are complete.
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Pointer to the current (read-\/only) game state.\\
+\hline
+\end{DoxyParams}
+Renders the complete game view for the current state.
+
+
+\begin{DoxyParams}{Parameters}
+{\em g} & Game state to draw (typically from game\+\_\+get\+\_\+state). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_a3ec2bf7b5110378afaabb921f99b6f56}\label{renderer_8h_a3ec2bf7b5110378afaabb921f99b6f56} 
+\index{renderer.h@{renderer.h}!get\_anim\_explosion@{get\_anim\_explosion}}
+\index{get\_anim\_explosion@{get\_anim\_explosion}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{get\_anim\_explosion()}{get\_anim\_explosion()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+anim\+\_\+explosion (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the animated explosion sprite used after a successful hit. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the shared \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_a307dc3748d2225b04f9365d6e49fa34e}\label{renderer_8h_a307dc3748d2225b04f9365d6e49fa34e} 
+\index{renderer.h@{renderer.h}!get\_anim\_flame@{get\_anim\_flame}}
+\index{get\_anim\_flame@{get\_anim\_flame}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{get\_anim\_flame()}{get\_anim\_flame()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+anim\+\_\+flame (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the animated flame sprite used for burning ships. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the shared \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065}\label{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065} 
+\index{renderer.h@{renderer.h}!get\_ship\_dead\_sprite@{get\_ship\_dead\_sprite}}
+\index{get\_ship\_dead\_sprite@{get\_ship\_dead\_sprite}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{get\_ship\_dead\_sprite()}{get\_ship\_dead\_sprite()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+ship\+\_\+dead\+\_\+sprite (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Returns the destroyed-\/ship sprite for the given ship type index. 
+
+Displayed in place of get\+\_\+ship\+\_\+sprite when a ship has been sunk.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & Ship type index (0–\doxylink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS} − 1). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the corresponding \doxylink{structsprite__t}{sprite\+\_\+t}. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_aa14f367a20b2995c725254db615219cb}\label{renderer_8h_aa14f367a20b2995c725254db615219cb} 
+\index{renderer.h@{renderer.h}!get\_ship\_sprite@{get\_ship\_sprite}}
+\index{get\_ship\_sprite@{get\_ship\_sprite}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{get\_ship\_sprite()}{get\_ship\_sprite()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+ship\+\_\+sprite (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Returns the live-\/ship sprite for the given ship type index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & Ship type index (0–\doxylink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS} − 1); matches SHIP\+\_\+\+SIZES. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the corresponding \doxylink{structsprite__t}{sprite\+\_\+t}. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_a5c70121f01bc0632efb08a163aa24108}\label{renderer_8h_a5c70121f01bc0632efb08a163aa24108} 
+\index{renderer.h@{renderer.h}!init\_game\_sprites@{init\_game\_sprites}}
+\index{init\_game\_sprites@{init\_game\_sprites}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{init\_game\_sprites()}{init\_game\_sprites()}}
+{\footnotesize\ttfamily void init\+\_\+game\+\_\+sprites (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Loads all game sprite sheets from their XPM sources into memory. 
+
+Must be called once during game initialisation, before any draw call that references ship or animation sprites. \Hypertarget{renderer_8h_aebcf03c84db0b015be1083ee5e913b2d}\label{renderer_8h_aebcf03c84db0b015be1083ee5e913b2d} 
+\index{renderer.h@{renderer.h}!renderer\_explosion\_finished@{renderer\_explosion\_finished}}
+\index{renderer\_explosion\_finished@{renderer\_explosion\_finished}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{renderer\_explosion\_finished()}{renderer\_explosion\_finished()}}
+{\footnotesize\ttfamily bool renderer\+\_\+explosion\+\_\+finished (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns {\ttfamily true} once a running explosion animation has played through all of its frames. 
+
+Transitions to {\ttfamily false} automatically on the next call to start\+\_\+explosion. \Hypertarget{renderer_8h_ac068dd81b6d39a7b0bc8ecfc88b41fff}\label{renderer_8h_ac068dd81b6d39a7b0bc8ecfc88b41fff} 
+\index{renderer.h@{renderer.h}!renderer\_get\_expl\_col@{renderer\_get\_expl\_col}}
+\index{renderer\_get\_expl\_col@{renderer\_get\_expl\_col}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{renderer\_get\_expl\_col()}{renderer\_get\_expl\_col()}}
+{\footnotesize\ttfamily int renderer\+\_\+get\+\_\+expl\+\_\+col (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the grid column of the currently active explosion. 
+
+Only meaningful while renderer\+\_\+is\+\_\+exploding returns {\ttfamily true}.
+
+\begin{DoxyReturn}{Returns}
+Grid column index. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_a59e730b6282be7a35362a3501df187e9}\label{renderer_8h_a59e730b6282be7a35362a3501df187e9} 
+\index{renderer.h@{renderer.h}!renderer\_get\_expl\_row@{renderer\_get\_expl\_row}}
+\index{renderer\_get\_expl\_row@{renderer\_get\_expl\_row}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{renderer\_get\_expl\_row()}{renderer\_get\_expl\_row()}}
+{\footnotesize\ttfamily int renderer\+\_\+get\+\_\+expl\+\_\+row (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the grid row of the currently active explosion. 
+
+Only meaningful while renderer\+\_\+is\+\_\+exploding returns {\ttfamily true}.
+
+\begin{DoxyReturn}{Returns}
+Grid row index. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_a6db41e811667f146d2886ad57b1a2749}\label{renderer_8h_a6db41e811667f146d2886ad57b1a2749} 
+\index{renderer.h@{renderer.h}!renderer\_is\_exploding@{renderer\_is\_exploding}}
+\index{renderer\_is\_exploding@{renderer\_is\_exploding}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{renderer\_is\_exploding()}{renderer\_is\_exploding()}}
+{\footnotesize\ttfamily bool renderer\+\_\+is\+\_\+exploding (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns {\ttfamily true} while an explosion animation is in progress. 
+
+The game controller polls this to suppress input during the animation. \Hypertarget{renderer_8h_a4e564d58f2fd8f83601a83e048c21f3f}\label{renderer_8h_a4e564d58f2fd8f83601a83e048c21f3f} 
+\index{renderer.h@{renderer.h}!renderer\_reset@{renderer\_reset}}
+\index{renderer\_reset@{renderer\_reset}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{renderer\_reset()}{renderer\_reset()}}
+{\footnotesize\ttfamily void renderer\+\_\+reset (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Resets all renderer-\/side state to its initial values. 
+
+Clears any in-\/progress explosion, resets animation counters, and returns the renderer to a clean slate. Call before starting a new game. \Hypertarget{renderer_8h_a7b257d81a7140208c292eaf092b34b18}\label{renderer_8h_a7b257d81a7140208c292eaf092b34b18} 
+\index{renderer.h@{renderer.h}!start\_explosion@{start\_explosion}}
+\index{start\_explosion@{start\_explosion}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{start\_explosion()}{start\_explosion()}}
+{\footnotesize\ttfamily void start\+\_\+explosion (\begin{DoxyParamCaption}\item[{int}]{col,  }\item[{int}]{row,  }\item[{bool}]{is\+\_\+hit }\end{DoxyParamCaption})}
+
+
+
+Starts a hit or miss explosion animation at the given grid cell. 
+
+Positions the appropriate animated sprite over the cell and resets the frame counter. The animation advances each tick via update\+\_\+animations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Grid column of the attacked cell. \\
+\hline
+{\em row} & Grid row of the attacked cell. \\
+\hline
+{\em is\+\_\+hit} & {\ttfamily true} to play the hit/explosion effect; {\ttfamily false} to play the water-\/splash miss effect. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_aa280d4d5b1686635d80804357866d376}\label{renderer_8h_aa280d4d5b1686635d80804357866d376} 
+\index{renderer.h@{renderer.h}!update\_animations@{update\_animations}}
+\index{update\_animations@{update\_animations}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{update\_animations()}{update\_animations()}}
+{\footnotesize\ttfamily void update\+\_\+animations (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Advances all active animation frame counters by one tick. 
+
+Should be called once per timer tick from the game controller. 

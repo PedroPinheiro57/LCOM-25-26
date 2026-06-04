@@ -1,0 +1,22 @@
+<map id="controller/game.h" name="controller/game.h">
+<area shape="rect" id="Node000001" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="239,5,376,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="192,152,263,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="239,26,175,33,109,43,52,59,31,69,18,80,9,99,13,113,28,126,52,136,115,151,179,158,178,163,114,156,50,141,25,130,8,116,3,98,13,77,28,65,50,54,108,38,175,27,238,21"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="426,152,509,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="377,20,446,26,519,36,583,53,608,64,624,77,632,92,631,106,622,119,607,129,567,145,523,157,522,151,566,140,604,124,618,115,626,104,627,93,620,80,605,68,582,58,518,41,445,31,376,25"/>
+<area shape="rect" id="Node000004" href="$mouse_8h.html" title="PS/2 mouse packet parsing and cursor&#45;state tracking." alt="" coords="160,79,295,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="296,33,252,72,249,68,293,29"/>
+<area shape="rect" id="Node000005" href="$rtc_8h.html" title="Real&#45;Time Clock (RTC/CMOS) access for reading the system time and date." alt="" coords="28,79,136,104"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="272,33,133,77,131,72,271,28"/>
+<area shape="rect" id="Node000006" href="$protocol_8h.html" title="Serial communication protocol for the two&#45;VM Battleship session." alt="" coords="320,79,458,104"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="322,29,367,68,364,72,319,33"/>
+<area shape="rect" id="Node000007" href="$board_8h.html" title="Battleship game board: data model and grid logic." alt="" coords="482,79,610,104"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="347,28,495,72,494,77,345,33"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="230,104,230,138,225,138,225,104"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="267,101,416,145,415,151,265,107"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="107,102,193,144,191,148,104,106"/>
+<area shape="poly" id="edge9_Node000006_Node000002" title=" " alt="" coords="364,106,268,149,265,144,362,102"/>
+<area shape="poly" id="edge10_Node000006_Node000003" title=" " alt="" coords="403,102,447,141,443,145,400,106"/>
+<area shape="poly" id="edge12_Node000007_Node000002" title=" " alt="" coords="496,107,277,155,276,150,494,101"/>
+<area shape="poly" id="edge13_Node000007_Node000003" title=" " alt="" coords="535,106,492,145,489,141,532,102"/>
+</map>

@@ -1,0 +1,241 @@
+\doxysection{game\+\_\+t Struct Reference}
+\hypertarget{structgame__t}{}\label{structgame__t}\index{game\_t@{game\_t}}
+
+
+The complete game state.  
+
+
+
+
+{\ttfamily \#include $<$game.\+h$>$}
+
+
+
+Collaboration diagram for game\+\_\+t\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{structgame__t__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state\+\_\+t}} \mbox{\hyperlink{structgame__t_a5f6aacac10381b98a2b67b8c8b763582}{tag}}
+\item 
+\mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state\+\_\+t}} \mbox{\hyperlink{structgame__t_a42f3ecb23b22f96cef90a42bc0e13e9f}{prev}}
+\item 
+\mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}} \mbox{\hyperlink{structgame__t_ab41913500cd7d4385b4d80935b3a69db}{role}}
+\item 
+bool \mbox{\hyperlink{structgame__t_af3d5487b180709a36c7f1778fac95e7c}{connected}}
+\item 
+\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \mbox{\hyperlink{structgame__t_a38190564a6e5a257baff7fff6c01b584}{p1\+\_\+board}}
+\item 
+\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \mbox{\hyperlink{structgame__t_a9854fcbd5921e9e66b825bad81efd24a}{p2\+\_\+board}}
+\item 
+\mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \mbox{\hyperlink{structgame__t_aab83776864b0a9ccee827fa0130c16ba}{rtc}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structgame__t_a5f7672e07b1d9438c96d330e412a5ae8}{tick\+\_\+count}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structgame__t_a4f5e09b87b40832d55391c595e59ba12}{countdown\+\_\+ticks}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structgame__t_a57f0d40d2b1a17db99ed4999eced0401}{countdown\+\_\+seconds}}
+\item 
+int8\+\_\+t \mbox{\hyperlink{structgame__t_acdc99567d81680e766106809d5536852}{remote\+\_\+cursor\+\_\+col}}
+\item 
+int8\+\_\+t \mbox{\hyperlink{structgame__t_a7642e099b3ee3ad81182c1098397f9c9}{remote\+\_\+cursor\+\_\+row}}
+\item 
+\Hypertarget{structgame__t_affd2fe014244274f144c68cb62aed53f}\label{structgame__t_affd2fe014244274f144c68cb62aed53f} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct \{\\
+\>\>int {\bfseries selected}\\
+\>\} \mbox{\hyperlink{structgame__t_aca4016d021a95d70e4fdd1853922b681}{menu}}\\
+\>struct \{\\
+\>\>int {\bfseries selected}\\
+\>\} \mbox{\hyperlink{structgame__t_a4a0b59f4a0df35cc78052abf2ab83d4e}{pause}}\\
+\>struct \{\\
+\>\>int \mbox{\hyperlink{structgame__t_a375539eb20fd99f56024475375dad76b}{player}}\\
+\>\>int \mbox{\hyperlink{structgame__t_a16f26635a5780690be69ce1b031ae035}{ship\_idx}}\\
+\>\>int \mbox{\hyperlink{structgame__t_af10363d389f9e8563dfc06a73bf7c5d1}{orient}}\\
+\>\>int \mbox{\hyperlink{structgame__t_ae1facda953b09dea7acdd2276c3ac202}{cursor\_col}}\\
+\>\>int \mbox{\hyperlink{structgame__t_a52fc9316ded2939806ff2c22d33e7bbb}{cursor\_row}}\\
+\>\} {\bfseries place}\\
+\>\>\>{\em State data for ship-\/placement phases. }\\
+\>struct \{\\
+\>\>int \mbox{\hyperlink{structgame__t_a375539eb20fd99f56024475375dad76b}{player}}\\
+\>\>int \mbox{\hyperlink{structgame__t_ae1facda953b09dea7acdd2276c3ac202}{cursor\_col}}\\
+\>\>int \mbox{\hyperlink{structgame__t_a52fc9316ded2939806ff2c22d33e7bbb}{cursor\_row}}\\
+\>\>bool \mbox{\hyperlink{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4}{last\_hit}}\\
+\>\} {\bfseries turn}\\
+\>\>\>{\em State data for attack turns. }\\
+\>struct \{\\
+\>\>int {\bfseries winner}\\
+\>\} \mbox{\hyperlink{structgame__t_aab1b5d31166d2e7a759da0edc3afeaef}{game\_over}}\\
+\} {\bfseries data}\\
+
+\end{tabbing}\begin{DoxyCompactList}\small\item\em Per-\/state data — only the member matching {\ttfamily tag} is valid. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The complete game state. 
+
+The {\ttfamily data} union carries per-\/state context — only the member that matches the current {\ttfamily tag} is valid. Never write to this struct directly; use the controller functions instead. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structgame__t_af3d5487b180709a36c7f1778fac95e7c}\label{structgame__t_af3d5487b180709a36c7f1778fac95e7c} 
+\index{game\_t@{game\_t}!connected@{connected}}
+\index{connected@{connected}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{connected}{connected}}
+{\footnotesize\ttfamily bool game\+\_\+t\+::connected}
+
+{\ttfamily true} once the serial handshake is complete. \Hypertarget{structgame__t_a57f0d40d2b1a17db99ed4999eced0401}\label{structgame__t_a57f0d40d2b1a17db99ed4999eced0401} 
+\index{game\_t@{game\_t}!countdown\_seconds@{countdown\_seconds}}
+\index{countdown\_seconds@{countdown\_seconds}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{countdown\_seconds}{countdown\_seconds}}
+{\footnotesize\ttfamily uint8\+\_\+t game\+\_\+t\+::countdown\+\_\+seconds}
+
+Seconds remaining on the countdown display. ~\newline
+ \Hypertarget{structgame__t_a4f5e09b87b40832d55391c595e59ba12}\label{structgame__t_a4f5e09b87b40832d55391c595e59ba12} 
+\index{game\_t@{game\_t}!countdown\_ticks@{countdown\_ticks}}
+\index{countdown\_ticks@{countdown\_ticks}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{countdown\_ticks}{countdown\_ticks}}
+{\footnotesize\ttfamily uint32\+\_\+t game\+\_\+t\+::countdown\+\_\+ticks}
+
+Ticks elapsed in the current countdown second. \Hypertarget{structgame__t_ae1facda953b09dea7acdd2276c3ac202}\label{structgame__t_ae1facda953b09dea7acdd2276c3ac202} 
+\index{game\_t@{game\_t}!cursor\_col@{cursor\_col}}
+\index{cursor\_col@{cursor\_col}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{cursor\_col}{cursor\_col}}
+{\footnotesize\ttfamily int game\+\_\+t\+::cursor\+\_\+col}
+
+Grid column under the placement cursor. ~\newline
+
+
+Grid column the attack cursor is hovering over. \Hypertarget{structgame__t_a52fc9316ded2939806ff2c22d33e7bbb}\label{structgame__t_a52fc9316ded2939806ff2c22d33e7bbb} 
+\index{game\_t@{game\_t}!cursor\_row@{cursor\_row}}
+\index{cursor\_row@{cursor\_row}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{cursor\_row}{cursor\_row}}
+{\footnotesize\ttfamily int game\+\_\+t\+::cursor\+\_\+row}
+
+Grid row under the placement cursor. ~\newline
+
+
+Grid row the attack cursor is hovering over. ~\newline
+ \Hypertarget{structgame__t_aab1b5d31166d2e7a759da0edc3afeaef}\label{structgame__t_aab1b5d31166d2e7a759da0edc3afeaef} 
+\index{game\_t@{game\_t}!game\_over@{game\_over}}
+\index{game\_over@{game\_over}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  game\+\_\+t\+::game\+\_\+over}
+
+Index of the winning player (1 or 2). \Hypertarget{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4}\label{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4} 
+\index{game\_t@{game\_t}!last\_hit@{last\_hit}}
+\index{last\_hit@{last\_hit}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{last\_hit}{last\_hit}}
+{\footnotesize\ttfamily bool game\+\_\+t\+::last\+\_\+hit}
+
+Whether the previous attack was a hit. ~\newline
+ \Hypertarget{structgame__t_aca4016d021a95d70e4fdd1853922b681}\label{structgame__t_aca4016d021a95d70e4fdd1853922b681} 
+\index{game\_t@{game\_t}!menu@{menu}}
+\index{menu@{menu}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  game\+\_\+t\+::menu}
+
+Currently highlighted menu option. ~\newline
+ \Hypertarget{structgame__t_af10363d389f9e8563dfc06a73bf7c5d1}\label{structgame__t_af10363d389f9e8563dfc06a73bf7c5d1} 
+\index{game\_t@{game\_t}!orient@{orient}}
+\index{orient@{orient}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{orient}{orient}}
+{\footnotesize\ttfamily int game\+\_\+t\+::orient}
+
+Current placement orientation. ~\newline
+ \Hypertarget{structgame__t_a38190564a6e5a257baff7fff6c01b584}\label{structgame__t_a38190564a6e5a257baff7fff6c01b584} 
+\index{game\_t@{game\_t}!p1\_board@{p1\_board}}
+\index{p1\_board@{p1\_board}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{p1\_board}{p1\_board}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structboard__t}{board\+\_\+t}} game\+\_\+t\+::p1\+\_\+board}
+
+Player 1\textquotesingle{}s board (ships + attacks received). ~\newline
+ \Hypertarget{structgame__t_a9854fcbd5921e9e66b825bad81efd24a}\label{structgame__t_a9854fcbd5921e9e66b825bad81efd24a} 
+\index{game\_t@{game\_t}!p2\_board@{p2\_board}}
+\index{p2\_board@{p2\_board}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{p2\_board}{p2\_board}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structboard__t}{board\+\_\+t}} game\+\_\+t\+::p2\+\_\+board}
+
+Player 2\textquotesingle{}s board (ships + attacks received). ~\newline
+ \Hypertarget{structgame__t_a4a0b59f4a0df35cc78052abf2ab83d4e}\label{structgame__t_a4a0b59f4a0df35cc78052abf2ab83d4e} 
+\index{game\_t@{game\_t}!pause@{pause}}
+\index{pause@{pause}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
+{\footnotesize\ttfamily struct  \{ ... \}  game\+\_\+t\+::pause}
+
+Currently highlighted pause-\/menu option. \Hypertarget{structgame__t_a375539eb20fd99f56024475375dad76b}\label{structgame__t_a375539eb20fd99f56024475375dad76b} 
+\index{game\_t@{game\_t}!player@{player}}
+\index{player@{player}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{player}{player}}
+{\footnotesize\ttfamily int game\+\_\+t\+::player}
+
+Which player is currently placing (1 or 2). ~\newline
+
+
+Active attacking player (1 or 2). ~\newline
+ \Hypertarget{structgame__t_a42f3ecb23b22f96cef90a42bc0e13e9f}\label{structgame__t_a42f3ecb23b22f96cef90a42bc0e13e9f} 
+\index{game\_t@{game\_t}!prev@{prev}}
+\index{prev@{prev}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{prev}{prev}}
+{\footnotesize\ttfamily \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state\+\_\+t}} game\+\_\+t\+::prev}
+
+Previous state (used for pause/resume). ~\newline
+ \Hypertarget{structgame__t_acdc99567d81680e766106809d5536852}\label{structgame__t_acdc99567d81680e766106809d5536852} 
+\index{game\_t@{game\_t}!remote\_cursor\_col@{remote\_cursor\_col}}
+\index{remote\_cursor\_col@{remote\_cursor\_col}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{remote\_cursor\_col}{remote\_cursor\_col}}
+{\footnotesize\ttfamily int8\+\_\+t game\+\_\+t\+::remote\+\_\+cursor\+\_\+col}
+
+Column reported by the remote player\textquotesingle{}s cursor. \Hypertarget{structgame__t_a7642e099b3ee3ad81182c1098397f9c9}\label{structgame__t_a7642e099b3ee3ad81182c1098397f9c9} 
+\index{game\_t@{game\_t}!remote\_cursor\_row@{remote\_cursor\_row}}
+\index{remote\_cursor\_row@{remote\_cursor\_row}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{remote\_cursor\_row}{remote\_cursor\_row}}
+{\footnotesize\ttfamily int8\+\_\+t game\+\_\+t\+::remote\+\_\+cursor\+\_\+row}
+
+Row reported by the remote player\textquotesingle{}s cursor. ~\newline
+ \Hypertarget{structgame__t_ab41913500cd7d4385b4d80935b3a69db}\label{structgame__t_ab41913500cd7d4385b4d80935b3a69db} 
+\index{game\_t@{game\_t}!role@{role}}
+\index{role@{role}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{role}{role}}
+{\footnotesize\ttfamily \mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}} game\+\_\+t\+::role}
+
+Whether this instance is host or client. ~\newline
+ \Hypertarget{structgame__t_aab83776864b0a9ccee827fa0130c16ba}\label{structgame__t_aab83776864b0a9ccee827fa0130c16ba} 
+\index{game\_t@{game\_t}!rtc@{rtc}}
+\index{rtc@{rtc}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{rtc}{rtc}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} game\+\_\+t\+::rtc}
+
+Last RTC reading (displayed in the HUD). ~\newline
+ \Hypertarget{structgame__t_a16f26635a5780690be69ce1b031ae035}\label{structgame__t_a16f26635a5780690be69ce1b031ae035} 
+\index{game\_t@{game\_t}!ship\_idx@{ship\_idx}}
+\index{ship\_idx@{ship\_idx}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{ship\_idx}{ship\_idx}}
+{\footnotesize\ttfamily int game\+\_\+t\+::ship\+\_\+idx}
+
+Index of the ship being placed (0..NUM\+\_\+\+SHIPS). \Hypertarget{structgame__t_a5f6aacac10381b98a2b67b8c8b763582}\label{structgame__t_a5f6aacac10381b98a2b67b8c8b763582} 
+\index{game\_t@{game\_t}!tag@{tag}}
+\index{tag@{tag}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{tag}{tag}}
+{\footnotesize\ttfamily \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state\+\_\+t}} game\+\_\+t\+::tag}
+
+Active state. ~\newline
+ \Hypertarget{structgame__t_a5f7672e07b1d9438c96d330e412a5ae8}\label{structgame__t_a5f7672e07b1d9438c96d330e412a5ae8} 
+\index{game\_t@{game\_t}!tick\_count@{tick\_count}}
+\index{tick\_count@{tick\_count}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{tick\_count}{tick\_count}}
+{\footnotesize\ttfamily uint32\+\_\+t game\+\_\+t\+::tick\+\_\+count}
+
+Total ticks elapsed since the game started. ~\newline
+ 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+controller/\mbox{\hyperlink{game_8h}{game.\+h}}\end{DoxyCompactItemize}

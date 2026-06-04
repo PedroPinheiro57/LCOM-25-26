@@ -1,0 +1,105 @@
+\doxysection{mouse\+\_\+byte1\+\_\+t Union Reference}
+\hypertarget{unionmouse__byte1__t}{}\label{unionmouse__byte1__t}\index{mouse\_byte1\_t@{mouse\_byte1\_t}}
+
+
+Bitfield overlay for the first byte of a PS/2 mouse packet.  
+
+
+
+
+{\ttfamily \#include $<$mouse.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{unionmouse__byte1__t_a57e086a5ea93724a86f994f1de1ab881}{val}}
+\item 
+\Hypertarget{unionmouse__byte1__t_a99b9775f3efbc0f58aaa67a035ba67dc}\label{unionmouse__byte1__t_a99b9775f3efbc0f58aaa67a035ba67dc} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_a94affceebad9e3269c42e3b7755b583c}{lb}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_a17498bcd3318e347e825c58344f8142e}{rb}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_a370df7d0a3234d8c02eec4e500f4a761}{mb}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_ae85ee0a78788a98932a545d3bf17abfc}{sync}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_a5e7fa01a2964bd2a156fb11d5fba0e3a}{x\_sign}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_a3fe314c06540e62805cb49605b382a3e}{y\_sign}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_a6b2ec8bedbc99a899480dd0c4385fb08}{x\_ovf}}: 1\\
+\>uint8\_t \mbox{\hyperlink{unionmouse__byte1__t_ab5fa9fa8c85b499a3a952b8ec110f8ec}{y\_ovf}}: 1\\
+\} {\bfseries fields}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Bitfield overlay for the first byte of a PS/2 mouse packet. 
+
+Lets you access button flags and delta sign/overflow bits by name rather than masking the raw byte manually. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{unionmouse__byte1__t_a94affceebad9e3269c42e3b7755b583c}\label{unionmouse__byte1__t_a94affceebad9e3269c42e3b7755b583c} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!lb@{lb}}
+\index{lb@{lb}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{lb}{lb}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::lb}
+
+Left button pressed. ~\newline
+ \Hypertarget{unionmouse__byte1__t_a370df7d0a3234d8c02eec4e500f4a761}\label{unionmouse__byte1__t_a370df7d0a3234d8c02eec4e500f4a761} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!mb@{mb}}
+\index{mb@{mb}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{mb}{mb}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::mb}
+
+Middle button pressed. ~\newline
+ \Hypertarget{unionmouse__byte1__t_a17498bcd3318e347e825c58344f8142e}\label{unionmouse__byte1__t_a17498bcd3318e347e825c58344f8142e} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!rb@{rb}}
+\index{rb@{rb}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{rb}{rb}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::rb}
+
+Right button pressed. ~\newline
+ \Hypertarget{unionmouse__byte1__t_ae85ee0a78788a98932a545d3bf17abfc}\label{unionmouse__byte1__t_ae85ee0a78788a98932a545d3bf17abfc} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!sync@{sync}}
+\index{sync@{sync}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{sync}{sync}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::sync}
+
+Sync bit – always 1 on a valid packet. \Hypertarget{unionmouse__byte1__t_a57e086a5ea93724a86f994f1de1ab881}\label{unionmouse__byte1__t_a57e086a5ea93724a86f994f1de1ab881} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!val@{val}}
+\index{val@{val}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{val}{val}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::val}
+
+Raw first byte of the PS/2 packet. \Hypertarget{unionmouse__byte1__t_a6b2ec8bedbc99a899480dd0c4385fb08}\label{unionmouse__byte1__t_a6b2ec8bedbc99a899480dd0c4385fb08} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!x\_ovf@{x\_ovf}}
+\index{x\_ovf@{x\_ovf}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{x\_ovf}{x\_ovf}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::x\+\_\+ovf}
+
+X displacement overflowed. ~\newline
+ \Hypertarget{unionmouse__byte1__t_a5e7fa01a2964bd2a156fb11d5fba0e3a}\label{unionmouse__byte1__t_a5e7fa01a2964bd2a156fb11d5fba0e3a} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!x\_sign@{x\_sign}}
+\index{x\_sign@{x\_sign}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{x\_sign}{x\_sign}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::x\+\_\+sign}
+
+Sign bit for the X displacement. ~\newline
+ \Hypertarget{unionmouse__byte1__t_ab5fa9fa8c85b499a3a952b8ec110f8ec}\label{unionmouse__byte1__t_ab5fa9fa8c85b499a3a952b8ec110f8ec} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!y\_ovf@{y\_ovf}}
+\index{y\_ovf@{y\_ovf}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{y\_ovf}{y\_ovf}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::y\+\_\+ovf}
+
+Y displacement overflowed. ~\newline
+ \Hypertarget{unionmouse__byte1__t_a3fe314c06540e62805cb49605b382a3e}\label{unionmouse__byte1__t_a3fe314c06540e62805cb49605b382a3e} 
+\index{mouse\_byte1\_t@{mouse\_byte1\_t}!y\_sign@{y\_sign}}
+\index{y\_sign@{y\_sign}!mouse\_byte1\_t@{mouse\_byte1\_t}}
+\doxysubsubsection{\texorpdfstring{y\_sign}{y\_sign}}
+{\footnotesize\ttfamily uint8\+\_\+t mouse\+\_\+byte1\+\_\+t\+::y\+\_\+sign}
+
+Sign bit for the Y displacement. ~\newline
+ 
+
+The documentation for this union was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{mouse_8h}{mouse.\+h}}\end{DoxyCompactItemize}

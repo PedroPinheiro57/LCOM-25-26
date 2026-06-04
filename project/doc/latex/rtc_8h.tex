@@ -1,0 +1,177 @@
+\doxysection{model/rtc.h File Reference}
+\hypertarget{rtc_8h}{}\label{rtc_8h}\index{model/rtc.h@{model/rtc.h}}
+
+
+Real-\/\+Time Clock (RTC/\+CMOS) access for reading the system time and date.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+Include dependency graph for rtc.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=152pt]{rtc_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=183pt]{rtc_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Wall-\/clock time read from the RTC. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Calendar date read from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{rtc_8h_a6ee8e8390002b24c20c7a1c64bc2c7ac}\label{rtc_8h_a6ee8e8390002b24c20c7a1c64bc2c7ac} 
+\#define {\bfseries RTC\+\_\+\+ADDR}~0x70
+\begin{DoxyCompactList}\small\item\em CMOS address/command port. \end{DoxyCompactList}\item 
+\Hypertarget{rtc_8h_aa6e7096882c10a7c82c33f3589694b6e}\label{rtc_8h_aa6e7096882c10a7c82c33f3589694b6e} 
+\#define {\bfseries RTC\+\_\+\+DATA}~0x71
+\begin{DoxyCompactList}\small\item\em CMOS data port. \end{DoxyCompactList}\item 
+\Hypertarget{rtc_8h_a2ebe3d816d8b2e9f1be075554e4135b3}\label{rtc_8h_a2ebe3d816d8b2e9f1be075554e4135b3} 
+\#define {\bfseries RTC\+\_\+\+UIP}~BIT(7)
+\begin{DoxyCompactList}\small\item\em Bit 7 of register A – Update In Progress. Poll until clear before reading. \end{DoxyCompactList}\item 
+\Hypertarget{rtc_8h_afe5d31647d8882e7fa9ea7030baa2780}\label{rtc_8h_afe5d31647d8882e7fa9ea7030baa2780} 
+\#define {\bfseries RTC\+\_\+\+DM}~BIT(2)
+\begin{DoxyCompactList}\small\item\em Bit 2 of register B – Data Mode\+: 1 = binary, 0 = BCD. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}\textbf{ CMOS register indices}\par
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{rtc_8h_ae5ffad506b363f28bed1bb5e5926bd2d}{RTC\+\_\+\+REG\+\_\+A}}~0x0A
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a03954a63ead3f02b7790ce79e9877eea}{RTC\+\_\+\+REG\+\_\+B}}~0x0B
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a2507e650d4ccc8a2bdf3001800a3e743}{RTC\+\_\+\+SEC}}~0x00
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a34fc4e7c0e5db231217aa3174e394c72}{RTC\+\_\+\+MIN}}~0x02
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a7264eac87ffc91cbdea1239d346a0ea4}{RTC\+\_\+\+HOUR}}~0x04
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a8645ae13bb42ddf10d3ca762a8754160}{RTC\+\_\+\+DAY}}~0x07
+\item 
+\#define \mbox{\hyperlink{rtc_8h_abda0c877ee1a02b8351c0cfe72838088}{RTC\+\_\+\+MONTH}}~0x08
+\item 
+\#define \mbox{\hyperlink{rtc_8h_a1df5568e6774b73aa4c6e59fc40e9147}{RTC\+\_\+\+YEAR}}~0x09
+\end{DoxyCompactItemize}
+\end{Indent}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b}{rtc\+\_\+read\+\_\+time}} (\mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}t)
+\begin{DoxyCompactList}\small\item\em Reads the current time from the RTC. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da}{rtc\+\_\+read\+\_\+date}} (\mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}} \texorpdfstring{$\ast$}{*}d)
+\begin{DoxyCompactList}\small\item\em Reads the current date from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Real-\/\+Time Clock (RTC/\+CMOS) access for reading the system time and date. 
+
+Communicates with the PC RTC through the standard CMOS port pair at 0x70/0x71, waiting for the Update-\/\+In-\/\+Progress flag to clear before reading so the values are always consistent. 
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{rtc_8h_a8645ae13bb42ddf10d3ca762a8754160}\label{rtc_8h_a8645ae13bb42ddf10d3ca762a8754160} 
+\index{rtc.h@{rtc.h}!RTC\_DAY@{RTC\_DAY}}
+\index{RTC\_DAY@{RTC\_DAY}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_DAY}{RTC\_DAY}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+DAY~0x07}
+
+Day of month. ~\newline
+ \Hypertarget{rtc_8h_a7264eac87ffc91cbdea1239d346a0ea4}\label{rtc_8h_a7264eac87ffc91cbdea1239d346a0ea4} 
+\index{rtc.h@{rtc.h}!RTC\_HOUR@{RTC\_HOUR}}
+\index{RTC\_HOUR@{RTC\_HOUR}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_HOUR}{RTC\_HOUR}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+HOUR~0x04}
+
+Current hours. ~\newline
+ \Hypertarget{rtc_8h_a34fc4e7c0e5db231217aa3174e394c72}\label{rtc_8h_a34fc4e7c0e5db231217aa3174e394c72} 
+\index{rtc.h@{rtc.h}!RTC\_MIN@{RTC\_MIN}}
+\index{RTC\_MIN@{RTC\_MIN}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_MIN}{RTC\_MIN}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+MIN~0x02}
+
+Current minutes. \Hypertarget{rtc_8h_abda0c877ee1a02b8351c0cfe72838088}\label{rtc_8h_abda0c877ee1a02b8351c0cfe72838088} 
+\index{rtc.h@{rtc.h}!RTC\_MONTH@{RTC\_MONTH}}
+\index{RTC\_MONTH@{RTC\_MONTH}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_MONTH}{RTC\_MONTH}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+MONTH~0x08}
+
+Month. ~\newline
+ \Hypertarget{rtc_8h_ae5ffad506b363f28bed1bb5e5926bd2d}\label{rtc_8h_ae5ffad506b363f28bed1bb5e5926bd2d} 
+\index{rtc.h@{rtc.h}!RTC\_REG\_A@{RTC\_REG\_A}}
+\index{RTC\_REG\_A@{RTC\_REG\_A}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_REG\_A}{RTC\_REG\_A}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+REG\+\_\+A~0x0A}
+
+Status register A (UIP flag, oscillator divider). \Hypertarget{rtc_8h_a03954a63ead3f02b7790ce79e9877eea}\label{rtc_8h_a03954a63ead3f02b7790ce79e9877eea} 
+\index{rtc.h@{rtc.h}!RTC\_REG\_B@{RTC\_REG\_B}}
+\index{RTC\_REG\_B@{RTC\_REG\_B}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_REG\_B}{RTC\_REG\_B}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+REG\+\_\+B~0x0B}
+
+Status register B (data format flags). ~\newline
+ \Hypertarget{rtc_8h_a2507e650d4ccc8a2bdf3001800a3e743}\label{rtc_8h_a2507e650d4ccc8a2bdf3001800a3e743} 
+\index{rtc.h@{rtc.h}!RTC\_SEC@{RTC\_SEC}}
+\index{RTC\_SEC@{RTC\_SEC}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_SEC}{RTC\_SEC}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+SEC~0x00}
+
+Current seconds. \Hypertarget{rtc_8h_a1df5568e6774b73aa4c6e59fc40e9147}\label{rtc_8h_a1df5568e6774b73aa4c6e59fc40e9147} 
+\index{rtc.h@{rtc.h}!RTC\_YEAR@{RTC\_YEAR}}
+\index{RTC\_YEAR@{RTC\_YEAR}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_YEAR}{RTC\_YEAR}}
+{\footnotesize\ttfamily \#define RTC\+\_\+\+YEAR~0x09}
+
+Year (2-\/digit). ~\newline
+ 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da}\label{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da} 
+\index{rtc.h@{rtc.h}!rtc\_read\_date@{rtc\_read\_date}}
+\index{rtc\_read\_date@{rtc\_read\_date}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_read\_date()}{rtc\_read\_date()}}
+{\footnotesize\ttfamily int rtc\+\_\+read\+\_\+date (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{d }\end{DoxyParamCaption})}
+
+
+
+Reads the current date from the RTC. 
+
+Waits for the UIP flag to clear and converts BCD to binary if needed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & Output struct to fill. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on error. 
+\end{DoxyReturn}
+\Hypertarget{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b}\label{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b} 
+\index{rtc.h@{rtc.h}!rtc\_read\_time@{rtc\_read\_time}}
+\index{rtc\_read\_time@{rtc\_read\_time}!rtc.h@{rtc.h}}
+\doxysubsubsection{\texorpdfstring{rtc\_read\_time()}{rtc\_read\_time()}}
+{\footnotesize\ttfamily int rtc\+\_\+read\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{t }\end{DoxyParamCaption})}
+
+
+
+Reads the current time from the RTC. 
+
+Waits for the UIP flag to clear and converts BCD to binary if needed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Output struct to fill. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on error. 
+\end{DoxyReturn}

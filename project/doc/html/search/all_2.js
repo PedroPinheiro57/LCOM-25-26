@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['board_2eh_0',['board.h',['../board_8h.html',1,'']]],
+  ['board_5fall_5fsunk_1',['board_all_sunk',['../board_8h.html#acc078d565ee266b249e6cb534b6b67e0',1,'board.c']]],
+  ['board_5falready_5fattacked_2',['board_already_attacked',['../board_8h.html#a7cfa46d8ac75f43eb103352d5cfa8c31',1,'board.c']]],
+  ['board_5fattack_3',['board_attack',['../board_8h.html#a25cdfa6e3e11db7888962c4d87539595',1,'board.c']]],
+  ['board_5fcan_5fplace_4',['board_can_place',['../board_8h.html#ac8718bcf9d2a2ecd7c33bf3b5d1a87b1',1,'board.c']]],
+  ['board_5fcell_5fto_5fpixel_5',['board_cell_to_pixel',['../board_8h.html#a990d7e6e5f0e3cf0c4278266d47f6b3f',1,'board.c']]],
+  ['board_5fcols_6',['BOARD_COLS',['../board_8h.html#a8d325fa33dd590065a0ddb96e687f528',1,'board.h']]],
+  ['board_5fcount_5fhits_7',['board_count_hits',['../board_8h.html#a7e8d0be2c53b42a67a3bd0d9eea401c2',1,'board.c']]],
+  ['board_5fcount_5fmisses_8',['board_count_misses',['../board_8h.html#aa8df8f28dd3b6ac2f6e17b5fb6a47a77',1,'board.c']]],
+  ['board_5fdraw_9',['board_draw',['../renderer_8h.html#abec597460eb6d8edfe925d18d14061df',1,'renderer.c']]],
+  ['board_5fdraw_5fpreview_10',['board_draw_preview',['../renderer_8h.html#ae103c3ebf7543a333db3dd282667585d',1,'renderer.c']]],
+  ['board_5fhighlight_5fcell_11',['board_highlight_cell',['../renderer_8h.html#a038ec21e3b51095a9cb9e677e28f6bf6',1,'renderer.c']]],
+  ['board_5fhighlight_5fremote_5fcursor_12',['board_highlight_remote_cursor',['../renderer_8h.html#ae76e1824a9c915076a7628f0a1143ef0',1,'renderer.c']]],
+  ['board_5finit_13',['board_init',['../board_8h.html#a82c8ddc02a6c3b7217c32ef45d81d41a',1,'board.c']]],
+  ['board_5fpixel_5fto_5fcell_14',['board_pixel_to_cell',['../board_8h.html#a8946c22c8005ba5d3e521bec81bb21bb',1,'board.c']]],
+  ['board_5fplace_5fship_15',['board_place_ship',['../board_8h.html#a9b03276da32d06a8733ebd03bd2cf248',1,'board.c']]],
+  ['board_5frows_16',['BOARD_ROWS',['../board_8h.html#afdeabcf1ceb950f88253cd775bacc441',1,'board.h']]],
+  ['board_5ft_17',['board_t',['../structboard__t.html',1,'']]],
+  ['board_5fx_18',['BOARD_X',['../board_8h.html#ab2f84c36c2d0595ec55832062bd0ebf2',1,'board.h']]],
+  ['board_5fy_19',['BOARD_Y',['../board_8h.html#a22de5dc5f2b1c9d3dfedd2e9b5f83017',1,'board.h']]],
+  ['buf_20',['buf',['../structproto__rx__state__t.html#a483b83e5f672bc28b7b645ec23c0ec39',1,'proto_rx_state_t']]]
+];

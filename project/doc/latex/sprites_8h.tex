@@ -1,0 +1,311 @@
+\doxysection{view/sprites.h File Reference}
+\hypertarget{sprites_8h}{}\label{sprites_8h}\index{view/sprites.h@{view/sprites.h}}
+
+
+Sprite loading, drawing, cursor management, and animated sprites.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=262pt]{sprites_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em A decoded, heap-\/allocated sprite ready for blitting. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em A sequence of sprite frames that animate in a loop. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{sprites_8h_a6c54e72c6142d317114a29adbcbb24b6}{TRANSPARENT}}~0x\+FFFFFE
+\begin{DoxyCompactList}\small\item\em Sentinel colour value treated as fully transparent. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5}{cursor\+\_\+mode\+\_\+t}} \{ \mbox{\hyperlink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ab855da01a6ebcbd6bdad89a28b4ce5c8}{CURSOR\+\_\+\+NORMAL}}
+, \mbox{\hyperlink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ad906e3d55b28f22aeb9d3554b8a170f4}{CURSOR\+\_\+\+HOVER}}
+ \}
+\begin{DoxyCompactList}\small\item\em Cursor appearance modes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{sprites_8h_a6c2fdfe156f841076fed9976f18e7386}{sprite\+\_\+load}} (xpm\+\_\+map\+\_\+t xpm)
+\begin{DoxyCompactList}\small\item\em Decodes an XPM pixel map into a heap-\/allocated \doxylink{structsprite__t}{sprite\+\_\+t}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a26cff820e8ff238fbbd86c6bb7802117}{sprite\+\_\+draw}} (\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}sp, uint16\+\_\+t x, uint16\+\_\+t y)
+\begin{DoxyCompactList}\small\item\em Blits a sprite to the framebuffer at the given pixel coordinates. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a2b2b9751e8886629f592077339961a54}{sprite\+\_\+destroy}} (\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}sp)
+\begin{DoxyCompactList}\small\item\em Frees the colour buffer and the \doxylink{structsprite__t}{sprite\+\_\+t} struct itself. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a71c831cb6d51c9dc8b76afa4d34eb014}{sprite\+\_\+draw\+\_\+rotated}} (\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}sp, uint16\+\_\+t x, uint16\+\_\+t y, bool rotate)
+\begin{DoxyCompactList}\small\item\em Blits a sprite, optionally applying a 90° clockwise rotation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a5bbfe98695534ca971f4c6ed253ec451}{cursor\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Loads the normal and hover cursor sprites into memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_ab6a6606522d4d88df3608413086e582b}{cursor\+\_\+set\+\_\+mode}} (\mbox{\hyperlink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5}{cursor\+\_\+mode\+\_\+t}} mode)
+\begin{DoxyCompactList}\small\item\em Switches the active cursor sprite. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_ac12f810043867d73e4200ecbcf3f7898}{cursor\+\_\+draw}} (uint16\+\_\+t x, uint16\+\_\+t y)
+\begin{DoxyCompactList}\small\item\em Draws the active cursor sprite centred at the given pixel position. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{sprites_8h_af2e814a98113d7690e9d065e42aa6d19}{anim\+\_\+sprite\+\_\+create}} (uint16\+\_\+t x, uint16\+\_\+t y, uint8\+\_\+t no\+\_\+pixmaps)
+\begin{DoxyCompactList}\small\item\em Allocates and initialises an \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t} with no frames. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a9a6066de14062a59dc413cd131fd63fe}{anim\+\_\+sprite\+\_\+update}} (\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}anim)
+\begin{DoxyCompactList}\small\item\em Advances the animated sprite to the next frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_af99e43be627b7643a7324a2bfaa25995}{anim\+\_\+sprite\+\_\+draw}} (\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}anim)
+\begin{DoxyCompactList}\small\item\em Draws the current frame of the animated sprite. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a2153ab60f10fb62ee594aeaacf08febb}{anim\+\_\+sprite\+\_\+destroy}} (\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}anim)
+\begin{DoxyCompactList}\small\item\em Frees all frame sprites and the \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t} itself. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_ae1a4182b9c2d9ac7001d638a767b518e}{destroy\+\_\+game\+\_\+sprites}} (void)
+\begin{DoxyCompactList}\small\item\em Frees all game sprite objects allocated by init\+\_\+game\+\_\+sprites. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Sprite loading, drawing, cursor management, and animated sprites. 
+
+Provides a thin abstraction over raw XPM pixel data. A \doxylink{structsprite__t}{sprite\+\_\+t} holds a decoded RGBA colour buffer that can be blitted to the framebuffer with optional 90° rotation.
+
+The \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t} type wraps a sequence of up to eight \doxylink{structsprite__t}{sprite\+\_\+t} frames and advances through them one at a time on each call to anim\+\_\+sprite\+\_\+update.
+
+The cursor subsystem maintains two pre-\/loaded cursor sprites (normal and hover) and renders the active one at an arbitrary pixel position. 
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{sprites_8h_a6c54e72c6142d317114a29adbcbb24b6}\label{sprites_8h_a6c54e72c6142d317114a29adbcbb24b6} 
+\index{sprites.h@{sprites.h}!TRANSPARENT@{TRANSPARENT}}
+\index{TRANSPARENT@{TRANSPARENT}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{TRANSPARENT}{TRANSPARENT}}
+{\footnotesize\ttfamily \#define TRANSPARENT~0x\+FFFFFE}
+
+
+
+Sentinel colour value treated as fully transparent. 
+
+Any pixel in a sprite whose colour equals this value is skipped during blitting so the background shows through. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{sprites_8h_a97809a6ddca0028049ee7a1391623fa5}\label{sprites_8h_a97809a6ddca0028049ee7a1391623fa5} 
+\index{sprites.h@{sprites.h}!cursor\_mode\_t@{cursor\_mode\_t}}
+\index{cursor\_mode\_t@{cursor\_mode\_t}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{cursor\_mode\_t}{cursor\_mode\_t}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5}{cursor\+\_\+mode\+\_\+t}}}
+
+
+
+Cursor appearance modes. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CURSOR\_NORMAL@{CURSOR\_NORMAL}!sprites.h@{sprites.h}}\index{sprites.h@{sprites.h}!CURSOR\_NORMAL@{CURSOR\_NORMAL}}}\Hypertarget{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ab855da01a6ebcbd6bdad89a28b4ce5c8}\label{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ab855da01a6ebcbd6bdad89a28b4ce5c8} 
+CURSOR\+\_\+\+NORMAL&Default arrow cursor. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CURSOR\_HOVER@{CURSOR\_HOVER}!sprites.h@{sprites.h}}\index{sprites.h@{sprites.h}!CURSOR\_HOVER@{CURSOR\_HOVER}}}\Hypertarget{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ad906e3d55b28f22aeb9d3554b8a170f4}\label{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ad906e3d55b28f22aeb9d3554b8a170f4} 
+CURSOR\+\_\+\+HOVER&Highlighted cursor shown over interactive elements. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{sprites_8h_af2e814a98113d7690e9d065e42aa6d19}\label{sprites_8h_af2e814a98113d7690e9d065e42aa6d19} 
+\index{sprites.h@{sprites.h}!anim\_sprite\_create@{anim\_sprite\_create}}
+\index{anim\_sprite\_create@{anim\_sprite\_create}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{anim\_sprite\_create()}{anim\_sprite\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} anim\+\_\+sprite\+\_\+create (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{uint8\+\_\+t}]{no\+\_\+pixmaps }\end{DoxyParamCaption})}
+
+
+
+Allocates and initialises an \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t} with no frames. 
+
+Frames must be loaded into {\ttfamily pixmaps}\mbox{[}\mbox{]} manually after creation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Initial pixel X position. \\
+\hline
+{\em y} & Initial pixel Y position. \\
+\hline
+{\em no\+\_\+pixmaps} & Number of frames to allocate space for (max 8). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new animated sprite, or {\ttfamily NULL} on failure. 
+\end{DoxyReturn}
+\Hypertarget{sprites_8h_a2153ab60f10fb62ee594aeaacf08febb}\label{sprites_8h_a2153ab60f10fb62ee594aeaacf08febb} 
+\index{sprites.h@{sprites.h}!anim\_sprite\_destroy@{anim\_sprite\_destroy}}
+\index{anim\_sprite\_destroy@{anim\_sprite\_destroy}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{anim\_sprite\_destroy()}{anim\_sprite\_destroy()}}
+{\footnotesize\ttfamily void anim\+\_\+sprite\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{anim }\end{DoxyParamCaption})}
+
+
+
+Frees all frame sprites and the \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t} itself. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em anim} & Animated sprite to destroy. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_af99e43be627b7643a7324a2bfaa25995}\label{sprites_8h_af99e43be627b7643a7324a2bfaa25995} 
+\index{sprites.h@{sprites.h}!anim\_sprite\_draw@{anim\_sprite\_draw}}
+\index{anim\_sprite\_draw@{anim\_sprite\_draw}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{anim\_sprite\_draw()}{anim\_sprite\_draw()}}
+{\footnotesize\ttfamily void anim\+\_\+sprite\+\_\+draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{anim }\end{DoxyParamCaption})}
+
+
+
+Draws the current frame of the animated sprite. 
+
+Blits {\ttfamily pixmaps}\mbox{[}cur\+\_\+pixmap\mbox{]} at the sprite\textquotesingle{}s stored {\ttfamily x} / {\ttfamily y} position.
+
+
+\begin{DoxyParams}{Parameters}
+{\em anim} & Animated sprite to draw. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_a9a6066de14062a59dc413cd131fd63fe}\label{sprites_8h_a9a6066de14062a59dc413cd131fd63fe} 
+\index{sprites.h@{sprites.h}!anim\_sprite\_update@{anim\_sprite\_update}}
+\index{anim\_sprite\_update@{anim\_sprite\_update}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{anim\_sprite\_update()}{anim\_sprite\_update()}}
+{\footnotesize\ttfamily void anim\+\_\+sprite\+\_\+update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{anim }\end{DoxyParamCaption})}
+
+
+
+Advances the animated sprite to the next frame. 
+
+Increments {\ttfamily cur\+\_\+pixmap}, wrapping around to 0 after the last frame.
+
+
+\begin{DoxyParams}{Parameters}
+{\em anim} & Animated sprite to update. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_ac12f810043867d73e4200ecbcf3f7898}\label{sprites_8h_ac12f810043867d73e4200ecbcf3f7898} 
+\index{sprites.h@{sprites.h}!cursor\_draw@{cursor\_draw}}
+\index{cursor\_draw@{cursor\_draw}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{cursor\_draw()}{cursor\_draw()}}
+{\footnotesize\ttfamily void cursor\+\_\+draw (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y }\end{DoxyParamCaption})}
+
+
+
+Draws the active cursor sprite centred at the given pixel position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Cursor hotspot X in screen pixels. \\
+\hline
+{\em y} & Cursor hotspot Y in screen pixels. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_a5bbfe98695534ca971f4c6ed253ec451}\label{sprites_8h_a5bbfe98695534ca971f4c6ed253ec451} 
+\index{sprites.h@{sprites.h}!cursor\_init@{cursor\_init}}
+\index{cursor\_init@{cursor\_init}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{cursor\_init()}{cursor\_init()}}
+{\footnotesize\ttfamily void cursor\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Loads the normal and hover cursor sprites into memory. 
+
+Must be called once before cursor\+\_\+draw. \Hypertarget{sprites_8h_ab6a6606522d4d88df3608413086e582b}\label{sprites_8h_ab6a6606522d4d88df3608413086e582b} 
+\index{sprites.h@{sprites.h}!cursor\_set\_mode@{cursor\_set\_mode}}
+\index{cursor\_set\_mode@{cursor\_set\_mode}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{cursor\_set\_mode()}{cursor\_set\_mode()}}
+{\footnotesize\ttfamily void cursor\+\_\+set\+\_\+mode (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5}{cursor\+\_\+mode\+\_\+t}}}]{mode }\end{DoxyParamCaption})}
+
+
+
+Switches the active cursor sprite. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & \doxylink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ab855da01a6ebcbd6bdad89a28b4ce5c8}{CURSOR\+\_\+\+NORMAL} or \doxylink{sprites_8h_a97809a6ddca0028049ee7a1391623fa5ad906e3d55b28f22aeb9d3554b8a170f4}{CURSOR\+\_\+\+HOVER}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_ae1a4182b9c2d9ac7001d638a767b518e}\label{sprites_8h_ae1a4182b9c2d9ac7001d638a767b518e} 
+\index{sprites.h@{sprites.h}!destroy\_game\_sprites@{destroy\_game\_sprites}}
+\index{destroy\_game\_sprites@{destroy\_game\_sprites}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{destroy\_game\_sprites()}{destroy\_game\_sprites()}}
+{\footnotesize\ttfamily void destroy\+\_\+game\+\_\+sprites (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Frees all game sprite objects allocated by init\+\_\+game\+\_\+sprites. 
+
+Should be called during game shutdown to avoid memory leaks. \Hypertarget{sprites_8h_a2b2b9751e8886629f592077339961a54}\label{sprites_8h_a2b2b9751e8886629f592077339961a54} 
+\index{sprites.h@{sprites.h}!sprite\_destroy@{sprite\_destroy}}
+\index{sprite\_destroy@{sprite\_destroy}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{sprite\_destroy()}{sprite\_destroy()}}
+{\footnotesize\ttfamily void sprite\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{sp }\end{DoxyParamCaption})}
+
+
+
+Frees the colour buffer and the \doxylink{structsprite__t}{sprite\+\_\+t} struct itself. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sp} & Sprite to destroy. Passing {\ttfamily NULL} is safe (no-\/op). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_a26cff820e8ff238fbbd86c6bb7802117}\label{sprites_8h_a26cff820e8ff238fbbd86c6bb7802117} 
+\index{sprites.h@{sprites.h}!sprite\_draw@{sprite\_draw}}
+\index{sprite\_draw@{sprite\_draw}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{sprite\_draw()}{sprite\_draw()}}
+{\footnotesize\ttfamily void sprite\+\_\+draw (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{sp,  }\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y }\end{DoxyParamCaption})}
+
+
+
+Blits a sprite to the framebuffer at the given pixel coordinates. 
+
+Pixels whose colour equals \doxylink{sprites_8h_a6c54e72c6142d317114a29adbcbb24b6}{TRANSPARENT} are not written.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sp} & Sprite to draw. \\
+\hline
+{\em x} & Pixel X of the sprite\textquotesingle{}s top-\/left corner. \\
+\hline
+{\em y} & Pixel Y of the sprite\textquotesingle{}s top-\/left corner. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_a71c831cb6d51c9dc8b76afa4d34eb014}\label{sprites_8h_a71c831cb6d51c9dc8b76afa4d34eb014} 
+\index{sprites.h@{sprites.h}!sprite\_draw\_rotated@{sprite\_draw\_rotated}}
+\index{sprite\_draw\_rotated@{sprite\_draw\_rotated}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{sprite\_draw\_rotated()}{sprite\_draw\_rotated()}}
+{\footnotesize\ttfamily void sprite\+\_\+draw\+\_\+rotated (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{sp,  }\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{bool}]{rotate }\end{DoxyParamCaption})}
+
+
+
+Blits a sprite, optionally applying a 90° clockwise rotation. 
+
+Used when drawing vertically-\/oriented ships whose sprites are stored horizontally.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sp} & Sprite to draw. \\
+\hline
+{\em x} & Pixel X of the (post-\/rotation) top-\/left corner. \\
+\hline
+{\em y} & Pixel Y of the (post-\/rotation) top-\/left corner. \\
+\hline
+{\em rotate} & {\ttfamily true} to rotate 90° clockwise before blitting. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_a6c2fdfe156f841076fed9976f18e7386}\label{sprites_8h_a6c2fdfe156f841076fed9976f18e7386} 
+\index{sprites.h@{sprites.h}!sprite\_load@{sprite\_load}}
+\index{sprite\_load@{sprite\_load}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{sprite\_load()}{sprite\_load()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} sprite\+\_\+load (\begin{DoxyParamCaption}\item[{xpm\+\_\+map\+\_\+t}]{xpm }\end{DoxyParamCaption})}
+
+
+
+Decodes an XPM pixel map into a heap-\/allocated \doxylink{structsprite__t}{sprite\+\_\+t}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em xpm} & XPM map to decode (as returned by the LCF layer). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new sprite, or {\ttfamily NULL} on allocation failure. The caller owns the returned object and must free it with sprite\+\_\+destroy when done. 
+\end{DoxyReturn}

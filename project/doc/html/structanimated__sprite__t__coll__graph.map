@@ -1,0 +1,5 @@
+<map id="animated_sprite_t" name="animated_sprite_t">
+<area shape="rect" id="Node000001" title="A sequence of sprite frames that animate in a loop." alt="" coords="5,93,145,119"/>
+<area shape="rect" id="Node000002" href="$structsprite__t.html" title="A decoded, heap&#45;allocated sprite ready for blitting." alt="" coords="40,5,111,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,45,78,93,73,93,73,45"/>
+</map>

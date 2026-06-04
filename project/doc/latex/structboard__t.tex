@@ -1,0 +1,70 @@
+\doxysection{board\+\_\+t Struct Reference}
+\hypertarget{structboard__t}{}\label{structboard__t}\index{board\_t@{board\_t}}
+
+
+The full board state for one player.  
+
+
+
+
+{\ttfamily \#include $<$board.\+h$>$}
+
+
+
+Collaboration diagram for board\+\_\+t\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{structboard__t__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474}{cell\+\_\+state\+\_\+t}} \mbox{\hyperlink{structboard__t_a6f0e29937deccc7eaf6c8fb3792399c8}{grid}} \mbox{[}\mbox{\hyperlink{board_8h_afdeabcf1ceb950f88253cd775bacc441}{BOARD\+\_\+\+ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{board_8h_a8d325fa33dd590065a0ddb96e687f528}{BOARD\+\_\+\+COLS}}\mbox{]}
+\item 
+\mbox{\hyperlink{structship__t}{ship\+\_\+t}} \mbox{\hyperlink{structboard__t_a5245af5b440de982e56acac96c22617a}{ships}} \mbox{[}\mbox{\hyperlink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS}}\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structboard__t_a37867acf590dc067db01ef81d0fb19f7}{ships\+\_\+placed}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structboard__t_a7cdfd3948899b9fc307a808551df3102}{ships\+\_\+sunk}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The full board state for one player. 
+
+Tracks the cell grid and the list of ships. Both players own one of these; the host keeps both. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structboard__t_a6f0e29937deccc7eaf6c8fb3792399c8}\label{structboard__t_a6f0e29937deccc7eaf6c8fb3792399c8} 
+\index{board\_t@{board\_t}!grid@{grid}}
+\index{grid@{grid}!board\_t@{board\_t}}
+\doxysubsubsection{\texorpdfstring{grid}{grid}}
+{\footnotesize\ttfamily \mbox{\hyperlink{board_8h_ad6a1c708ba92d4a599efc19e8bd7b474}{cell\+\_\+state\+\_\+t}} board\+\_\+t\+::grid\mbox{[}\mbox{\hyperlink{board_8h_afdeabcf1ceb950f88253cd775bacc441}{BOARD\+\_\+\+ROWS}}\mbox{]}\mbox{[}\mbox{\hyperlink{board_8h_a8d325fa33dd590065a0ddb96e687f528}{BOARD\+\_\+\+COLS}}\mbox{]}}
+
+Cell state for every grid position. \Hypertarget{structboard__t_a5245af5b440de982e56acac96c22617a}\label{structboard__t_a5245af5b440de982e56acac96c22617a} 
+\index{board\_t@{board\_t}!ships@{ships}}
+\index{ships@{ships}!board\_t@{board\_t}}
+\doxysubsubsection{\texorpdfstring{ships}{ships}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structship__t}{ship\+\_\+t}} board\+\_\+t\+::ships\mbox{[}\mbox{\hyperlink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS}}\mbox{]}}
+
+Per-\/ship data. ~\newline
+ \Hypertarget{structboard__t_a37867acf590dc067db01ef81d0fb19f7}\label{structboard__t_a37867acf590dc067db01ef81d0fb19f7} 
+\index{board\_t@{board\_t}!ships\_placed@{ships\_placed}}
+\index{ships\_placed@{ships\_placed}!board\_t@{board\_t}}
+\doxysubsubsection{\texorpdfstring{ships\_placed}{ships\_placed}}
+{\footnotesize\ttfamily uint8\+\_\+t board\+\_\+t\+::ships\+\_\+placed}
+
+How many ships have been placed so far. \Hypertarget{structboard__t_a7cdfd3948899b9fc307a808551df3102}\label{structboard__t_a7cdfd3948899b9fc307a808551df3102} 
+\index{board\_t@{board\_t}!ships\_sunk@{ships\_sunk}}
+\index{ships\_sunk@{ships\_sunk}!board\_t@{board\_t}}
+\doxysubsubsection{\texorpdfstring{ships\_sunk}{ships\_sunk}}
+{\footnotesize\ttfamily uint8\+\_\+t board\+\_\+t\+::ships\+\_\+sunk}
+
+How many of this player\textquotesingle{}s ships are sunk. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{board_8h}{board.\+h}}\end{DoxyCompactItemize}

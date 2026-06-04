@@ -1,0 +1,91 @@
+\doxysection{protocol.\+h}
+\hypertarget{protocol_8h_source}{}\label{protocol_8h_source}\index{serial/protocol.h@{serial/protocol.h}}
+\mbox{\hyperlink{protocol_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ MSG\_HELLO\ \ \ \ \ \ \ \ \ \ 'H'\ }}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ MSG\_HELLO\_ACK\ \ \ \ \ \ 'A'\ }}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ MSG\_KEY\ \ \ \ \ \ \ \ \ \ \ \ 'K'\ }}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ MSG\_MOUSE\ \ \ \ \ \ \ \ \ \ 'M'\ }}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ MSG\_SHIP\_PLACE\ \ \ \ \ 'P'\ }}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ MSG\_ATTACK\ \ \ \ \ \ \ \ \ 'T'\ }}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ MSG\_CURSOR\ \ \ \ \ \ \ \ \ 'C'\ }}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ MSG\_STATE\ \ \ \ \ \ \ \ \ \ 'S'\ }}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ MSG\_COUNTDOWN\ \ \ \ \ \ 'D'\ }}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ MSG\_WINNER\ \ \ \ \ \ \ \ \ 'W'\ }}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ MSG\_DONE\_PLACING\ \ \ 'F'\ }}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ MSG\_CLIENT\_QUIT\ \ \ \ 'Q'\ }}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ MSG\_HELLO\_LEN\ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ MSG\_HELLO\_ACK\_LEN\ \ \ \ \ 0}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ MSG\_KEY\_LEN\ \ \ \ \ \ \ \ \ \ \ 1\ }}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ MSG\_MOUSE\_LEN\ \ \ \ \ \ \ \ \ 3\ }}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ MSG\_SHIP\_PLACE\_LEN\ \ \ \ 4\ }}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ MSG\_ATTACK\_LEN\ \ \ \ \ \ \ \ 3\ }}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ MSG\_CURSOR\_LEN\ \ \ \ \ \ \ \ 2\ }}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ MSG\_STATE\_LEN\ \ \ \ \ \ \ \ \ 1\ }}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ MSG\_COUNTDOWN\_LEN\ \ \ \ \ 1\ }}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ MSG\_WINNER\_LEN\ \ \ \ \ \ \ \ 1\ }}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ MSG\_DONE\_PLACING\_LEN\ \ 0}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ MSG\_CLIENT\_QUIT\_LEN\ \ \ 0}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ MSG\_MAX\_PAYLOAD\ \ 4}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ ATTACK\_MISS\ \ 0\ }}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ ATTACK\_HIT\ \ \ 1\ }}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ ATTACK\_SUNK\ \ 2\ }}
+\DoxyCodeLine{00072\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00073\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structserial__msg__t_a8458ba42bcd82c9ca35a2dca6b06d3f6}{type}};\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ scancode;\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ key;\ \ \ \ \ \ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ pkt[3];\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mouse;\ \ \ \ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ col,\ row,\ size,\ type\_orient;\ \}\ ship;\ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ col,\ row,\ result;\ \}\ \ \ \ \ \ \ \ \ \ \ \ attack;\ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ col,\ row;\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cursor;\ \ \ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ \mbox{\hyperlink{structserial__msg__t_a29d64921c1ce0c879de216bb206a7329}{state}};\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state;\ \ \ \ }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ seconds;\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ countdown;}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\{\ uint8\_t\ \mbox{\hyperlink{structserial__msg__t_ab89efd6ec20f0fb9339bd6b372c2ad90}{winner}};\ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ winner;\ \ \ }
+\DoxyCodeLine{00084\ \ \ \ \ \}\ payload;}
+\DoxyCodeLine{00085\ \}\ \mbox{\hyperlink{structserial__msg__t}{serial\_msg\_t}};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00095\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structproto__rx__state__t_a3db894524d3c1389186aa5c95ebdcfe4}{type}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00096\ \ \ \ \ uint8\_t\ buf[\mbox{\hyperlink{protocol_8h_a7a1b14c6089364e05b3ea85c2c6472b2}{MSG\_MAX\_PAYLOAD}}];\ }
+\DoxyCodeLine{00097\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structproto__rx__state__t_ad217e833f75208dec142a378fe20c987}{collected}};\ \ }
+\DoxyCodeLine{00098\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structproto__rx__state__t_a7f5b61e1db5dee0213418286b19ab61f}{expected}};\ \ \ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{structproto__rx__state__t_a68d4a2b18feb14b87c18ebc5b6a0126f}{have\_type}};\ \ }
+\DoxyCodeLine{00100\ \}\ \mbox{\hyperlink{structproto__rx__state__t}{proto\_rx\_state\_t}};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00107\ \mbox{\hyperlink{structproto__rx__state__t}{proto\_rx\_state\_t}}\ *\mbox{\hyperlink{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721}{get\_rx\_state}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00113\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_af5cc84158e0926a9c0add64b4bdb5557}{proto\_rx\_reset}}(\mbox{\hyperlink{structproto__rx__state__t}{proto\_rx\_state\_t}}\ *s);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00127\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17}{proto\_feed\_byte}}(\mbox{\hyperlink{structproto__rx__state__t}{proto\_rx\_state\_t}}\ *s,\ uint8\_t\ b,\ \mbox{\hyperlink{structserial__msg__t}{serial\_msg\_t}}\ *msg\_out);}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00131\ \textcolor{keywordtype}{void}\ proto\_send\_hello(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00132\ \textcolor{keywordtype}{void}\ proto\_send\_hello\_ack(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00135\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_ac532c3510e17ad14064484e148de1671}{proto\_send\_key}}(uint8\_t\ scancode);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00138\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_aed6400d029afabd3d03df06dbc079cac}{proto\_send\_mouse}}(uint8\_t\ pkt[3]);}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00141\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_a0bc580ae49a3fd81a980d03c02c55720}{proto\_send\_ship\_place}}(uint8\_t\ col,\ uint8\_t\ row,\ uint8\_t\ size,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ type\_idx,\ uint8\_t\ orient);}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00145\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_af9951aec7b11e9699d5f1bc2a2384733}{proto\_send\_attack}}(uint8\_t\ col,\ uint8\_t\ row,\ uint8\_t\ result);}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00148\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_a4049149428a2b0d31cd2e719b76078e5}{proto\_send\_cursor}}(uint8\_t\ col,\ uint8\_t\ row);}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00151\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_aaf2e6409b671db395f04dd945b8cab72}{proto\_send\_state}}(uint8\_t\ state);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00154\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_a3197c39523808dee171e52403d0ffe2e}{proto\_send\_countdown}}(uint8\_t\ seconds);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00157\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_a4bd42bc1a5f52cc3fc1796d5f8118fbf}{proto\_send\_winner}}(uint8\_t\ winner);}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00160\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_a5d6a311882611da698297c004cb15309}{proto\_send\_done\_placing}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00163\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{protocol_8h_aedee5c447e8fa692c2b406e0d2dab83e}{proto\_send\_client\_quit}}(\textcolor{keywordtype}{void});}
+
+\end{DoxyCode}

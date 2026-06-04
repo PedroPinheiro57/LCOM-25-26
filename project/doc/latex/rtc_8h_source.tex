@@ -1,0 +1,39 @@
+\doxysection{rtc.\+h}
+\hypertarget{rtc_8h_source}{}\label{rtc_8h_source}\index{model/rtc.h@{model/rtc.h}}
+\mbox{\hyperlink{rtc_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ RTC\_ADDR\ \ 0x70}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ RTC\_DATA\ \ 0x71}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ RTC\_REG\_A\ \ 0x0A\ }}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ RTC\_REG\_B\ \ 0x0B\ }}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ RTC\_SEC\ \ \ \ 0x00\ }}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ RTC\_MIN\ \ \ \ 0x02\ }}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ RTC\_HOUR\ \ \ 0x04\ }}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ RTC\_DAY\ \ \ \ 0x07\ }}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ RTC\_MONTH\ \ 0x08\ }}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ RTC\_YEAR\ \ \ 0x09\ }}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ RTC\_UIP\ \ BIT(7)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ RTC\_DM\ \ \ BIT(2)}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00039\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__time__t_a7c662a931dab30917745a6c87a058cd2}{hours}};\ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__time__t_a6581b5f9734e93498ce56e6f3c278835}{minutes}};\ }
+\DoxyCodeLine{00041\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__time__t_a6a60d94468d40cef2e2b387c2db7f788}{seconds}};\ }
+\DoxyCodeLine{00042\ \}\ \mbox{\hyperlink{structrtc__time__t}{rtc\_time\_t}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00048\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__date__t_aac2d1613473d4eb898c33c8243a90ef1}{day}};\ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__date__t_afd04996b250949b3d0a0b95500b91b81}{month}};\ }
+\DoxyCodeLine{00050\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structrtc__date__t_a8df518e0cf16c60f43bce0428919bfe5}{year}};\ \ }
+\DoxyCodeLine{00051\ \}\ \mbox{\hyperlink{structrtc__date__t}{rtc\_date\_t}};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00061\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b}{rtc\_read\_time}}(\mbox{\hyperlink{structrtc__time__t}{rtc\_time\_t}}\ *t);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00071\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da}{rtc\_read\_date}}(\mbox{\hyperlink{structrtc__date__t}{rtc\_date\_t}}\ *d);}
+
+\end{DoxyCode}

@@ -1,0 +1,9 @@
+<map id="serial/uart.h" name="serial/uart.h">
+<area shape="rect" id="Node000001" title="16550&#45;compatible UART driver for COM1 serial communication." alt="" coords="92,5,192,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,76,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,33,70,73,67,68,124,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="101,79,183,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,31,145,65,139,65,139,31"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="207,79,293,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="161,28,222,69,219,73,158,33"/>
+</map>

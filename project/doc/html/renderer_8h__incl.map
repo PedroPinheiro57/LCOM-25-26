@@ -1,0 +1,29 @@
+<map id="view/renderer.h" name="view/renderer.h">
+<area shape="rect" id="Node000001" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="545,5,668,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="130,225,201,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="545,26,413,39,252,63,174,80,105,101,50,125,30,139,15,154,9,167,10,179,19,189,33,199,73,215,117,226,116,231,71,220,31,204,15,193,5,181,3,166,11,150,27,135,48,121,103,96,173,75,251,58,412,34,544,21"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="464,225,547,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="622,29,650,56,678,94,689,115,695,137,694,158,685,179,659,204,627,221,593,232,560,237,559,232,592,226,625,216,656,200,680,176,689,157,690,137,684,117,674,97,646,60,618,33"/>
+<area shape="rect" id="Node000004" href="$board_8h.html" title="Battleship game board: data model and grid logic." alt="" coords="543,152,671,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="609,31,609,138,604,138,604,31"/>
+<area shape="rect" id="Node000005" href="$game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="324,79,473,104"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="574,33,446,77,444,72,572,28"/>
+<area shape="rect" id="Node000009" href="$sprites_8h.html" title="Sprite loading, drawing, cursor management, and animated sprites." alt="" coords="746,79,825,104"/>
+<area shape="poly" id="edge18_Node000001_Node000009" title=" " alt="" coords="636,28,744,71,742,76,634,33"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="543,179,215,231,214,226,542,174"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="592,180,534,219,531,215,589,175"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="324,96,241,100,152,110,75,127,46,139,27,154,21,166,22,176,29,186,41,196,77,212,117,224,116,229,75,217,38,200,25,190,17,178,15,165,23,150,43,135,73,122,151,105,241,95,324,91"/>
+<area shape="poly" id="edge8_Node000005_Node000003" title=" " alt="" coords="423,102,454,122,482,150,497,181,505,211,499,213,492,183,478,154,450,126,420,106"/>
+<area shape="poly" id="edge17_Node000005_Node000004" title=" " alt="" coords="433,101,561,145,559,150,431,107"/>
+<area shape="rect" id="Node000006" href="$mouse_8h.html" title="PS/2 mouse packet parsing and cursor&#45;state tracking." alt="" coords="170,152,305,177"/>
+<area shape="poly" id="edge9_Node000005_Node000006" title=" " alt="" coords="374,106,277,149,275,144,372,102"/>
+<area shape="rect" id="Node000007" href="$rtc_8h.html" title="Real&#45;Time Clock (RTC/CMOS) access for reading the system time and date." alt="" coords="38,152,146,177"/>
+<area shape="poly" id="edge12_Node000005_Node000007" title=" " alt="" coords="350,107,155,151,154,146,349,101"/>
+<area shape="rect" id="Node000008" href="$protocol_8h.html" title="Serial communication protocol for the two&#45;VM Battleship session." alt="" coords="329,152,468,177"/>
+<area shape="poly" id="edge14_Node000005_Node000008" title=" " alt="" coords="401,104,401,138,396,138,396,104"/>
+<area shape="poly" id="edge10_Node000006_Node000002" title=" " alt="" coords="227,180,188,218,185,214,223,176"/>
+<area shape="poly" id="edge11_Node000006_Node000003" title=" " alt="" coords="281,175,451,220,450,225,280,180"/>
+<area shape="poly" id="edge13_Node000007_Node000002" title=" " alt="" coords="106,176,145,214,141,218,102,180"/>
+<area shape="poly" id="edge15_Node000008_Node000002" title=" " alt="" coords="362,180,214,225,213,219,360,175"/>
+<area shape="poly" id="edge16_Node000008_Node000003" title=" " alt="" coords="417,175,478,215,475,220,414,180"/>
+</map>

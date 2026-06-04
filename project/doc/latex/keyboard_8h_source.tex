@@ -1,0 +1,24 @@
+\doxysection{keyboard.\+h}
+\hypertarget{keyboard_8h_source}{}\label{keyboard_8h_source}\index{model/keyboard.h@{model/keyboard.h}}
+\mbox{\hyperlink{keyboard_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{union\ }\{}
+\DoxyCodeLine{00020\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionkbc__status__t_adaa086c020d8b0de71f6936d5b3facb8}{val}};\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields}{kbc\_status\_fields}}\ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_abbc04ca893ca82cd764fd95ecda82c0a}{obf}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a7a6aab459373004f9975b2cdddeaa56f}{ibf}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a97b429901e36f19db18c0dd3675a12f9}{sys}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_af0fe86de18de8207f6b5faecdec89027}{cmd}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a89d811bf70db07528c0252b9021f03d1}{\_unused}}\ :\ 1;\ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_a4703a197aa049684062c4af08c276e00}{aux}}\ \ \ \ \ :\ 1;\ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_abc431eaf0a2ec02b5a0560068f7b28ed}{timeout}}\ :\ 1;\ }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structkbc__status__t_1_1kbc__status__fields_aca66b8bd5278ceb5bfaee85f37f05ca0}{parity}}\ \ :\ 1;\ }
+\DoxyCodeLine{00032\ \ \ \ \ \}\ fields;}
+\DoxyCodeLine{00033\ \}\ \mbox{\hyperlink{unionkbc__status__t}{kbc\_status\_t}};}
+
+\end{DoxyCode}

@@ -14,9 +14,8 @@
 #include "view/renderer.h"
 
 
-extern int foo();
+extern int foo(); 
 
-/* IRQ hook bit indices returned by the subscribe functions           */
 static uint8_t timer_bit;
 static uint8_t kbd_bit;
 static uint8_t mouse_bit;
@@ -27,9 +26,7 @@ bool role_is_client() {
     return role == ROLE_CLIENT;
 }
 
-/* ------------------------------------------------------------------ */
-/* devices_init                                                       */
-/* ------------------------------------------------------------------ */
+/* devices_init */
 static int devices_init(void) {
     if (video_init(0x115) != 0) return 1;
 
@@ -69,9 +66,7 @@ static int devices_init(void) {
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
 /* devices_cleanup                                                    */
-/* ------------------------------------------------------------------ */
 static int devices_cleanup(void) {
     uart_cleanup();
     if (mouse_disable_data_reporting() != 0)    return 1;
@@ -82,9 +77,7 @@ static int devices_cleanup(void) {
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
-/* proj_main_loop                                                     */
-/* ------------------------------------------------------------------ */
+/* proj_main_loop */
 int(proj_main_loop)(int argc, char *argv[]) {
     foo();
 
@@ -148,9 +141,7 @@ int(proj_main_loop)(int argc, char *argv[]) {
     return 0;
 }
 
-/* ------------------------------------------------------------------ */
-/* main — lcf entry point (unchanged)                                */
-/* ------------------------------------------------------------------ */
+
 int main(int argc, char *argv[]) {
     lcf_set_language("EN-US");
     lcf_trace_calls("/home/lcom/labs/grupo_2leic01_5/project/trace.txt");

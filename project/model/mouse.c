@@ -34,7 +34,7 @@ void mouse_state_update(mouse_state_t *ms, uint8_t buf[3], uint16_t hres, uint16
 
     ms->x    += dx;
     ms->y    -= dy;
-    ms->moved |= (dx != 0 || dy != 0);
+    ms->moved = (dx != 0 || dy != 0);
   }
 
 clamp:

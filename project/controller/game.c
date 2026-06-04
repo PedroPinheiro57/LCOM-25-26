@@ -657,6 +657,11 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
         case MSG_STATE: {
             game_state_t next = (game_state_t)msg->payload.state.state;
 
+            if (next == STATE_EXIT) {
+                over = true;
+                break;
+            }
+            
             if (next == STATE_MAIN_MENU && g.tag == STATE_GAME_OVER) {
                 board_init(&g.p1_board);
                 board_init(&g.p2_board);

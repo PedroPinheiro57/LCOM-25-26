@@ -141,6 +141,8 @@ int(proj_main_loop)(int argc, char *argv[]) {
             handle_timer();
         }
     }
+    proto_send_state(STATE_EXIT);
+    tickdelay(micros_to_ticks(50000));
     printf("destroying game spprites!");
     destroy_game_sprites();
     if (devices_cleanup() != 0) return 1;

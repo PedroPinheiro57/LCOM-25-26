@@ -239,7 +239,7 @@ void game_handle_keyboard(uint8_t scancode) {
             break;
 
         case STATE_INSTRUCTIONS:
-            if (make && (code == KEY_ESC || code == KEY_ENTER)) {
+            if ((make && code == KEY_ENTER) || (!make && code == KEY_ESC)) {
                 transition(STATE_MAIN_MENU);
                 proto_send_state(STATE_MAIN_MENU);
             }

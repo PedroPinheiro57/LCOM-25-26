@@ -39,7 +39,7 @@ void board_highlight_remote_cursor(int col, int row);
 
                                    
 void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds);
-void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds); /* enemy board for counters */
+void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds, bool is_my_turn); /* enemy board for counters */
 void draw_stopwatch(uint32_t total_seconds, uint16_t x, uint16_t y);
 void init_game_sprites();
 bool renderer_is_exploding(void);

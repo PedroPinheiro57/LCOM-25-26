@@ -46,17 +46,17 @@ void menu_draw_game_over(int winner) {
 }
 
 void menu_draw_handover(int player) {
-  /* "PASS SCREEN TO" = 14 * 8 * scale3 = 336px  → x = (800-336)/2 = 232 */
-  draw_string("PASS SCREEN TO", 232, 200, COLOR_TITLE, 3);
+  /* "SWITCHING TURNS" = 15 * 8 * scale3 = 360px  → x = (800-360)/2 = 220 */
+  draw_string("SWITCHING TURNS", 220, 200, COLOR_TITLE, 3);
 
   /* "PLAYER X" = 8 * 8 * scale4 = 256px  → x = (800-256)/2 = 272 */
   if (player == 1)
-    draw_string("PLAYER 1", 272, 290, COLOR_SELECTED, 4);
+    draw_string("PLAYER 1", 272, 290, 0x00BFFF, 4); /* Azul para destacar o P1 */
   else
-    draw_string("PLAYER 2", 272, 290, COLOR_SELECTED, 4);
+    draw_string("PLAYER 2", 272, 290, 0xFFD700, 4); /* Amarelo para destacar o P2 */
 
-  /* "PRESS ENTER WHEN READY" = 22 * 8 * scale2 = 352px  → x = (800-352)/2 = 224 */
-  draw_string("PRESS ENTER WHEN READY", 224, 430, COLOR_TEXT, 2);
+  /* "GET READY!" = 10 * 8 * scale2 = 160px  → x = (800-160)/2 = 320 */
+  draw_string("GET READY!", 320, 430, COLOR_TEXT, 2);
 }
 
 void menu_draw_instructions(void) {

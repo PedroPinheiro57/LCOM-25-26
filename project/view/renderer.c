@@ -223,7 +223,7 @@ void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds) {
     draw_string("CLICK=PLACE", 400, 560, 0x888888, 2);
 }
 
-void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds) {
+void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds, bool is_my_turn) {
     if (player == 1) draw_string("PLAYER 1 - YOUR TURN", 220, 30, 0x00BFFF, 2);
     else             draw_string("PLAYER 2 - YOUR TURN", 220, 30, 0xFFD700, 2);
 
@@ -244,7 +244,9 @@ void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds) {
     draw_string("SUNK:", 25, 310, 0xFF6666, 2);
     num_to_str(sunk, num); draw_string(num, 120, 310, 0xFF6666, 2); draw_string("/5", 136, 310, 0xFF6666, 2);
 
-    draw_string("CLICK TO ATTACK", 280, 560, 0x888888, 2);
+    if (is_my_turn) {
+        draw_string("CLICK TO ATTACK", 280, 560, 0x888888, 2);
+    }
 }
 
 void init_game_sprites(void) {
@@ -380,12 +382,12 @@ void game_draw(const game_t *g) {
 
         case STATE_WAITING_CONNECT:
             if (g->role == ROLE_HOST) {
-                draw_string("WAITING FOR", 248, 220, 0x00BFFF, 3);
-                draw_string("PLAYER 2...", 248, 270, 0x00BFFF, 3);
-                draw_string("(START CLIENT VM NOW)", 132, 380, 0x888888, 2);
+                draw_string("WAITING FOR", 268, 220, 0x00BFFF, 3);
+                draw_string("PLAYER 2...", 268, 270, 0x00BFFF, 3);
+                draw_string("(START CLIENT VM NOW)", 232, 380, 0x888888, 2);
             } else {
-                draw_string("CONNECTING TO", 208, 220, 0xFFD700, 3);
-                draw_string("HOST...", 304, 270, 0xFFD700, 3);
+                draw_string("CONNECTING TO", 244, 220, 0xFFD700, 3);
+                draw_string("HOST...", 316, 270, 0xFFD700, 3);
             }
             break;
 
@@ -406,9 +408,9 @@ void game_draw(const game_t *g) {
                     (orientation_t)g->data.place.orient);
                 draw_hud_place(1, g->data.place.ship_idx, g->timer_seconds);
             } else {
-                draw_string("PLAYER 1 IS", 248, 220, 0x00BFFF, 3);
-                draw_string("PLACING SHIPS...", 192, 270, 0x00BFFF, 3);
-                draw_string("PLEASE WAIT", 248, 340, 0x888888, 2);
+                draw_string("PLAYER 1 IS", 268, 220, 0x00BFFF, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0x00BFFF, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             }
             break;
 
@@ -419,26 +421,27 @@ void game_draw(const game_t *g) {
                     g->data.place.cursor_col, g->data.place.cursor_row,
                     SHIP_SIZES[g->data.place.ship_idx],
                     (orientation_t)g->data.place.orient);
-                draw_hud_place(1, g->data.place.ship_idx, g->timer_seconds);
+                draw_hud_place(2, g->data.place.ship_idx, g->timer_seconds);
             } else {
-                draw_string("PLAYER 2 IS", 248, 220, 0x00BFFF, 3);
-                draw_string("PLACING SHIPS...", 192, 270, 0x00BFFF, 3);
-                draw_string("PLEASE WAIT", 248, 340, 0x888888, 2);
+                draw_string("PLAYER 2 IS", 268, 220, 0xFFD700, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0xFFD700, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             }
             break;
 
         case STATE_PLACE_SHIPS_WAITING:
             if (g->role == ROLE_HOST) {
-                board_draw((board_t *)&g->p1_board, false);
+                draw_string("PLAYER 2 IS", 268, 220, 0xFFD700, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0xFFD700, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             } else {
-                board_draw((board_t *)&g->p2_board, false);
+                draw_string("WAITING FOR", 268, 220, 0x00BFFF, 3);
+                draw_string("HOST...", 316, 270, 0x00BFFF, 3);
             }
-            draw_string("WAITING FOR", 248, 540, 0x888888, 2);
-            draw_string("OPPONENT...", 248, 560, 0x888888, 2);
             break;
 
         case STATE_COUNTDOWN: {
-            draw_string("GAME STARTS IN", 192, 200, 0x00BFFF, 3);
+            draw_string("GAME STARTS IN", 232, 200, 0x00BFFF, 3);
             char digit[2] = { '0' + g->countdown_seconds, '\0' };
             draw_string(digit, 376, 280, 0xFFD700, 8);
             break;
@@ -450,14 +453,14 @@ void game_draw(const game_t *g) {
                 board_highlight_cell(
                     g->data.turn.cursor_col,
                     g->data.turn.cursor_row);
-                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds);
+                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds, true);
             } else {
                 board_draw((board_t *)&g->p2_board, false);
                 if (g->remote_cursor_col >= 0)
                     board_highlight_remote_cursor(
                         g->remote_cursor_col,
                         g->remote_cursor_row);
-                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds);
+                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds, false);
             }
             break;
 
@@ -467,14 +470,14 @@ void game_draw(const game_t *g) {
                 board_highlight_cell(
                     g->data.turn.cursor_col,
                     g->data.turn.cursor_row);
-                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds);
+                draw_hud_attack(2, (board_t *)&g->p1_board, g->timer_seconds, true);
             } else {
                 board_draw((board_t *)&g->p1_board, false);
                 if (g->remote_cursor_col >= 0)
                     board_highlight_remote_cursor(
                         g->remote_cursor_col,
                         g->remote_cursor_row);
-                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds);
+                draw_hud_attack(2, (board_t *)&g->p1_board, g->timer_seconds, false);
             }
             break;
 

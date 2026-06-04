@@ -51,6 +51,7 @@ static void uart_set_baud_rate(void) {
 }
 
 static void uart_set_line_control(void) {
+    /* this also sets dlab bit to 0 */
     uart_write_reg(UART_LCR, UART_DEFAULT_LCR);
 }
 

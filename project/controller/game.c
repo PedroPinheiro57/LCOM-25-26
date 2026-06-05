@@ -24,7 +24,6 @@ static uint8_t post_attack_ticks   = 0;
 static bool    waiting_post_attack = false;
 
 bool game_is_waiting_connect(void) { return (g.tag == STATE_WAITING_CONNECT); }
-bool game_is_connected(void)       { return g.connected; }
 bool game_is_client_turn(void)     { return (g.role == ROLE_HOST) && (g.tag == STATE_TURN_P2); }
 bool game_is_over(void)            { return over; }
 const game_t *game_get_state(void) { return &g; }
@@ -765,7 +764,7 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             if (next == STATE_MAIN_MENU && g.tag == STATE_WAITING_CONNECT) {
                 break; 
             }
-            
+
             if (next == STATE_EXIT) {
                 over = true;
                 break;

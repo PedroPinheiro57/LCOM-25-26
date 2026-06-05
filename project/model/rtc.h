@@ -41,14 +41,6 @@ typedef struct {
     uint8_t seconds; /**< Seconds (0–59). */
 } rtc_time_t;
 
-/**
- * @brief Calendar date read from the RTC.
- */
-typedef struct {
-    uint8_t day;   /**< Day of the month (1–31). */
-    uint8_t month; /**< Month (1–12).            */
-    uint8_t year;  /**< Year, last two digits.   */
-} rtc_date_t;
 
 /**
  * @brief Reads the current time from the RTC.
@@ -60,12 +52,3 @@ typedef struct {
  */
 int rtc_read_time(rtc_time_t *t);
 
-/**
- * @brief Reads the current date from the RTC.
- *
- * Waits for the UIP flag to clear and converts BCD to binary if needed.
- *
- * @param d Output struct to fill.
- * @return 0 on success, non-zero on error.
- */
-int rtc_read_date(rtc_date_t *d);

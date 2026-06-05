@@ -6,6 +6,5 @@ var searchData=
   ['renderer_5fis_5fexploding_3',['renderer_is_exploding',['../renderer_8h.html#a6db41e811667f146d2886ad57b1a2749',1,'renderer.c']]],
   ['renderer_5freset_4',['renderer_reset',['../renderer_8h.html#a4e564d58f2fd8f83601a83e048c21f3f',1,'renderer.c']]],
   ['role_5fis_5fclient_5',['role_is_client',['../main_8h.html#a3e82153dc9f2465eeca670505b717d3b',1,'main.c']]],
-  ['rtc_5fread_5fdate_6',['rtc_read_date',['../rtc_8h.html#a12e2c5bf273e9fc0054dc6e1484963da',1,'rtc.c']]],
-  ['rtc_5fread_5ftime_7',['rtc_read_time',['../rtc_8h.html#a814d06fd237e374fe39dd1ff49eca57b',1,'rtc.c']]]
+  ['rtc_5fread_5ftime_6',['rtc_read_time',['../rtc_8h.html#a814d06fd237e374fe39dd1ff49eca57b',1,'rtc.c']]]
 ];

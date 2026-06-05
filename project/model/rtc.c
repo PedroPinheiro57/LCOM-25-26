@@ -45,22 +45,3 @@ int rtc_read_time(rtc_time_t *t) {
   }
   return 0;
 }
-
-int rtc_read_date(rtc_date_t *d) {
-  wait_uip();
-  uint8_t day, month, year;
-  if (rtc_read_reg(RTC_DAY,   &day)   != 0) return 1;
-  if (rtc_read_reg(RTC_MONTH, &month) != 0) return 1;
-  if (rtc_read_reg(RTC_YEAR,  &year)  != 0) return 1;
-
-  if (is_bcd()) {
-    d->day   = bcd_to_bin(day);
-    d->month = bcd_to_bin(month);
-    d->year  = bcd_to_bin(year);
-  } else {
-    d->day   = day;
-    d->month = month;
-    d->year  = year;
-  }
-  return 0;
-}

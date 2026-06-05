@@ -24,9 +24,7 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}}
-\begin{DoxyCompactList}\small\item\em Wall-\/clock time read from the RTC. \end{DoxyCompactList}\item 
-struct \mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}}
-\begin{DoxyCompactList}\small\item\em Calendar date read from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Wall-\/clock time read from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
@@ -66,9 +64,7 @@ struct \mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}}
 \begin{DoxyCompactItemize}
 \item 
 int \mbox{\hyperlink{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b}{rtc\+\_\+read\+\_\+time}} (\mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \texorpdfstring{$\ast$}{*}t)
-\begin{DoxyCompactList}\small\item\em Reads the current time from the RTC. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da}{rtc\+\_\+read\+\_\+date}} (\mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}} \texorpdfstring{$\ast$}{*}d)
-\begin{DoxyCompactList}\small\item\em Reads the current date from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Reads the current time from the RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -133,26 +129,6 @@ Year (2-\/digit). ~\newline
  
 
 \doxysubsection{Function Documentation}
-\Hypertarget{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da}\label{rtc_8h_a12e2c5bf273e9fc0054dc6e1484963da} 
-\index{rtc.h@{rtc.h}!rtc\_read\_date@{rtc\_read\_date}}
-\index{rtc\_read\_date@{rtc\_read\_date}!rtc.h@{rtc.h}}
-\doxysubsubsection{\texorpdfstring{rtc\_read\_date()}{rtc\_read\_date()}}
-{\footnotesize\ttfamily int rtc\+\_\+read\+\_\+date (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structrtc__date__t}{rtc\+\_\+date\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{d }\end{DoxyParamCaption})}
-
-
-
-Reads the current date from the RTC. 
-
-Waits for the UIP flag to clear and converts BCD to binary if needed.
-
-
-\begin{DoxyParams}{Parameters}
-{\em d} & Output struct to fill. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-0 on success, non-\/zero on error. 
-\end{DoxyReturn}
 \Hypertarget{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b}\label{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b} 
 \index{rtc.h@{rtc.h}!rtc\_read\_time@{rtc\_read\_time}}
 \index{rtc\_read\_time@{rtc\_read\_time}!rtc.h@{rtc.h}}

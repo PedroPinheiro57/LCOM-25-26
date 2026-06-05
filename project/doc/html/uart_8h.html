@@ -193,13 +193,6 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>UART_FCR_INIT</b>&#160;&#160;&#160;(<a class="el" href="uart_8h.html#a787d83dbf59cc1a79a980dbdcec22b66">UART_FCR_ENABLE</a> | <a class="el" href="uart_8h.html#a5ea27cb7903840d45579f7860796c63a">UART_FCR_RXRST</a> | <a class="el" href="uart_8h.html#a7fd3afc2b9051b4e8c2c55936d1578a8">UART_FCR_TXRST</a> | <a class="el" href="uart_8h.html#aeb1a70e4404eef9c3d14be8fb8b1a550">UART_FCR_TRIG_4</a>)</td></tr>
 <tr class="memdesc:a90cf43cb40a80cc41f7bdbf150a76757"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default FCR value: FIFOs on, both reset, 4-byte trigger threshold. <br /></td></tr>
 <tr class="separator:a90cf43cb40a80cc41f7bdbf150a76757"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">MCR – Modem Control Register bits</div></td></tr>
-<tr class="memitem:a792e69385c822a6189b106e8d848c5c7" id="r_a792e69385c822a6189b106e8d848c5c7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a792e69385c822a6189b106e8d848c5c7">UART_MCR_OUT2</a>&#160;&#160;&#160;BIT(3)</td></tr>
-<tr class="separator:a792e69385c822a6189b106e8d848c5c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab8b38fe8c406c72e4dce38a382afbaa" id="r_aab8b38fe8c406c72e4dce38a382afbaa"><td class="memItemLeft" align="right" valign="top"><a id="aab8b38fe8c406c72e4dce38a382afbaa" name="aab8b38fe8c406c72e4dce38a382afbaa"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>UART_MCR_INIT</b>&#160;&#160;&#160;<a class="el" href="uart_8h.html#a792e69385c822a6189b106e8d848c5c7">UART_MCR_OUT2</a></td></tr>
-<tr class="memdesc:aab8b38fe8c406c72e4dce38a382afbaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default MCR: only OUT2 asserted. <br /></td></tr>
-<tr class="separator:aab8b38fe8c406c72e4dce38a382afbaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">LSR – Line Status Register bits</div></td></tr>
 <tr class="memitem:a8cc7d49fde8f2b393a398e6ebf1fbc00" id="r_a8cc7d49fde8f2b393a398e6ebf1fbc00"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a8cc7d49fde8f2b393a398e6ebf1fbc00">UART_LSR_DR</a>&#160;&#160;&#160;BIT(0)</td></tr>
 <tr class="separator:a8cc7d49fde8f2b393a398e6ebf1fbc00"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -863,21 +856,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>uart_rx_overflow</b> 
 </div><div class="memdoc">
 <p>Modem Control Register (read/write). <br  />
  </p>
-
-</div>
-</div>
-<a id="a792e69385c822a6189b106e8d848c5c7" name="a792e69385c822a6189b106e8d848c5c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a792e69385c822a6189b106e8d848c5c7">&#9670;&#160;</a></span>UART_MCR_OUT2</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define UART_MCR_OUT2&#160;&#160;&#160;BIT(3)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Gates UART IRQ through the PIC — must be set. </p>
 
 </div>
 </div>

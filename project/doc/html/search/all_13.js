@@ -45,14 +45,12 @@ var searchData=
   ['uart_5flsr_5fpe_42',['UART_LSR_PE',['../uart_8h.html#a3ae0ee26be22b855aa08d68a2801d3d2',1,'uart.h']]],
   ['uart_5flsr_5fthre_43',['UART_LSR_THRE',['../uart_8h.html#ae05118527ef8873b9d7b1b0be0153019',1,'uart.h']]],
   ['uart_5fmcr_44',['UART_MCR',['../uart_8h.html#a8ef39bc0942ddd0411d87001d12224f4',1,'uart.h']]],
-  ['uart_5fmcr_5finit_45',['UART_MCR_INIT',['../uart_8h.html#aab8b38fe8c406c72e4dce38a382afbaa',1,'uart.h']]],
-  ['uart_5fmcr_5fout2_46',['UART_MCR_OUT2',['../uart_8h.html#a792e69385c822a6189b106e8d848c5c7',1,'uart.h']]],
-  ['uart_5frbr_47',['UART_RBR',['../uart_8h.html#a3eb7d5a767dae7774aa2b4be28e20a7e',1,'uart.h']]],
-  ['uart_5frecv_5fbyte_48',['uart_recv_byte',['../uart_8h.html#ac097192de266a1ae9f1410e34b74d216',1,'uart.c']]],
-  ['uart_5frx_5foverflow_49',['uart_rx_overflow',['../uart_8h.html#a85a0e0442e8944610520cd792cd75337',1,'uart.c']]],
-  ['uart_5frxbuf_5fsize_50',['UART_RXBUF_SIZE',['../uart_8h.html#ad1f0f31ed8578a4eb4f68262618571e2',1,'uart.h']]],
-  ['uart_5fsend_5fbuf_51',['uart_send_buf',['../uart_8h.html#aae1566bcc28e2cb32078e43350fce7cd',1,'uart.c']]],
-  ['uart_5fsend_5fbyte_52',['uart_send_byte',['../uart_8h.html#a7cfbea398adb8df943122e69f2f6098a',1,'uart.c']]],
-  ['uart_5fthr_53',['UART_THR',['../uart_8h.html#a7a676f075475e46d27eb878977b867ec',1,'uart.h']]],
-  ['update_5fanimations_54',['update_animations',['../renderer_8h.html#aa280d4d5b1686635d80804357866d376',1,'renderer.c']]]
+  ['uart_5frbr_45',['UART_RBR',['../uart_8h.html#a3eb7d5a767dae7774aa2b4be28e20a7e',1,'uart.h']]],
+  ['uart_5frecv_5fbyte_46',['uart_recv_byte',['../uart_8h.html#ac097192de266a1ae9f1410e34b74d216',1,'uart.c']]],
+  ['uart_5frx_5foverflow_47',['uart_rx_overflow',['../uart_8h.html#a85a0e0442e8944610520cd792cd75337',1,'uart.c']]],
+  ['uart_5frxbuf_5fsize_48',['UART_RXBUF_SIZE',['../uart_8h.html#ad1f0f31ed8578a4eb4f68262618571e2',1,'uart.h']]],
+  ['uart_5fsend_5fbuf_49',['uart_send_buf',['../uart_8h.html#aae1566bcc28e2cb32078e43350fce7cd',1,'uart.c']]],
+  ['uart_5fsend_5fbyte_50',['uart_send_byte',['../uart_8h.html#a7cfbea398adb8df943122e69f2f6098a',1,'uart.c']]],
+  ['uart_5fthr_51',['UART_THR',['../uart_8h.html#a7a676f075475e46d27eb878977b867ec',1,'uart.h']]],
+  ['update_5fanimations_52',['update_animations',['../renderer_8h.html#aa280d4d5b1686635d80804357866d376',1,'renderer.c']]]
 ];

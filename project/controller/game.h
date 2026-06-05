@@ -187,8 +187,6 @@ void game_handle_serial_msg(const serial_msg_t *msg);
 /** @brief Returns @c true while the game is waiting for the remote VM to connect. */
 bool game_is_waiting_connect(void);
 
-/** @brief Returns @c true once the serial handshake has completed. */
-bool game_is_connected(void);
 
 /**
  * @brief Returns @c true when it is the client VM's turn to act.

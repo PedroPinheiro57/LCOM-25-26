@@ -17,7 +17,7 @@
 <area shape="poly" id="edge17_Node000005_Node000004" title=" " alt="" coords="331,107,149,151,148,146,330,101"/>
 <area shape="rect" id="Node000006" href="$mouse_8h.html" title="PS/2 mouse packet parsing and cursor&#45;state tracking." alt="" coords="391,152,526,177"/>
 <area shape="poly" id="edge9_Node000005_Node000006" title=" " alt="" coords="392,102,436,141,433,145,388,106"/>
-<area shape="rect" id="Node000007" href="$rtc_8h.html" title="Real&#45;Time Clock (RTC/CMOS) access for reading the system time and date." alt="" coords="602,152,710,177"/>
+<area shape="rect" id="Node000007" href="$rtc_8h.html" title="Real&#45;Time Clock (RTC) access for reading the system time and date." alt="" coords="602,152,710,177"/>
 <area shape="poly" id="edge12_Node000005_Node000007" title=" " alt="" coords="422,101,598,146,597,151,421,107"/>
 <area shape="rect" id="Node000008" href="$protocol_8h.html" title="Serial communication protocol for the two&#45;VM Battleship session." alt="" coords="228,152,366,177"/>
 <area shape="poly" id="edge14_Node000005_Node000008" title=" " alt="" coords="366,106,322,145,318,141,362,102"/>

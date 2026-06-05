@@ -7,16 +7,14 @@ Serial communication protocol for the two-\/\+VM Battleship session.
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stdbool.\+h$>$}\newline
-Include dependency graph for protocol.\+h\+:
-\nopagebreak
+Include dependency graph for protocol.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=214pt]{protocol_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -109,7 +107,8 @@ struct \mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721}{get\+\_\+rx\+\_\+state}} (void)
+\Hypertarget{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721}\label{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721} 
+\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*} {\bfseries get\+\_\+rx\+\_\+state} (void)
 \begin{DoxyCompactList}\small\item\em Returns a pointer to the global receive state singleton. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{protocol_8h_af5cc84158e0926a9c0add64b4bdb5557}{proto\+\_\+rx\+\_\+reset}} (\mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*}s)
 \begin{DoxyCompactList}\small\item\em Resets the receive state so the parser is ready for the next message. \end{DoxyCompactList}\item 
@@ -333,17 +332,7 @@ Host → Client\+: game-\/over with winning player. ~\newline
  
 
 \doxysubsection{Function Documentation}
-\Hypertarget{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721}\label{protocol_8h_aa509e5bca5a4e6ddaf6a0d4761bb9721} 
-\index{protocol.h@{protocol.h}!get\_rx\_state@{get\_rx\_state}}
-\index{get\_rx\_state@{get\_rx\_state}!protocol.h@{protocol.h}}
-\doxysubsubsection{\texorpdfstring{get\_rx\_state()}{get\_rx\_state()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structproto__rx__state__t}{proto\+\_\+rx\+\_\+state\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+rx\+\_\+state (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Returns a pointer to the global receive state singleton. 
-
-There is normally only one UART, so a single shared state is sufficient. \Hypertarget{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17}\label{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17} 
+\Hypertarget{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17}\label{protocol_8h_aa23ad1324e468e7f119d7b7363d84e17} 
 \index{protocol.h@{protocol.h}!proto\_feed\_byte@{proto\_feed\_byte}}
 \index{proto\_feed\_byte@{proto\_feed\_byte}!protocol.h@{protocol.h}}
 \doxysubsubsection{\texorpdfstring{proto\_feed\_byte()}{proto\_feed\_byte()}}

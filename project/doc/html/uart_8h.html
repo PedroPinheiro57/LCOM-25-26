@@ -247,7 +247,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>uart_rx_overflow</b> 
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>16550-compatible UART driver for COM1 serial communication. </p>
-<p>Configures the UART at 9600 baud, 8-N-1, with FIFOs enabled and a 4-byte RX trigger threshold (matching the maximum protocol payload size). Received bytes are stored in a software ring buffer and consumed by uart_recv_byte.</p>
+<p>Configures the UART, 8-N-1, with FIFOs enabled and a 4-byte RX trigger threshold (matching the maximum protocol payload size). Received bytes are stored in a software ring buffer and consumed by uart_recv_byte.</p>
 <p>Typical usage: </p><div class="fragment"><div class="line">uint8_t irq_bit;</div>
 <div class="line">uart_init(&amp;irq_bit);</div>
 <div class="line"><span class="comment">// ... subscribe to IRQ4, point handler to uart_ih() ...</span></div>

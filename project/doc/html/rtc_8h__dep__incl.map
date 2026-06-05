@@ -1,5 +1,5 @@
 <map id="src/model/rtc.h" name="src/model/rtc.h">
-<area shape="rect" id="Node000001" title="Real&#45;Time Clock (RTC/CMOS) access for reading the system time and date." alt="" coords="26,5,145,31"/>
+<area shape="rect" id="Node000001" title="Real&#45;Time Clock (RTC) access for reading the system time and date." alt="" coords="26,5,145,31"/>
 <area shape="rect" id="Node000002" href="$game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="5,79,165,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,44,88,79,83,79,83,44"/>
 <area shape="rect" id="Node000003" href="$renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="12,152,159,177"/>

@@ -2,7 +2,7 @@
  * @file uart.h
  * @brief 16550-compatible UART driver for COM1 serial communication.
  *
- * Configures the UART at 9600 baud, 8-N-1, with FIFOs enabled and a
+ * Configures the UART, 8-N-1, with FIFOs enabled and a
  * 4-byte RX trigger threshold (matching the maximum protocol payload
  * size).  Received bytes are stored in a software ring buffer and
  * consumed by @ref uart_recv_byte.

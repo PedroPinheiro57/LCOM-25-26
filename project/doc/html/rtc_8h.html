@@ -81,7 +81,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Real-Time Clock (RTC/CMOS) access for reading the system time and date.  
+<p>Real-Time Clock (RTC) access for reading the system time and date.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -89,7 +89,7 @@ Include dependency graph for rtc.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="rtc_8h__incl.png" border="0" usemap="#asrc_2model_2rtc_8h" alt=""/></div>
 <map name="asrc_2model_2rtc_8h" id="asrc_2model_2rtc_8h">
-<area shape="rect" title="Real&#45;Time Clock (RTC/CMOS) access for reading the system time and date." alt="" coords="5,5,124,31"/>
+<area shape="rect" title="Real&#45;Time Clock (RTC) access for reading the system time and date." alt="" coords="5,5,124,31"/>
 <area shape="rect" title=" " alt="" coords="29,79,100,104"/>
 <area shape="poly" title=" " alt="" coords="67,31,67,65,62,65,62,31"/>
 </map>
@@ -99,7 +99,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="rtc_8h__dep__incl.png" border="0" usemap="#asrc_2model_2rtc_8hdep" alt=""/></div>
 <map name="asrc_2model_2rtc_8hdep" id="asrc_2model_2rtc_8hdep">
-<area shape="rect" title="Real&#45;Time Clock (RTC/CMOS) access for reading the system time and date." alt="" coords="26,5,145,31"/>
+<area shape="rect" title="Real&#45;Time Clock (RTC) access for reading the system time and date." alt="" coords="26,5,145,31"/>
 <area shape="rect" href="game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="5,79,165,104"/>
 <area shape="poly" title=" " alt="" coords="88,44,88,79,83,79,83,44"/>
 <area shape="rect" href="renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="12,152,159,177"/>
@@ -158,8 +158,8 @@ Functions</h2></td></tr>
 <tr class="separator:a814d06fd237e374fe39dd1ff49eca57b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Real-Time Clock (RTC/CMOS) access for reading the system time and date. </p>
-<p>Communicates with the PC RTC through the standard CMOS port pair at 0x70/0x71, waiting for the Update-In-Progress flag to clear before reading so the values are always consistent. </p>
+<div class="textblock"><p>Real-Time Clock (RTC) access for reading the system time and date. </p>
+<p>Communicates with the PC RTC through the port pair at 0x70/0x71, waiting for the Update-In-Progress flag to clear before reading so the values are always consistent. </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a8645ae13bb42ddf10d3ca762a8754160" name="a8645ae13bb42ddf10d3ca762a8754160"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8645ae13bb42ddf10d3ca762a8754160">&#9670;&#160;</a></span>RTC_DAY</h2>

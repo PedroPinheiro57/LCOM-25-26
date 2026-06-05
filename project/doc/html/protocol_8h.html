@@ -191,8 +191,9 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa509e5bca5a4e6ddaf6a0d4761bb9721" id="r_aa509e5bca5a4e6ddaf6a0d4761bb9721"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structproto__rx__state__t.html">proto_rx_state_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_8h.html#aa509e5bca5a4e6ddaf6a0d4761bb9721">get_rx_state</a> (void)</td></tr>
-<tr class="memdesc:aa509e5bca5a4e6ddaf6a0d4761bb9721"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the global receive state singleton.  <br /></td></tr>
+<tr class="memitem:aa509e5bca5a4e6ddaf6a0d4761bb9721" id="r_aa509e5bca5a4e6ddaf6a0d4761bb9721"><td class="memItemLeft" align="right" valign="top"><a id="aa509e5bca5a4e6ddaf6a0d4761bb9721" name="aa509e5bca5a4e6ddaf6a0d4761bb9721"></a>
+<a class="el" href="structproto__rx__state__t.html">proto_rx_state_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>get_rx_state</b> (void)</td></tr>
+<tr class="memdesc:aa509e5bca5a4e6ddaf6a0d4761bb9721"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the global receive state singleton. <br /></td></tr>
 <tr class="separator:aa509e5bca5a4e6ddaf6a0d4761bb9721"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5cc84158e0926a9c0add64b4bdb5557" id="r_af5cc84158e0926a9c0add64b4bdb5557"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="protocol_8h.html#af5cc84158e0926a9c0add64b4bdb5557">proto_rx_reset</a> (<a class="el" href="structproto__rx__state__t.html">proto_rx_state_t</a> *s)</td></tr>
 <tr class="memdesc:af5cc84158e0926a9c0add64b4bdb5557"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the receive state so the parser is ready for the next message.  <br /></td></tr>
@@ -625,27 +626,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>proto_send_client_qui
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aa509e5bca5a4e6ddaf6a0d4761bb9721" name="aa509e5bca5a4e6ddaf6a0d4761bb9721"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa509e5bca5a4e6ddaf6a0d4761bb9721">&#9670;&#160;</a></span>get_rx_state()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structproto__rx__state__t.html">proto_rx_state_t</a> * get_rx_state </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns a pointer to the global receive state singleton. </p>
-<p>There is normally only one UART, so a single shared state is sufficient. </p>
-
-</div>
-</div>
 <a id="aa23ad1324e468e7f119d7b7363d84e17" name="aa23ad1324e468e7f119d7b7363d84e17"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa23ad1324e468e7f119d7b7363d84e17">&#9670;&#160;</a></span>proto_feed_byte()</h2>
 

@@ -2,7 +2,7 @@
 \hypertarget{rtc_8h}{}\label{rtc_8h}\index{src/model/rtc.h@{src/model/rtc.h}}
 
 
-Real-\/\+Time Clock (RTC/\+CMOS) access for reading the system time and date.  
+Real-\/\+Time Clock (RTC) access for reading the system time and date.  
 
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
@@ -70,9 +70,9 @@ int \mbox{\hyperlink{rtc_8h_a814d06fd237e374fe39dd1ff49eca57b}{rtc\+\_\+read\+\_
 
 
 \doxysubsection{Detailed Description}
-Real-\/\+Time Clock (RTC/\+CMOS) access for reading the system time and date. 
+Real-\/\+Time Clock (RTC) access for reading the system time and date. 
 
-Communicates with the PC RTC through the standard CMOS port pair at 0x70/0x71, waiting for the Update-\/\+In-\/\+Progress flag to clear before reading so the values are always consistent. 
+Communicates with the PC RTC through the port pair at 0x70/0x71, waiting for the Update-\/\+In-\/\+Progress flag to clear before reading so the values are always consistent. 
 
 \doxysubsection{Macro Definition Documentation}
 \Hypertarget{rtc_8h_a8645ae13bb42ddf10d3ca762a8754160}\label{rtc_8h_a8645ae13bb42ddf10d3ca762a8754160} 

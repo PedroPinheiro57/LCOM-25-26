@@ -37,7 +37,7 @@
  */
 typedef enum {
     ROLE_HOST,   /**< Original VM: runs all game logic, sends state to the client. */
-    ROLE_CLIENT  /**< Cloned VM: forwards input upstream, renders from host data.  */
+    ROLE_CLIENT  /**< Cloned VM: forwards input upstream  */
 } game_role_t;
 
 /* ------------------------------------------------------------------ */

@@ -8,8 +8,7 @@
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stdbool.\+h$>$}\newline
 {\ttfamily \#include $<$lcom/lcf.\+h$>$}\newline
-Include dependency graph for uart.\+h\+:
-\nopagebreak
+Include dependency graph for uart.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -174,7 +173,7 @@ bool {\bfseries uart\+\_\+rx\+\_\+overflow} (void)
 \doxysubsection{Detailed Description}
 16550-\/compatible UART driver for COM1 serial communication. 
 
-Configures the UART at 9600 baud, 8-\/N-\/1, with FIFOs enabled and a 4-\/byte RX trigger threshold (matching the maximum protocol payload size). Received bytes are stored in a software ring buffer and consumed by uart\+\_\+recv\+\_\+byte.
+Configures the UART, 8-\/N-\/1, with FIFOs enabled and a 4-\/byte RX trigger threshold (matching the maximum protocol payload size). Received bytes are stored in a software ring buffer and consumed by uart\+\_\+recv\+\_\+byte.
 
 Typical usage\+: 
 \begin{DoxyCode}{0}

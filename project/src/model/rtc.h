@@ -1,8 +1,8 @@
 /**
  * @file rtc.h
- * @brief Real-Time Clock (RTC/CMOS) access for reading the system time and date.
+ * @brief Real-Time Clock (RTC) access for reading the system time and date.
  *
- * Communicates with the PC RTC through the standard CMOS port pair at
+ * Communicates with the PC RTC through the port pair at
  * 0x70/0x71, waiting for the Update-In-Progress flag to clear before
  * reading so the values are always consistent.
  */

@@ -101,8 +101,6 @@ typedef struct {
 
 /**
  * @brief Returns a pointer to the global receive state singleton.
- *
- * There is normally only one UART, so a single shared state is sufficient.
  */
 proto_rx_state_t *get_rx_state(void);
 

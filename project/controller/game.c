@@ -9,6 +9,8 @@
 #include "../serial/protocol.h"
 #include "../../pedro/lab5/video.h"
 #include "../../pedro/lab3/kbc.h"
+#include "bot.h"
+#include <stdlib.h>
 
 
 static game_t  g;
@@ -64,6 +66,7 @@ void game_init(game_role_t role) {
     g.tag  = STATE_WAITING_CONNECT;
     g.prev = STATE_WAITING_CONNECT;
     rtc_read_time(&g.rtc);
+    srand(g.rtc.seconds + g.rtc.minutes * 60);
 
     font_init();
     cursor_init();
@@ -99,9 +102,9 @@ void game_handle_timer(void) {
                 g.data.turn.cursor_col = 0;
                 g.data.turn.cursor_row = 0;
                 transition(STATE_TURN_P1);
-                proto_send_state(STATE_TURN_P1);
+                if (!g.is_single_player) proto_send_state(STATE_TURN_P1);
             } else {
-                proto_send_countdown((uint8_t)g.countdown_seconds);
+                if (!g.is_single_player) proto_send_countdown((uint8_t)g.countdown_seconds);
             }
         }
     }
@@ -123,14 +126,16 @@ void game_handle_timer(void) {
         else
             result = ATTACK_HIT;
 
-        proto_send_attack(col, row, result);
+        if (!g.is_single_player) proto_send_attack(col, row, result);
 
         if (board_all_sunk(enemy)) {
             uint8_t winner = (g.tag == STATE_TURN_P1) ? 1 : 2;
             g.data.game_over.winner = winner;
             transition(STATE_GAME_OVER);
-            proto_send_winner(winner);
-            proto_send_state(STATE_GAME_OVER);
+            if (!g.is_single_player) {
+                proto_send_winner(winner);
+                proto_send_state(STATE_GAME_OVER);
+            }
             return;
         }
 
@@ -150,12 +155,12 @@ void game_handle_timer(void) {
                 g.data.turn.player = 2;
                 g.countdown_ticks  = 0;
                 transition(STATE_HANDOVER_P2);
-                proto_send_state(STATE_HANDOVER_P2);
+                if (!g.is_single_player) proto_send_state(STATE_HANDOVER_P2);
             } else {
                 g.data.turn.player = 1;
                 g.countdown_ticks  = 0;
                 transition(STATE_HANDOVER_P1);
-                proto_send_state(STATE_HANDOVER_P1);
+                if (!g.is_single_player) proto_send_state(STATE_HANDOVER_P1);
             }
         }
     }
@@ -169,12 +174,12 @@ void game_handle_timer(void) {
                 g.data.turn.cursor_col = 0;
                 g.data.turn.cursor_row = 0;
                 transition(STATE_TURN_P1);
-                proto_send_state(STATE_TURN_P1);
+                if (!g.is_single_player) proto_send_state(STATE_TURN_P1); 
             } else {
                 g.data.turn.cursor_col = 0;
                 g.data.turn.cursor_row = 0;
                 transition(STATE_TURN_P2);
-                proto_send_state(STATE_TURN_P2);
+                if (!g.is_single_player) proto_send_state(STATE_TURN_P2); 
             }
         }
     }
@@ -184,14 +189,44 @@ void game_handle_timer(void) {
     cursor_tick++;
     if (cursor_tick >= 2) {
         cursor_tick = 0;
-        if (g.role == ROLE_HOST && g.tag == STATE_TURN_P1)
-            proto_send_cursor(
-                (uint8_t)g.data.turn.cursor_col,
-                (uint8_t)g.data.turn.cursor_row);
-        if (g.role == ROLE_CLIENT && g.tag == STATE_TURN_P2)
-            proto_send_cursor(
-                (uint8_t)g.data.turn.cursor_col,
-                (uint8_t)g.data.turn.cursor_row);
+        if (!g.is_single_player) {
+            if (g.role == ROLE_HOST && g.tag == STATE_TURN_P1)
+                proto_send_cursor(
+                    (uint8_t)g.data.turn.cursor_col,
+                    (uint8_t)g.data.turn.cursor_row);
+            if (g.role == ROLE_CLIENT && g.tag == STATE_TURN_P2)
+                proto_send_cursor(
+                    (uint8_t)g.data.turn.cursor_col,
+                    (uint8_t)g.data.turn.cursor_row);
+        }
+    }
+
+    if (g.is_single_player) {
+        if (g.tag == STATE_PLACE_SHIPS_P2) {
+            g.bot_timer++;
+            if (g.bot_timer >= TICKS_PER_SEC * 2) { 
+                bot_place_ships(&g.p2_board);
+                g.countdown_seconds = COUNTDOWN_START;
+                g.countdown_ticks   = 0;
+                transition(STATE_COUNTDOWN);
+            }
+        } else if (g.tag == STATE_TURN_P2 && !renderer_is_exploding() && !waiting_post_attack) {
+            g.bot_timer++;
+            if (g.bot_timer >= TICKS_PER_SEC) {
+                uint8_t col, row;
+                
+                bot_choose_attack(&g.p1_board, &col, &row);
+                
+                board_attack(&g.p1_board, col, row);
+                
+                bool is_hit = (g.p1_board.grid[row][col] == CELL_HIT || g.p1_board.grid[row][col] == CELL_SUNK);
+                bool is_sunk = (g.p1_board.grid[row][col] == CELL_SUNK);
+                bot_register_result(is_hit, is_sunk); 
+                
+                start_explosion(col, row, is_hit);
+                g.bot_timer = 0;
+            }
+        }
     }
 }
 
@@ -238,11 +273,11 @@ void game_handle_keyboard(uint8_t scancode) {
 
         if (g.tag == STATE_MAIN_MENU) {
             if (make && code == KEY_UP) {
-                g.data.menu.selected = (g.data.menu.selected + 2) % 3;
+                g.data.menu.selected = (g.data.menu.selected + 3) % 4;
                 proto_send_key(scancode); 
             }
             if (make && code == KEY_DOWN) {
-                g.data.menu.selected = (g.data.menu.selected + 1) % 3;
+                g.data.menu.selected = (g.data.menu.selected + 1) % 4;
                 proto_send_key(scancode);
             }
             if (!make && code == KEY_ESC) {
@@ -250,13 +285,13 @@ void game_handle_keyboard(uint8_t scancode) {
                 over = true;
             }
             if (make && code == KEY_ENTER) {
-                if (g.data.menu.selected == 0) {
-                    proto_send_key(scancode); 
-                } else if (g.data.menu.selected == 1) {
+                if (g.data.menu.selected == 0 || g.data.menu.selected == 1) {
+                    proto_send_key(scancode);
+                } else if (g.data.menu.selected == 2) {
                     transition(STATE_INSTRUCTIONS);
                     proto_send_state(STATE_INSTRUCTIONS);
-                } else if (g.data.menu.selected == 2) {
-                    proto_send_client_quit();
+                } else if (g.data.menu.selected == 3) {
+                    proto_send_client_quit(); 
                     over = true;
                 }
             }
@@ -292,16 +327,20 @@ void game_handle_keyboard(uint8_t scancode) {
 
         case STATE_MAIN_MENU:
             if (make && code == KEY_UP)
-                g.data.menu.selected = (g.data.menu.selected + 2) % 3;
+                g.data.menu.selected = (g.data.menu.selected + 3) % 4;
             if (make && code == KEY_DOWN)
-                g.data.menu.selected = (g.data.menu.selected + 1) % 3;
+                g.data.menu.selected = (g.data.menu.selected + 1) % 4;
             if (!make && code == KEY_ESC)
                 over = true;
             if (make && code == KEY_ENTER) {
                 switch (g.data.menu.selected) {
-                    case 0:
+                    case 0: 
+                    case 1: 
+                        board_init(&g.p1_board);
+                        board_init(&g.p2_board);
                         renderer_reset();
 
+                        g.is_single_player = (g.data.menu.selected == 0); 
                         g.timer_seconds = 0; 
 
                         g.data.place.player     = 1;
@@ -310,13 +349,16 @@ void game_handle_keyboard(uint8_t scancode) {
                         g.data.place.cursor_col = 0;
                         g.data.place.cursor_row = 0;
                         transition(STATE_PLACE_SHIPS_P1);
-                        proto_send_state(STATE_PLACE_SHIPS_P1);
-                        break;
-                    case 1:
-                        transition(STATE_INSTRUCTIONS);
-                        proto_send_state(STATE_INSTRUCTIONS);
+                        
+                        if (!g.is_single_player) {
+                            proto_send_state(STATE_PLACE_SHIPS_P1);
+                        }
                         break;
                     case 2:
+                        transition(STATE_INSTRUCTIONS);
+                        if (!g.is_single_player) proto_send_state(STATE_INSTRUCTIONS);
+                        break;
+                    case 3:
                         over = true;
                         break;
                 }
@@ -365,8 +407,14 @@ void game_handle_keyboard(uint8_t scancode) {
                             g.data.place.orient     = HORIZONTAL;
                             g.data.place.cursor_col = 0;
                             g.data.place.cursor_row = 0;
-                            transition(STATE_PLACE_SHIPS_WAITING);
-                            proto_send_state(STATE_PLACE_SHIPS_P2);
+                            
+                            if (g.is_single_player) {
+                                g.bot_timer = 0;
+                                transition(STATE_PLACE_SHIPS_P2); 
+                            } else {
+                                transition(STATE_PLACE_SHIPS_WAITING);
+                                proto_send_state(STATE_PLACE_SHIPS_P2);
+                            }
                         } else {
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_done_placing();
@@ -511,16 +559,17 @@ void game_handle_mouse(mouse_state_t *ms) {
             if (ms->clicked && hover >= 0) {
                 switch (hover) {
                     case 0: 
-                        proto_send_key(0x1C); 
+                    case 1: 
+                        proto_send_key(0x1C);
                         break;
                         
-                    case 1: 
+                    case 2: 
                         transition(STATE_INSTRUCTIONS);
                         proto_send_state(STATE_INSTRUCTIONS); 
                         break;
                         
-                    case 2: 
-                        proto_send_client_quit(); 
+                    case 3: 
+                        proto_send_client_quit();
                         over = true;             
                         break;
                 }
@@ -552,10 +601,12 @@ void game_handle_mouse(mouse_state_t *ms) {
             if (ms->clicked && hover >= 0) {
                 switch (hover) {
                     case 0:
+                    case 1:
                         board_init(&g.p1_board);
                         board_init(&g.p2_board);
                         renderer_reset();
 
+                        g.is_single_player = (hover == 0); 
                         g.timer_seconds = 0; 
 
                         g.data.place.player     = 1;
@@ -564,13 +615,16 @@ void game_handle_mouse(mouse_state_t *ms) {
                         g.data.place.cursor_col = 0;
                         g.data.place.cursor_row = 0;
                         transition(STATE_PLACE_SHIPS_P1);
-                        proto_send_state(STATE_PLACE_SHIPS_P1);
+                        
+                        if (!g.is_single_player) {
+                            proto_send_state(STATE_PLACE_SHIPS_P1);
+                        }
                         break;
-                    case 1:
+                    case 2: 
                         transition(STATE_INSTRUCTIONS);
-                        proto_send_state(STATE_INSTRUCTIONS);
+                        if (!g.is_single_player) proto_send_state(STATE_INSTRUCTIONS);
                         break;
-                    case 2:
+                    case 3: 
                         over = true;
                         break;
                 }
@@ -613,8 +667,14 @@ void game_handle_mouse(mouse_state_t *ms) {
                             g.data.place.orient     = HORIZONTAL;
                             g.data.place.cursor_col = 0;
                             g.data.place.cursor_row = 0;
-                            transition(STATE_PLACE_SHIPS_WAITING);
-                            proto_send_state(STATE_PLACE_SHIPS_P2);
+                            
+                            if (g.is_single_player) {
+                                g.bot_timer = 0;
+                                transition(STATE_PLACE_SHIPS_P2);
+                            } else {
+                                transition(STATE_PLACE_SHIPS_WAITING);
+                                proto_send_state(STATE_PLACE_SHIPS_P2);
+                            }
                         } else {
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_done_placing();

@@ -85,6 +85,9 @@ typedef struct {
     game_role_t  role;     /**< Whether this instance is host or client.       */
     bool         connected;/**< @c true once the serial handshake is complete. */
 
+    bool         is_single_player;  
+    uint8_t      bot_timer;
+
     board_t p1_board;      /**< Player 1's board (ships + attacks received).   */
     board_t p2_board;      /**< Player 2's board (ships + attacks received).   */
 

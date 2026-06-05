@@ -15,12 +15,12 @@
 #include <stdint.h>
 
 /** @brief Number of selectable options in the main menu and pause menu. */
-#define NUM_OPTIONS 3
+#define NUM_OPTIONS 4
 
 /** @brief X pixel coordinate of the left edge of each menu option box. */
-#define OPT_X       300
+#define OPT_X       275
 /** @brief Width in pixels of each menu option box. */
-#define OPT_W       200
+#define OPT_W       250
 /** @brief Height in pixels of each menu option box. */
 #define OPT_H       50
 /** @brief Y pixel coordinate of the top edge of the first option box. */

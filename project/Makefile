@@ -1,9 +1,8 @@
 PROG = proj
 
-# Adicionamos as novas subpastas ao .PATH
 .PATH: controller model view assets assets/ships assets/flames assets/explosions serial
 
-SRCS = main.c mouse.c rtc.c sprites.c game.c handlers.c font.c game_menu.c board.c renderer.c uart.c protocol.c
+SRCS = main.c mouse.c rtc.c sprites.c game.c handlers.c font.c game_menu.c board.c renderer.c uart.c protocol.c bot.c
 
 
 CFLAGS += -pedantic

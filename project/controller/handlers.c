@@ -26,7 +26,7 @@ void handle_timer(void) {
     video_swap_buffers();
 
     /* try connect the 2 VMs every second */
-    if (role_is_client() && game_is_waiting_connect() && !game_is_connected()) {
+    if (role_is_client() && game_is_waiting_connect()) {
         if (timer_get_counter() % 30 == 0) {
             proto_send_hello();
             printf("Client sending MSG_HELLO...\n");

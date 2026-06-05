@@ -332,41 +332,34 @@ void game_handle_keyboard(uint8_t scancode) {
 
         case STATE_PLACE_SHIPS_P1:
         case STATE_PLACE_SHIPS_P2: {
-            if (make && code == KEY_UP)
-                g.data.place.cursor_row = (g.data.place.cursor_row > 0) ?
-                    g.data.place.cursor_row - 1 : 0;
-            if (make && code == KEY_DOWN)
-                g.data.place.cursor_row = (g.data.place.cursor_row < BOARD_ROWS - 1) ?
-                    g.data.place.cursor_row + 1 : BOARD_ROWS - 1;
-            if (make && code == KEY_LEFT)
-                g.data.place.cursor_col = (g.data.place.cursor_col > 0) ?
-                    g.data.place.cursor_col - 1 : 0;
-            if (make && code == KEY_RIGHT)
-                g.data.place.cursor_col = (g.data.place.cursor_col < BOARD_COLS - 1) ?
-                    g.data.place.cursor_col + 1 : BOARD_COLS - 1;
+            board_t *b = (g.tag == STATE_PLACE_SHIPS_P1) ? &g.p1_board : &g.p2_board;
 
-            if (make && code == KEY_R)
-                g.data.place.orient ^= 1;
+            if (make && code == KEY_UP) {
+                g.data.place.cursor_row = (g.data.place.cursor_row > 0) ? g.data.place.cursor_row - 1 : 0;
+            } else if (make && code == KEY_DOWN) {
+                g.data.place.cursor_row = (g.data.place.cursor_row < BOARD_ROWS - 1) ? g.data.place.cursor_row + 1 : BOARD_ROWS - 1;
+            } else if (make && code == KEY_LEFT) {
+                g.data.place.cursor_col = (g.data.place.cursor_col > 0) ? g.data.place.cursor_col - 1 : 0;
+            } else if (make && code == KEY_RIGHT) {
+                g.data.place.cursor_col = (g.data.place.cursor_col < BOARD_COLS - 1) ? g.data.place.cursor_col + 1 : BOARD_COLS - 1;
+            }
+
+            if (make && code == KEY_R) g.data.place.orient ^= 1;
 
             if (make && code == KEY_ENTER) {
-                board_t *b   = (g.tag == STATE_PLACE_SHIPS_P1) ? &g.p1_board : &g.p2_board;
                 uint8_t col  = (uint8_t)g.data.place.cursor_col;
                 uint8_t row  = (uint8_t)g.data.place.cursor_row;
                 uint8_t size = SHIP_SIZES[g.data.place.ship_idx];
                 orientation_t orient = (orientation_t)g.data.place.orient;
 
                 if (board_can_place(b, col, row, size, orient)) {
-                    board_place_ship(b, col, row, size,
-                                     (uint8_t)g.data.place.ship_idx, orient);
+                    board_place_ship(b, col, row, size, (uint8_t)g.data.place.ship_idx, orient);
 
                     if (g.role == ROLE_CLIENT) {
-                        proto_send_ship_place(col, row, size,
-                                              (uint8_t)g.data.place.ship_idx,
-                                              (uint8_t)orient);
+                        proto_send_ship_place(col, row, size, (uint8_t)g.data.place.ship_idx, (uint8_t)orient);
                     }
 
-                    g.data.place.ship_idx++;
-                    if (g.data.place.ship_idx >= NUM_SHIPS) {
+                    if (b->ships_placed >= NUM_SHIPS) {
                         if (g.tag == STATE_PLACE_SHIPS_P1) {
                             g.data.place.ship_idx   = 0;
                             g.data.place.orient     = HORIZONTAL;
@@ -378,12 +371,14 @@ void game_handle_keyboard(uint8_t scancode) {
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_done_placing();
                         }
+                    } else {
+                        g.data.place.ship_idx++;
+                        g.data.place.cursor_col = 0;
+                        g.data.place.cursor_row = 0;
                     }
                 }
             }
-
-            if (!make && code == KEY_ESC)
-                transition(STATE_PAUSED);
+            if (!make && code == KEY_ESC) transition(STATE_PAUSED);
             break;
         }
 
@@ -588,37 +583,31 @@ void game_handle_mouse(mouse_state_t *ms) {
             if (g.tag == STATE_PLACE_SHIPS_P1 && g.role != ROLE_HOST)   break;
             if (g.tag == STATE_PLACE_SHIPS_P2 && g.role != ROLE_CLIENT) break;
 
-            board_t *b = (g.tag == STATE_PLACE_SHIPS_P1)
-                         ? &g.p1_board : &g.p2_board;
+            board_t *b = (g.tag == STATE_PLACE_SHIPS_P1) ? &g.p1_board : &g.p2_board;
 
             if (ms->moved) {
+                int col, row;
                 board_pixel_to_cell(ms->x, ms->y, &col, &row);
-                if (col >= 0 && col < BOARD_COLS &&
-                    row >= 0 && row < BOARD_ROWS) {
+                if (col >= 0 && col < BOARD_COLS && row >= 0 && row < BOARD_ROWS) {
                     g.data.place.cursor_col = col;
                     g.data.place.cursor_row = row;
                 }
             }
 
             if (ms->clicked) {
-                col = g.data.place.cursor_col;
-                row = g.data.place.cursor_row;
-                uint8_t size         = SHIP_SIZES[g.data.place.ship_idx];
+                uint8_t col = (uint8_t)g.data.place.cursor_col;
+                uint8_t row = (uint8_t)g.data.place.cursor_row;
+                uint8_t size = SHIP_SIZES[g.data.place.ship_idx];
                 orientation_t orient = (orientation_t)g.data.place.orient;
 
                 if (board_can_place(b, col, row, size, orient)) {
-                    board_place_ship(b, col, row, size,
-                                     (uint8_t)g.data.place.ship_idx, orient);
+                    board_place_ship(b, col, row, size, (uint8_t)g.data.place.ship_idx, orient);
 
                     if (g.role == ROLE_CLIENT) {
-                        proto_send_ship_place((uint8_t)col, (uint8_t)row,
-                                              size,
-                                              (uint8_t)g.data.place.ship_idx,
-                                              (uint8_t)orient);
+                        proto_send_ship_place(col, row, size, (uint8_t)g.data.place.ship_idx, (uint8_t)orient);
                     }
 
-                    g.data.place.ship_idx++;
-                    if (g.data.place.ship_idx >= NUM_SHIPS) {
+                    if (b->ships_placed >= NUM_SHIPS) {
                         if (g.tag == STATE_PLACE_SHIPS_P1) {
                             g.data.place.ship_idx   = 0;
                             g.data.place.orient     = HORIZONTAL;
@@ -630,6 +619,10 @@ void game_handle_mouse(mouse_state_t *ms) {
                             transition(STATE_PLACE_SHIPS_WAITING);
                             proto_send_done_placing();
                         }
+                    } else {
+                        g.data.place.ship_idx++;
+                        g.data.place.cursor_col = 0;
+                        g.data.place.cursor_row = 0;
                     }
                 }
             }
@@ -893,9 +886,10 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
                     }
                 }
             }
-
-            bool is_hit = (result == ATTACK_HIT || result == ATTACK_SUNK);
-            start_explosion(col, row, is_hit);
+            if (g.tag == STATE_TURN_P1) {
+                bool is_hit = (result == ATTACK_HIT || result == ATTACK_SUNK);
+                start_explosion(col, row, is_hit);
+            }
             break;
         }
 

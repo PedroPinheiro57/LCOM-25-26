@@ -41,6 +41,20 @@
 #define C_REMOTE   0xFF8C00
 
 /**
+ * @brief Returns the logo sprite for the main menu.
+ *
+ * @return Pointer to the logo @ref sprite_t, or NULL if not loaded.
+ */
+sprite_t* get_logo_sprite(void);
+
+/**
+ * @brief Returns the sprite for a missed attack (water splash/miss).
+ *
+ * @return Pointer to the miss @ref sprite_t.
+ */
+sprite_t* get_miss_sprite(void);
+
+/**
  * @brief Returns the live-ship sprite for the given ship type index.
  *
  * @param index Ship type index (0–@ref NUM_SHIPS − 1); matches @ref SHIP_SIZES.
@@ -125,24 +139,28 @@ void board_highlight_remote_cursor(int col, int row);
 /**
  * @brief Draws the HUD overlay shown during the ship-placement phase.
  *
- * Displays which player is placing and which ship is currently being
- * positioned (name and remaining ships).
+ * Displays which player is placing, the stopwatch timer, and an interactive 
+ * "garage" list of the fleet. It highlights the currently selected ship and 
+ * marks already placed ships as "PLACED".
  *
- * @param player    Active player index (1 or 2).
- * @param ship_idx  Index of the ship being placed (0–@ref NUM_SHIPS − 1).
+ * @param player        Active player index (1 or 2).
+ * @param ship_idx      Index of the ship currently selected (0–@ref NUM_SHIPS − 1).
+ * @param timer_seconds Total elapsed time in seconds to display on the stopwatch.
  */
-void draw_hud_place(int player, int ship_idx);
+void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds);
 
 /**
  * @brief Draws the HUD overlay shown during the attack phase.
  *
  * Displays the active player's turn indicator together with hit and miss
- * counters derived from the enemy board.
+ * counters derived from the enemy board, as well as the stopwatch timer.
  *
- * @param player Active attacking player index (1 or 2).
- * @param enemy  Pointer to the opponent's board (used to count hits/misses).
+ * @param player        Active attacking player index (1 or 2).
+ * @param enemy         Pointer to the opponent's board (used to count hits/misses).
+ * @param timer_seconds Total elapsed time in seconds to display on the stopwatch.
+ * @param is_my_turn    @c true if it is the local player's turn (displays "CLICK TO ATTACK" instruction), @c false otherwise.
  */
-void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds);
+void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds, bool is_my_turn);
 
 /**
  * @brief Loads all game sprite sheets from their XPM sources into memory.
@@ -224,3 +242,15 @@ void game_draw(const game_t *g);
  * returns the renderer to a clean slate.  Call before starting a new game.
  */
 void renderer_reset(void);
+
+/**
+ * @brief Draws a formatted stopwatch (MM:SS) at the specified coordinates.
+ *
+ * Converts the total elapsed seconds into a minutes and seconds format 
+ * and renders the text on the screen. Used by the HUD drawing functions.
+ *
+ * @param total_seconds Total elapsed time in seconds.
+ * @param x             Pixel X coordinate of the text.
+ * @param y             Pixel Y coordinate of the text.
+ */
+void draw_stopwatch(uint32_t total_seconds, uint16_t x, uint16_t y);

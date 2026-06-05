@@ -1,19 +1,30 @@
 #include "game_menu.h"
 #include "../view/font.h"
 #include "../../pedro/lab5/video.h"
+#include <string.h>
+#include "sprites.h"  
+#include "renderer.h"
 
 
 static const char *options[] = { "PLAY", "INSTRUCTIONS", "EXIT" };
 
 void menu_draw_main(int selected) {
-  /* "BATTLESHIP" = 10 chars * 8px * scale4 = 320px  → x = (800-320)/2 = 240 */
-  draw_string("BATTLESHIP", 240, 80, COLOR_TITLE, 4);
+  sprite_t *logo = get_logo_sprite();
+  if (logo != NULL) {
+      sprite_draw(logo, 200, 50); 
+  } else {
+      draw_string("BATTLESHIP", 240, 80, COLOR_TITLE, 4);
+  }
 
   for (int i = 0; i < NUM_OPTIONS; i++) {
     uint16_t oy  = OPT_Y_START + i * OPT_GAP;
     uint32_t col = (i == selected) ? COLOR_SELECTED : COLOR_UNSELECTED;
     vg_draw_rectangle_project(OPT_X, oy, OPT_W, OPT_H, col);
-    draw_string(options[i], OPT_X + 10, oy + 15, COLOR_TEXT, 2);
+    
+    int text_width = strlen(options[i]) * 16;
+    int text_x = OPT_X + (OPT_W - text_width) / 2;
+    
+    draw_string(options[i], text_x, oy + 15, COLOR_TEXT, 2);
   }
 }
 
@@ -23,10 +34,14 @@ void menu_draw_pause(int selected) {
 
   uint32_t col0 = (selected == 0) ? COLOR_SELECTED : COLOR_UNSELECTED;
   uint32_t col1 = (selected == 1) ? COLOR_SELECTED : COLOR_UNSELECTED;
+  
   vg_draw_rectangle_project(OPT_X, 300, OPT_W, OPT_H, col0);
-  draw_string("RESUME", OPT_X + 10, 315, COLOR_TEXT, 2);
+  int w_resume = 6 * 16; // "RESUME" tem 6 letras (6 * 16 = 96px)
+  draw_string("RESUME", OPT_X + (OPT_W - w_resume) / 2, 315, COLOR_TEXT, 2);
+  
   vg_draw_rectangle_project(OPT_X, 370, OPT_W, OPT_H, col1);
-  draw_string("QUIT", OPT_X + 10, 385, COLOR_TEXT, 2);
+  int w_quit = 4 * 16; 
+  draw_string("QUIT", OPT_X + (OPT_W - w_quit) / 2, 385, COLOR_TEXT, 2);
 }
 
 void menu_draw_game_over(int winner) {

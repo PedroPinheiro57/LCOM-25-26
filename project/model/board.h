@@ -18,7 +18,7 @@
 /** @brief Side length of a single cell in pixels. */
 #define CELL_SIZE   45
 /** @brief X pixel coordinate of the grid's top-left corner. */
-#define BOARD_X     175
+#define BOARD_X     290
 /** @brief Y pixel coordinate of the grid's top-left corner. */
 #define BOARD_Y     90
 /** @brief Total number of ships per player. */

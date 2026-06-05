@@ -90,6 +90,7 @@ typedef struct {
 
     rtc_time_t rtc;        /**< Last RTC reading (displayed in the HUD).       */
     uint32_t   tick_count; /**< Total ticks elapsed since the game started.    */
+    uint32_t   timer_seconds;   /**< Total seconds elapsed (used for the HUD stopwatch). */
 
     uint32_t countdown_ticks;   /**< Ticks elapsed in the current countdown second. */
     uint8_t  countdown_seconds; /**< Seconds remaining on the countdown display.    */

@@ -6,6 +6,8 @@
 #include "game_menu.h"
 
 #include "../assets/gameBackground.xpm"
+#include "../assets/logo.xpm"
+#include "../assets/miss.xpm"
 
 #include "../assets/explosions/Explosion_1.xpm"
 #include "../assets/explosions/Explosion_2.xpm"
@@ -49,6 +51,16 @@ static bool explosion_finished  = false;
 static bool is_waiting_for_turn = false;
 static int  wait_ticks          = 0;
 static bool expl_is_hit         = false;
+static sprite_t *spr_logo       = NULL;
+static sprite_t *spr_miss       = NULL;
+
+sprite_t* get_logo_sprite(void) {
+    return spr_logo;
+}
+
+sprite_t* get_miss_sprite(void) {
+    return spr_miss;
+}
 
 sprite_t* get_ship_sprite(int index) {
     if (index < 0 || index >= NUM_SHIPS) return NULL;
@@ -108,8 +120,15 @@ void board_draw(board_t *b, bool hide_ships) {
                     draw = false;
                     break;
                 case CELL_MISS:
-                    color = 0x808080;
-                    draw = true;
+                    draw = false;
+                    if (spr_miss != NULL) {
+                        if (is_exploding && col == expl_col && row == expl_row) {
+                            break; 
+                        }
+                        uint16_t px = BOARD_X + col * CELL_SIZE + 1;
+                        uint16_t py = BOARD_Y + row * CELL_SIZE + 1;
+                        sprite_draw(spr_miss, px, py);
+                    }
                     break;
                 default:
                     break;
@@ -174,9 +193,8 @@ void board_draw(board_t *b, bool hide_ships) {
     }
 }
 
-void board_draw_preview(board_t *b, int col, int row,
-                         uint8_t size, orientation_t orient) {
-    if (col < 0 || row < 0) return;
+void board_draw_preview(board_t *b, int col, int row, uint8_t size, orientation_t orient) {
+    if ((uint8_t)col == 255 || col < 0 || row < 0) return;
     bool valid = board_can_place(b, col, row, size, orient);
     uint32_t color = valid ? C_VALID : C_INVALID;
 
@@ -227,7 +245,7 @@ void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds) {
     else             draw_string("PLAYER 2 - PLACE SHIPS", 200, 30, 0xFFD700, 2);
 
     if (ship_idx < NUM_SHIPS) {
-        vg_draw_rectangle_project(15, 200, 220, 150, 0x000000);
+        vg_draw_rectangle_project(15, 200, 220, 150, 0x0A1025);
 
         draw_string("TIME:", 25, 215, 0xAAAAAA, 2);
         draw_stopwatch(timer_seconds, 120, 215);
@@ -235,9 +253,7 @@ void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds) {
         draw_string("PLACING:", 25, 250, 0xFFFFFF, 2);
         draw_string(SHIP_NAMES[ship_idx], 25, 280, 0x00FF00, 2);
         
-        uint8_t size = SHIP_SIZES[ship_idx];
-        for (uint8_t i = 0; i < size; i++)
-            vg_draw_rectangle_project(25 + i * 20, 310, 15, 15, 0x808080);
+        sprite_draw_mini(spr_ships[ship_idx], 25, 320, true);
     }
 
     draw_string("R=ROTATE", 200, 560, 0x888888, 2);
@@ -248,7 +264,7 @@ void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds, bool is
     if (player == 1) draw_string("PLAYER 1 - YOUR TURN", 220, 30, 0x00BFFF, 2);
     else             draw_string("PLAYER 2 - YOUR TURN", 220, 30, 0xFFD700, 2);
 
-    vg_draw_rectangle_project(15, 200, 220, 150, 0x000000);
+    vg_draw_rectangle_project(15, 200, 220, 150, 0x0A1025);
 
     draw_string("TIME:", 25, 215, 0xAAAAAA, 2);
     draw_stopwatch(timer_seconds, 120, 215);
@@ -305,6 +321,8 @@ void init_game_sprites(void) {
     }
 
     spr_background = sprite_load((xpm_map_t) gameBackground_xpm);
+    spr_logo = sprite_load((xpm_map_t) logo_xpm);
+    spr_miss = sprite_load((xpm_map_t) miss_xpm);
 }
 
 
@@ -403,7 +421,10 @@ video_clear_screen();
 
     bool usar_background = (g->tag != STATE_MAIN_MENU && 
                             g->tag != STATE_INSTRUCTIONS && 
-                            g->tag != STATE_WAITING_CONNECT);
+                            g->tag != STATE_WAITING_CONNECT &&
+                            g->tag != STATE_COUNTDOWN &&
+                            g->tag != STATE_GAME_OVER &&
+                            g->tag != STATE_PAUSED);
 
     if (usar_background && spr_background != NULL) {
         sprite_draw(spr_background, 0, 0); 
@@ -478,7 +499,7 @@ video_clear_screen();
             break;
         }
 
-case STATE_TURN_P1:
+    case STATE_TURN_P1:
             if (g->role == ROLE_HOST) {
                 board_draw((board_t *)&g->p2_board, true);
                 if (!renderer_is_exploding()) {

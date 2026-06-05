@@ -1,5 +1,7 @@
 #pragma once
 
+#include <lcom/lcf.h>
+
 /**
  * @file sprites.h
  * @brief Sprite loading, drawing, cursor management, and animated sprites.
@@ -164,3 +166,13 @@ void anim_sprite_destroy(animated_sprite_t *anim);
  * Should be called during game shutdown to avoid memory leaks.
  */
 void destroy_game_sprites(void);
+
+/**
+ * @brief Blits a sprite at half its original size (skipping pixels).
+ *
+ * @param sp     Sprite to draw.
+ * @param x      Pixel X of the top-left corner.
+ * @param y      Pixel Y of the top-left corner.
+ * @param rotate @c true to rotate 90° clockwise before blitting.
+ */
+void sprite_draw_mini(sprite_t *sp, uint16_t x, uint16_t y, bool rotate);

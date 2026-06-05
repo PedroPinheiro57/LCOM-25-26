@@ -5,6 +5,10 @@
 #include "../controller/game.h"
 #include "game_menu.h"
 
+#include "../assets/gameBackground.xpm"
+#include "../assets/logo.xpm"
+#include "../assets/miss.xpm"
+
 #include "../assets/explosions/Explosion_1.xpm"
 #include "../assets/explosions/Explosion_2.xpm"
 #include "../assets/explosions/Explosion_3.xpm"
@@ -34,6 +38,7 @@
 
 sprite_t *spr_ships[NUM_SHIPS];
 sprite_t *spr_ships_dead[NUM_SHIPS];
+sprite_t *spr_background;
 
 animated_sprite_t *anim_flame;
 animated_sprite_t *anim_explosion;
@@ -46,6 +51,16 @@ static bool explosion_finished  = false;
 static bool is_waiting_for_turn = false;
 static int  wait_ticks          = 0;
 static bool expl_is_hit         = false;
+static sprite_t *spr_logo       = NULL;
+static sprite_t *spr_miss       = NULL;
+
+sprite_t* get_logo_sprite(void) {
+    return spr_logo;
+}
+
+sprite_t* get_miss_sprite(void) {
+    return spr_miss;
+}
 
 sprite_t* get_ship_sprite(int index) {
     if (index < 0 || index >= NUM_SHIPS) return NULL;
@@ -84,33 +99,49 @@ static void draw_cell(uint8_t col, uint8_t row, uint32_t color) {
 }
 
 void board_draw(board_t *b, bool hide_ships) {
-    vg_draw_rectangle_project(BOARD_X - 2, BOARD_Y - 2,
-        BOARD_COLS * CELL_SIZE + 4,
-        BOARD_ROWS * CELL_SIZE + 4, 0xFFFFFF);
+    for (uint8_t col = 0; col <= BOARD_COLS; col++)
+        vg_draw_rectangle_project(BOARD_X + col * CELL_SIZE - 1, BOARD_Y - 2, 2, BOARD_ROWS * CELL_SIZE + 4, 0xFFFFFF);
+    for (uint8_t row = 0; row <= BOARD_ROWS; row++)
+        vg_draw_rectangle_project(BOARD_X - 2, BOARD_Y + row * CELL_SIZE - 1, BOARD_COLS * CELL_SIZE + 4, 2, 0xFFFFFF);
 
     for (uint8_t row = 0; row < BOARD_ROWS; row++) {
         for (uint8_t col = 0; col < BOARD_COLS; col++) {
-            uint32_t color;
+            uint32_t color = 0;
+            bool draw = false;
+
             switch (b->grid[row][col]) {
-                case CELL_SHIP:  color = hide_ships ? C_EMPTY : C_SHIP; break;
-                case CELL_HIT:   color = C_HIT;   break;
-                case CELL_MISS:  color = C_MISS;  break;
-                case CELL_SUNK:  color = C_SUNK;  break;
-                default:         color = C_EMPTY; break;
+                case CELL_SHIP:
+                    draw = false; 
+                    break;
+                case CELL_HIT:
+                    draw = false;
+                    break;
+                case CELL_SUNK:
+                    draw = false;
+                    break;
+                case CELL_MISS:
+                    draw = false;
+                    if (spr_miss != NULL) {
+                        if (is_exploding && col == expl_col && row == expl_row) {
+                            break; 
+                        }
+                        uint16_t px = BOARD_X + col * CELL_SIZE + 1;
+                        uint16_t py = BOARD_Y + row * CELL_SIZE + 1;
+                        sprite_draw(spr_miss, px, py);
+                    }
+                    break;
+                default:
+                    break;
             }
-            draw_cell(col, row, color);
+            if (draw) draw_cell(col, row, color);
         }
     }
 
-    /* Column labels A-J */
     for (uint8_t col = 0; col < BOARD_COLS; col++) {
         char label[2] = { 'A' + col, '\0' };
-        draw_string(label,
-            BOARD_X + col * CELL_SIZE + 15,
-            BOARD_Y - 30, 0xFFFFFF, 2);
+        draw_string(label, BOARD_X + col * CELL_SIZE + 15, BOARD_Y - 30, 0xFFFFFF, 2);
     }
 
-    /* Row labels 1-10 */
     for (uint8_t row = 0; row < BOARD_ROWS; row++) {
         char label[3];
         if (row < 9) {
@@ -121,17 +152,15 @@ void board_draw(board_t *b, bool hide_ships) {
             label[1] = '0';
             label[2] = '\0';
         }
-        draw_string(label,
-            BOARD_X - 35,
-            BOARD_Y + row * CELL_SIZE + 13, 0xFFFFFF, 2);
+        draw_string(label, BOARD_X - 35, BOARD_Y + row * CELL_SIZE + 13, 0xFFFFFF, 2);
     }
 
-    /* Draw ship sprites using type_idx for correct sprite */
     for (int i = 0; i < b->ships_placed; i++) {
         ship_t s = b->ships[i];
         uint16_t px = BOARD_X + s.col * CELL_SIZE + 1;
         uint16_t py = BOARD_Y + s.row * CELL_SIZE + 1;
         bool need_rotation = (s.orient == HORIZONTAL);
+        
         if (s.sunk) {
             sprite_draw_rotated(spr_ships_dead[s.type_idx], px, py, need_rotation);
         } else if (!hide_ships) {
@@ -139,25 +168,22 @@ void board_draw(board_t *b, bool hide_ships) {
         }
     }
 
-    /* Draw flame animations on hit/sunk cells */
     for (uint8_t row = 0; row < BOARD_ROWS; row++) {
         for (uint8_t col = 0; col < BOARD_COLS; col++) {
             if (b->grid[row][col] == CELL_HIT || b->grid[row][col] == CELL_SUNK) {
                 if (is_exploding && col == expl_col && row == expl_row) continue;
                 uint16_t px = BOARD_X + col * CELL_SIZE + 1;
                 uint16_t py = BOARD_Y + row * CELL_SIZE + 1;
+                
                 if (anim_flame != NULL) {
                     anim_flame->x = px + 2;
                     anim_flame->y = py;
                     anim_sprite_draw(anim_flame);
-                } else {
-                    draw_cell(col, row, C_HIT);
                 }
             }
         }
     }
 
-    /* Draw explosion animation */
     if (is_exploding && anim_explosion != NULL) {
         uint16_t px = BOARD_X + expl_col * CELL_SIZE + 1;
         uint16_t py = BOARD_Y + expl_row * CELL_SIZE + 1;
@@ -167,9 +193,8 @@ void board_draw(board_t *b, bool hide_ships) {
     }
 }
 
-void board_draw_preview(board_t *b, int col, int row,
-                         uint8_t size, orientation_t orient) {
-    if (col < 0 || row < 0) return;
+void board_draw_preview(board_t *b, int col, int row, uint8_t size, orientation_t orient) {
+    if ((uint8_t)col == 255 || col < 0 || row < 0) return;
     bool valid = board_can_place(b, col, row, size, orient);
     uint32_t color = valid ? C_VALID : C_INVALID;
 
@@ -190,60 +215,75 @@ void board_draw_preview(board_t *b, int col, int row,
 }
 
 void board_highlight_cell(int col, int row) {
-    if (col < 0 || col >= BOARD_COLS) return;
-    if (row < 0 || row >= BOARD_ROWS) return;
-    draw_cell((uint8_t)col, (uint8_t)row, C_HOVER);
+    if (col < 0 || row < 0) return;
+    uint16_t px = BOARD_X + col * CELL_SIZE;
+    uint16_t py = BOARD_Y + row * CELL_SIZE;
+    uint32_t color = 0xFFD700;
+    int t = 3; 
+
+    vg_draw_rectangle_project(px, py, CELL_SIZE, t, color); 
+    vg_draw_rectangle_project(px, py + CELL_SIZE - t, CELL_SIZE, t, color); 
+    vg_draw_rectangle_project(px, py, t, CELL_SIZE, color);
+    vg_draw_rectangle_project(px + CELL_SIZE - t, py, t, CELL_SIZE, color); 
 }
 
 void board_highlight_remote_cursor(int col, int row) {
-    if (col < 0 || col >= BOARD_COLS) return;
-    if (row < 0 || row >= BOARD_ROWS) return;
-    draw_cell((uint8_t)col, (uint8_t)row, C_REMOTE);
+    if (col < 0 || row < 0) return;
+    uint16_t px = BOARD_X + col * CELL_SIZE;
+    uint16_t py = BOARD_Y + row * CELL_SIZE;
+    uint32_t color = 0xFF8C00; 
+    int t = 3; 
+
+    vg_draw_rectangle_project(px, py, CELL_SIZE, t, color); 
+    vg_draw_rectangle_project(px, py + CELL_SIZE - t, CELL_SIZE, t, color); 
+    vg_draw_rectangle_project(px, py, t, CELL_SIZE, color);
+    vg_draw_rectangle_project(px + CELL_SIZE - t, py, t, CELL_SIZE, color); 
 }
 
-void draw_hud_place(int player, int ship_idx) {
-    if (player == 1)
-        draw_string("PLAYER 1 - PLACE SHIPS", 224, 20, 0x00BFFF, 2);
-    else
-        draw_string("PLAYER 2 - PLACE SHIPS", 224, 20, 0xFFD700, 2);
+void draw_hud_place(int player, int ship_idx, uint32_t timer_seconds) {
+    if (player == 1) draw_string("PLAYER 1 - PLACE SHIPS", 200, 30, 0x00BFFF, 2);
+    else             draw_string("PLAYER 2 - PLACE SHIPS", 200, 30, 0xFFD700, 2);
 
     if (ship_idx < NUM_SHIPS) {
-        draw_string("PLACING:", 100, 575, 0xFFFFFF, 2);
-        draw_string(SHIP_NAMES[ship_idx], 240, 575, 0x00FF00, 2);
-        uint8_t size = SHIP_SIZES[ship_idx];
-        for (uint8_t i = 0; i < size; i++)
-            vg_draw_rectangle_project(560 + i * 20, 575, 15, 15, 0x808080);
+        vg_draw_rectangle_project(15, 200, 220, 150, 0x0A1025);
+
+        draw_string("TIME:", 25, 215, 0xAAAAAA, 2);
+        draw_stopwatch(timer_seconds, 120, 215);
+
+        draw_string("PLACING:", 25, 250, 0xFFFFFF, 2);
+        draw_string(SHIP_NAMES[ship_idx], 25, 280, 0x00FF00, 2);
+        
+        sprite_draw_mini(spr_ships[ship_idx], 25, 320, true);
     }
 
-    draw_string("R=ROTATE  CLICK=PLACE", 316, 550, 0x888888, 1);
+    draw_string("R=ROTATE", 200, 560, 0x888888, 2);
+    draw_string("CLICK=PLACE", 400, 560, 0x888888, 2);
 }
 
-void draw_hud_attack(int player, board_t *enemy) {
-    if (player == 1)
-        draw_string("PLAYER 1 - YOUR TURN", 240, 20, 0x00BFFF, 2);
-    else
-        draw_string("PLAYER 2 - YOUR TURN", 240, 20, 0xFFD700, 2);
+void draw_hud_attack(int player, board_t *enemy, uint32_t timer_seconds, bool is_my_turn) {
+    if (player == 1) draw_string("PLAYER 1 - YOUR TURN", 220, 30, 0x00BFFF, 2);
+    else             draw_string("PLAYER 2 - YOUR TURN", 220, 30, 0xFFD700, 2);
 
-    draw_string("CLICK TO ATTACK", 280, 558, 0x888888, 2);
+    vg_draw_rectangle_project(15, 200, 220, 150, 0x0A1025);
 
-    uint8_t hits   = board_count_hits(enemy);
-    uint8_t misses = board_count_misses(enemy);
-    uint8_t sunk   = enemy->ships_sunk;
+    draw_string("TIME:", 25, 215, 0xAAAAAA, 2);
+    draw_stopwatch(timer_seconds, 120, 215);
 
+    uint8_t hits = board_count_hits(enemy), misses = board_count_misses(enemy), sunk = enemy->ships_sunk;
     char num[3];
 
-    draw_string("HITS:", 30, 548, 0xFF4500, 2);
-    num_to_str(hits, num);
-    draw_string(num, 126, 548, 0xFF4500, 2);
+    draw_string("HITS:", 25, 250, 0xFF4500, 2);
+    num_to_str(hits, num); draw_string(num, 120, 250, 0xFF4500, 2);
 
-    draw_string("MISS:", 30, 568, 0x00BFFF, 2);
-    num_to_str(misses, num);
-    draw_string(num, 126, 568, 0x00BFFF, 2);
+    draw_string("MISS:", 25, 280, 0x00BFFF, 2);
+    num_to_str(misses, num); draw_string(num, 120, 280, 0x00BFFF, 2);
 
-    draw_string("SUNK:", 30, 588, 0xFF6666, 2);
-    num_to_str(sunk, num);
-    draw_string(num,  126, 588, 0xFF6666, 2);
-    draw_string("/5",  142, 588, 0xFF6666, 2);
+    draw_string("SUNK:", 25, 310, 0xFF6666, 2);
+    num_to_str(sunk, num); draw_string(num, 120, 310, 0xFF6666, 2); draw_string("/5", 136, 310, 0xFF6666, 2);
+
+    if (is_my_turn) {
+        draw_string("CLICK TO ATTACK", 280, 560, 0x888888, 2);
+    }
 }
 
 void init_game_sprites(void) {
@@ -279,6 +319,10 @@ void init_game_sprites(void) {
         anim_explosion->pixmaps[6] = sprite_load((xpm_map_t) Explosion_7_xpm);
         anim_explosion->pixmaps[7] = sprite_load((xpm_map_t) Explosion_8_xpm);
     }
+
+    spr_background = sprite_load((xpm_map_t) gameBackground_xpm);
+    spr_logo = sprite_load((xpm_map_t) logo_xpm);
+    spr_miss = sprite_load((xpm_map_t) miss_xpm);
 }
 
 
@@ -359,43 +403,48 @@ void renderer_reset(void) {
         anim_flame->cur_pixmap = 0;
 }
 
-static void rtc_format(const rtc_time_t *t, char buf[9]) {
-    buf[0] = '0' + t->hours   / 10;
-    buf[1] = '0' + t->hours   % 10;
+void draw_stopwatch(uint32_t total_seconds, uint16_t x, uint16_t y) {
+    uint8_t m = total_seconds / 60;
+    uint8_t s = total_seconds % 60;
+    char buf[6];
+    buf[0] = '0' + (m / 10);
+    buf[1] = '0' + (m % 10);
     buf[2] = ':';
-    buf[3] = '0' + t->minutes / 10;
-    buf[4] = '0' + t->minutes % 10;
-    buf[5] = ':';
-    buf[6] = '0' + t->seconds / 10;
-    buf[7] = '0' + t->seconds % 10;
-    buf[8] = '\0';
-}
-
-static void draw_rtc(const rtc_time_t *t) {
-    char buf[9];
-    rtc_format(t, buf);
-    draw_string(buf, RTC_X, RTC_Y, 0xAAAAAA, 2);
+    buf[3] = '0' + (s / 10);
+    buf[4] = '0' + (s % 10);
+    buf[5] = '\0';
+    draw_string(buf, x, y, 0xFFFFFF, 2);
 }
 
 void game_draw(const game_t *g) {
-    video_clear_screen();
+video_clear_screen();
+
+    bool usar_background = (g->tag != STATE_MAIN_MENU && 
+                            g->tag != STATE_INSTRUCTIONS && 
+                            g->tag != STATE_WAITING_CONNECT &&
+                            g->tag != STATE_COUNTDOWN &&
+                            g->tag != STATE_GAME_OVER &&
+                            g->tag != STATE_PAUSED);
+
+    if (usar_background && spr_background != NULL) {
+        sprite_draw(spr_background, 0, 0); 
+    }
 
     switch (g->tag) {
 
         case STATE_WAITING_CONNECT:
             if (g->role == ROLE_HOST) {
-                draw_string("WAITING FOR", 248, 220, 0x00BFFF, 3);
-                draw_string("PLAYER 2...", 248, 270, 0x00BFFF, 3);
-                draw_string("(START CLIENT VM NOW)", 132, 380, 0x888888, 2);
+                draw_string("WAITING FOR", 268, 220, 0x00BFFF, 3);
+                draw_string("PLAYER 2...", 268, 270, 0x00BFFF, 3);
+                draw_string("(START CLIENT VM NOW)", 232, 380, 0x888888, 2);
             } else {
-                draw_string("CONNECTING TO", 208, 220, 0xFFD700, 3);
-                draw_string("HOST...", 304, 270, 0xFFD700, 3);
+                draw_string("CONNECTING TO", 244, 220, 0xFFD700, 3);
+                draw_string("HOST...", 316, 270, 0xFFD700, 3);
             }
             break;
 
         case STATE_MAIN_MENU:
-            menu_draw_main(g->data.menu.selected);
-            draw_rtc(&g->rtc);
+            menu_draw_main(g->data.menu.selected);            
             break;
 
         case STATE_INSTRUCTIONS:
@@ -409,13 +458,12 @@ void game_draw(const game_t *g) {
                     g->data.place.cursor_col, g->data.place.cursor_row,
                     SHIP_SIZES[g->data.place.ship_idx],
                     (orientation_t)g->data.place.orient);
-                draw_hud_place(1, g->data.place.ship_idx);
+                draw_hud_place(1, g->data.place.ship_idx, g->timer_seconds);
             } else {
-                draw_string("PLAYER 1 IS", 248, 220, 0x00BFFF, 3);
-                draw_string("PLACING SHIPS...", 192, 270, 0x00BFFF, 3);
-                draw_string("PLEASE WAIT", 248, 340, 0x888888, 2);
+                draw_string("PLAYER 1 IS", 268, 220, 0x00BFFF, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0x00BFFF, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             }
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_PLACE_SHIPS_P2:
@@ -425,83 +473,74 @@ void game_draw(const game_t *g) {
                     g->data.place.cursor_col, g->data.place.cursor_row,
                     SHIP_SIZES[g->data.place.ship_idx],
                     (orientation_t)g->data.place.orient);
-                draw_hud_place(2, g->data.place.ship_idx);
+                draw_hud_place(2, g->data.place.ship_idx, g->timer_seconds);
             } else {
-                draw_string("PLAYER 2 IS", 248, 220, 0x00BFFF, 3);
-                draw_string("PLACING SHIPS...", 192, 270, 0x00BFFF, 3);
-                draw_string("PLEASE WAIT", 248, 340, 0x888888, 2);
+                draw_string("PLAYER 2 IS", 268, 220, 0xFFD700, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0xFFD700, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             }
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_PLACE_SHIPS_WAITING:
             if (g->role == ROLE_HOST) {
-                board_draw((board_t *)&g->p1_board, false);
+                draw_string("PLAYER 2 IS", 268, 220, 0xFFD700, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0xFFD700, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             } else {
-                board_draw((board_t *)&g->p2_board, false);
+                draw_string("WAITING FOR", 268, 220, 0x00BFFF, 3);
+                draw_string("HOST...", 316, 270, 0x00BFFF, 3);
             }
-            draw_string("WAITING FOR", 248, 540, 0x888888, 2);
-            draw_string("OPPONENT...", 248, 560, 0x888888, 2);
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_COUNTDOWN: {
-            draw_string("GAME STARTS IN", 192, 200, 0x00BFFF, 3);
+            draw_string("GAME STARTS IN", 232, 200, 0x00BFFF, 3);
             char digit[2] = { '0' + g->countdown_seconds, '\0' };
             draw_string(digit, 376, 280, 0xFFD700, 8);
-            draw_rtc(&g->rtc);
             break;
         }
 
-        case STATE_TURN_P1:
+    case STATE_TURN_P1:
             if (g->role == ROLE_HOST) {
                 board_draw((board_t *)&g->p2_board, true);
-                board_highlight_cell(
-                    g->data.turn.cursor_col,
-                    g->data.turn.cursor_row);
-                draw_hud_attack(1, (board_t *)&g->p2_board);
+                if (!renderer_is_exploding()) {
+                    board_highlight_cell(g->data.turn.cursor_col, g->data.turn.cursor_row);
+                }
+                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds, true); 
             } else {
                 board_draw((board_t *)&g->p2_board, false);
-                if (g->remote_cursor_col >= 0)
-                    board_highlight_remote_cursor(
-                        g->remote_cursor_col,
-                        g->remote_cursor_row);
-                draw_hud_attack(1, (board_t *)&g->p2_board);
+                if (g->remote_cursor_col >= 0 && !renderer_is_exploding()) {
+                    board_highlight_remote_cursor(g->remote_cursor_col, g->remote_cursor_row);
+                }
+                draw_hud_attack(1, (board_t *)&g->p2_board, g->timer_seconds, false); 
             }
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_TURN_P2:
             if (g->role == ROLE_CLIENT) {
                 board_draw((board_t *)&g->p1_board, true);
-                board_highlight_cell(
-                    g->data.turn.cursor_col,
-                    g->data.turn.cursor_row);
-                draw_hud_attack(2, (board_t *)&g->p1_board);
+                if (!renderer_is_exploding()) {
+                    board_highlight_cell(g->data.turn.cursor_col, g->data.turn.cursor_row);
+                }
+                draw_hud_attack(2, (board_t *)&g->p1_board, g->timer_seconds, true); 
             } else {
                 board_draw((board_t *)&g->p1_board, false);
-                if (g->remote_cursor_col >= 0)
-                    board_highlight_remote_cursor(
-                        g->remote_cursor_col,
-                        g->remote_cursor_row);
-                draw_hud_attack(2, (board_t *)&g->p1_board);
+                if (g->remote_cursor_col >= 0 && !renderer_is_exploding()) {
+                    board_highlight_remote_cursor(g->remote_cursor_col, g->remote_cursor_row);
+                }
+                draw_hud_attack(2, (board_t *)&g->p1_board, g->timer_seconds, false); 
             }
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_HANDOVER_P1:
             menu_draw_handover(1);
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_HANDOVER_P2:
             menu_draw_handover(2);
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_PAUSED:
             menu_draw_pause(g->data.pause.selected);
-            draw_rtc(&g->rtc);
             break;
 
         case STATE_GAME_OVER:

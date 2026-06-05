@@ -134,4 +134,30 @@ void destroy_game_sprites(void) {
     sprite_destroy(font_get_sprite());
     sprite_destroy(cursor_normal);
     sprite_destroy(cursor_hover);
+
+    sprite_destroy(get_miss_sprite());
+}
+
+void sprite_draw_mini(sprite_t *sp, uint16_t x, uint16_t y, bool rotate) {
+  if (sp == NULL) return;
+  uint32_t trans_color = xpm_transparency_color(XPM_8_8_8_8);
+
+  for (uint16_t row = 0; row < sp->height; row += 2) {
+    for (uint16_t col = 0; col < sp->width; col += 2) {
+      uint32_t color = sp->colors[row * sp->width + col];
+      
+      if (color == TRANSPARENT || color == trans_color) continue;
+      
+      uint16_t px, py;
+      if (!rotate) {
+          px = x + col / 2;
+          py = y + row / 2;
+      } else {
+          px = x + (sp->height - 1 - row) / 2;
+          py = y + col / 2;
+      }
+      
+      vg_draw_pixel_project(px, py, color);
+    }
+  }
 }

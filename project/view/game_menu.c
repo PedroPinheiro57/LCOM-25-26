@@ -1,19 +1,30 @@
 #include "game_menu.h"
 #include "../view/font.h"
 #include "../../pedro/lab5/video.h"
+#include <string.h>
+#include "sprites.h"  
+#include "renderer.h"
 
 
 static const char *options[] = { "PLAY", "INSTRUCTIONS", "EXIT" };
 
 void menu_draw_main(int selected) {
-  /* "BATTLESHIP" = 10 chars * 8px * scale4 = 320px  → x = (800-320)/2 = 240 */
-  draw_string("BATTLESHIP", 240, 80, COLOR_TITLE, 4);
+  sprite_t *logo = get_logo_sprite();
+  if (logo != NULL) {
+      sprite_draw(logo, 200, 50); 
+  } else {
+      draw_string("BATTLESHIP", 240, 80, COLOR_TITLE, 4);
+  }
 
   for (int i = 0; i < NUM_OPTIONS; i++) {
     uint16_t oy  = OPT_Y_START + i * OPT_GAP;
     uint32_t col = (i == selected) ? COLOR_SELECTED : COLOR_UNSELECTED;
     vg_draw_rectangle_project(OPT_X, oy, OPT_W, OPT_H, col);
-    draw_string(options[i], OPT_X + 10, oy + 15, COLOR_TEXT, 2);
+    
+    int text_width = strlen(options[i]) * 16;
+    int text_x = OPT_X + (OPT_W - text_width) / 2;
+    
+    draw_string(options[i], text_x, oy + 15, COLOR_TEXT, 2);
   }
 }
 
@@ -23,10 +34,14 @@ void menu_draw_pause(int selected) {
 
   uint32_t col0 = (selected == 0) ? COLOR_SELECTED : COLOR_UNSELECTED;
   uint32_t col1 = (selected == 1) ? COLOR_SELECTED : COLOR_UNSELECTED;
+  
   vg_draw_rectangle_project(OPT_X, 300, OPT_W, OPT_H, col0);
-  draw_string("RESUME", OPT_X + 10, 315, COLOR_TEXT, 2);
+  int w_resume = 6 * 16; // "RESUME" tem 6 letras (6 * 16 = 96px)
+  draw_string("RESUME", OPT_X + (OPT_W - w_resume) / 2, 315, COLOR_TEXT, 2);
+  
   vg_draw_rectangle_project(OPT_X, 370, OPT_W, OPT_H, col1);
-  draw_string("QUIT", OPT_X + 10, 385, COLOR_TEXT, 2);
+  int w_quit = 4 * 16; 
+  draw_string("QUIT", OPT_X + (OPT_W - w_quit) / 2, 385, COLOR_TEXT, 2);
 }
 
 void menu_draw_game_over(int winner) {
@@ -46,17 +61,17 @@ void menu_draw_game_over(int winner) {
 }
 
 void menu_draw_handover(int player) {
-  /* "PASS SCREEN TO" = 14 * 8 * scale3 = 336px  → x = (800-336)/2 = 232 */
-  draw_string("PASS SCREEN TO", 232, 200, COLOR_TITLE, 3);
+  /* "SWITCHING TURNS" = 15 * 8 * scale3 = 360px  → x = (800-360)/2 = 220 */
+  draw_string("SWITCHING TURNS", 220, 200, COLOR_TITLE, 3);
 
   /* "PLAYER X" = 8 * 8 * scale4 = 256px  → x = (800-256)/2 = 272 */
   if (player == 1)
-    draw_string("PLAYER 1", 272, 290, COLOR_SELECTED, 4);
+    draw_string("PLAYER 1", 272, 290, 0x00BFFF, 4); /* Azul para destacar o P1 */
   else
-    draw_string("PLAYER 2", 272, 290, COLOR_SELECTED, 4);
+    draw_string("PLAYER 2", 272, 290, 0xFFD700, 4); /* Amarelo para destacar o P2 */
 
-  /* "PRESS ENTER WHEN READY" = 22 * 8 * scale2 = 352px  → x = (800-352)/2 = 224 */
-  draw_string("PRESS ENTER WHEN READY", 224, 430, COLOR_TEXT, 2);
+  /* "GET READY!" = 10 * 8 * scale2 = 160px  → x = (800-160)/2 = 320 */
+  draw_string("GET READY!", 320, 430, COLOR_TEXT, 2);
 }
 
 void menu_draw_instructions(void) {

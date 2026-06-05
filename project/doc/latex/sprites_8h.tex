@@ -5,8 +5,15 @@
 Sprite loading, drawing, cursor management, and animated sprites.  
 
 
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+{\ttfamily \#include $<$lcom/lcf.\+h$>$}\newline
+Include dependency graph for sprites.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=165pt]{sprites_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -58,7 +65,9 @@ void \mbox{\hyperlink{sprites_8h_af99e43be627b7643a7324a2bfaa25995}{anim\+\_\+sp
 void \mbox{\hyperlink{sprites_8h_a2153ab60f10fb62ee594aeaacf08febb}{anim\+\_\+sprite\+\_\+destroy}} (\mbox{\hyperlink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}anim)
 \begin{DoxyCompactList}\small\item\em Frees all frame sprites and the \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t} itself. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{sprites_8h_ae1a4182b9c2d9ac7001d638a767b518e}{destroy\+\_\+game\+\_\+sprites}} (void)
-\begin{DoxyCompactList}\small\item\em Frees all game sprite objects allocated by init\+\_\+game\+\_\+sprites. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Frees all game sprite objects allocated by init\+\_\+game\+\_\+sprites. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{sprites_8h_a4a5e4f5fca380bc3741c0ce0a4acacc9}{sprite\+\_\+draw\+\_\+mini}} (\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}sp, uint16\+\_\+t x, uint16\+\_\+t y, bool rotate)
+\begin{DoxyCompactList}\small\item\em Blits a sprite at half its original size (skipping pixels). \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -266,6 +275,27 @@ Pixels whose colour equals \doxylink{sprites_8h_a6c54e72c6142d317114a29adbcbb24b
 {\em x} & Pixel X of the sprite\textquotesingle{}s top-\/left corner. \\
 \hline
 {\em y} & Pixel Y of the sprite\textquotesingle{}s top-\/left corner. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{sprites_8h_a4a5e4f5fca380bc3741c0ce0a4acacc9}\label{sprites_8h_a4a5e4f5fca380bc3741c0ce0a4acacc9} 
+\index{sprites.h@{sprites.h}!sprite\_draw\_mini@{sprite\_draw\_mini}}
+\index{sprite\_draw\_mini@{sprite\_draw\_mini}!sprites.h@{sprites.h}}
+\doxysubsubsection{\texorpdfstring{sprite\_draw\_mini()}{sprite\_draw\_mini()}}
+{\footnotesize\ttfamily void sprite\+\_\+draw\+\_\+mini (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{sp,  }\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y,  }\item[{bool}]{rotate }\end{DoxyParamCaption})}
+
+
+
+Blits a sprite at half its original size (skipping pixels). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sp} & Sprite to draw. \\
+\hline
+{\em x} & Pixel X of the top-\/left corner. \\
+\hline
+{\em y} & Pixel Y of the top-\/left corner. \\
+\hline
+{\em rotate} & {\ttfamily true} to rotate 90° clockwise before blitting. \\
 \hline
 \end{DoxyParams}
 \Hypertarget{sprites_8h_a71c831cb6d51c9dc8b76afa4d34eb014}\label{sprites_8h_a71c831cb6d51c9dc8b76afa4d34eb014} 

@@ -7,20 +7,18 @@ Battleship game board\+: data model and grid logic.
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stdbool.\+h$>$}\newline
-Include dependency graph for board.\+h\+:
-\nopagebreak
+Include dependency graph for board.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=214pt]{board_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=218pt]{board_8h__dep__incl}
+\includegraphics[width=327pt]{board_8h__dep__incl}
 \end{center}
 \end{figure}
 \doxysubsubsection*{Classes}
@@ -43,7 +41,7 @@ struct \mbox{\hyperlink{structboard__t}{board\+\_\+t}}
 \#define {\bfseries CELL\+\_\+\+SIZE}~45
 \begin{DoxyCompactList}\small\item\em Side length of a single cell in pixels. \end{DoxyCompactList}\item 
 \Hypertarget{board_8h_ab2f84c36c2d0595ec55832062bd0ebf2}\label{board_8h_ab2f84c36c2d0595ec55832062bd0ebf2} 
-\#define {\bfseries BOARD\+\_\+X}~175
+\#define {\bfseries BOARD\+\_\+X}~290
 \begin{DoxyCompactList}\small\item\em X pixel coordinate of the grid\textquotesingle{}s top-\/left corner. \end{DoxyCompactList}\item 
 \Hypertarget{board_8h_a22de5dc5f2b1c9d3dfedd2e9b5f83017}\label{board_8h_a22de5dc5f2b1c9d3dfedd2e9b5f83017} 
 \#define {\bfseries BOARD\+\_\+Y}~90
@@ -82,7 +80,7 @@ bool \mbox{\hyperlink{board_8h_a7cfa46d8ac75f43eb103352d5cfa8c31}{board\+\_\+alr
 \begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if the cell has already been attacked (hit or miss). \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{board_8h_acc078d565ee266b249e6cb534b6b67e0}{board\+\_\+all\+\_\+sunk}} (\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}b)
 \begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} when every ship on the board has been sunk. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{board_8h_a8946c22c8005ba5d3e521bec81bb21bb}{board\+\_\+pixel\+\_\+to\+\_\+cell}} (uint16\+\_\+t px, uint16\+\_\+t py, int \texorpdfstring{$\ast$}{*}col, int \texorpdfstring{$\ast$}{*}row)
+void \mbox{\hyperlink{board_8h_a166d09ae22e89abd4c9630a024041847}{board\+\_\+pixel\+\_\+to\+\_\+cell}} (int16\+\_\+t px, int16\+\_\+t py, int \texorpdfstring{$\ast$}{*}col, int \texorpdfstring{$\ast$}{*}row)
 \begin{DoxyCompactList}\small\item\em Converts a pixel coordinate to the corresponding grid cell. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{board_8h_a990d7e6e5f0e3cf0c4278266d47f6b3f}{board\+\_\+cell\+\_\+to\+\_\+pixel}} (uint8\+\_\+t col, uint8\+\_\+t row, uint16\+\_\+t \texorpdfstring{$\ast$}{*}px, uint16\+\_\+t \texorpdfstring{$\ast$}{*}py)
 \begin{DoxyCompactList}\small\item\em Converts a grid cell to the pixel coordinate of its top-\/left corner. \end{DoxyCompactList}\item 
@@ -312,11 +310,11 @@ Clears the board to an all-\/empty state.
 {\em b} & Board to initialise. \\
 \hline
 \end{DoxyParams}
-\Hypertarget{board_8h_a8946c22c8005ba5d3e521bec81bb21bb}\label{board_8h_a8946c22c8005ba5d3e521bec81bb21bb} 
+\Hypertarget{board_8h_a166d09ae22e89abd4c9630a024041847}\label{board_8h_a166d09ae22e89abd4c9630a024041847} 
 \index{board.h@{board.h}!board\_pixel\_to\_cell@{board\_pixel\_to\_cell}}
 \index{board\_pixel\_to\_cell@{board\_pixel\_to\_cell}!board.h@{board.h}}
 \doxysubsubsection{\texorpdfstring{board\_pixel\_to\_cell()}{board\_pixel\_to\_cell()}}
-{\footnotesize\ttfamily void board\+\_\+pixel\+\_\+to\+\_\+cell (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{px,  }\item[{uint16\+\_\+t}]{py,  }\item[{int \texorpdfstring{$\ast$}{*}}]{col,  }\item[{int \texorpdfstring{$\ast$}{*}}]{row }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void board\+\_\+pixel\+\_\+to\+\_\+cell (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{px,  }\item[{int16\+\_\+t}]{py,  }\item[{int \texorpdfstring{$\ast$}{*}}]{col,  }\item[{int \texorpdfstring{$\ast$}{*}}]{row }\end{DoxyParamCaption})}
 
 
 

@@ -11,16 +11,14 @@ Central game-\/state machine\+: structs, state tags, and controller API.
 {\ttfamily \#include "{}../model/rtc.\+h"{}}\newline
 {\ttfamily \#include "{}../serial/protocol.\+h"{}}\newline
 {\ttfamily \#include "{}../model/board.\+h"{}}\newline
-Include dependency graph for game.\+h\+:
-\nopagebreak
+Include dependency graph for game.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[width=350pt]{game_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -75,7 +73,7 @@ enum \mbox{\hyperlink{game_8h_a4edce1ca040716922b6e4a79be4e414d}{game\+\_\+state
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{game_8h_a3053a148777dea2c02c0406de704f885}{game\+\_\+init}} (\mbox{\hyperlink{game_8h_ae64e36463cddb927d9f55a15244a6968}{game\+\_\+role\+\_\+t}} role)
-\begin{DoxyCompactList}\small\item\em Initialises all game state and subscribes hardware interrupts. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Initialises all game state. \end{DoxyCompactList}\item 
 \Hypertarget{game_8h_a677fc186acdade9af8025dada0bcfc46}\label{game_8h_a677fc186acdade9af8025dada0bcfc46} 
 void {\bfseries game\+\_\+handle\+\_\+timer} (void)
 \begin{DoxyCompactList}\small\item\em Advances the game clock by one tick; drives animations and timeouts. \end{DoxyCompactList}\item 
@@ -298,7 +296,7 @@ Dispatches an incoming serial message to the appropriate handler.
 
 
 
-Initialises all game state and subscribes hardware interrupts. 
+Initialises all game state. 
 
 Must be called once before any other game function.
 

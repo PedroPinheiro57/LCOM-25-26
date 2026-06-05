@@ -220,10 +220,10 @@ Macros</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Baud rate divisors</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Divisor = 115200 / desired_baud. </p>
 </div></td></tr>
-<tr class="memitem:ae001c4ee4541bab328df3876e73808ab" id="r_ae001c4ee4541bab328df3876e73808ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#ae001c4ee4541bab328df3876e73808ab">UART_BAUD_9600</a>&#160;&#160;&#160;12</td></tr>
-<tr class="separator:ae001c4ee4541bab328df3876e73808ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af523f4782c9768ba2e566b0f5fb61ec3" id="r_af523f4782c9768ba2e566b0f5fb61ec3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#af523f4782c9768ba2e566b0f5fb61ec3">UART_BAUD_115200</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:af523f4782c9768ba2e566b0f5fb61ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67405a6e6e4427b2fb7ca73182212bf1" id="r_a67405a6e6e4427b2fb7ca73182212bf1"><td class="memItemLeft" align="right" valign="top"><a id="a67405a6e6e4427b2fb7ca73182212bf1" name="a67405a6e6e4427b2fb7ca73182212bf1"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>UART_DEFAULT_BAUD</b>&#160;&#160;&#160;<a class="el" href="uart_8h.html#ae001c4ee4541bab328df3876e73808ab">UART_BAUD_9600</a></td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>UART_DEFAULT_BAUD</b>&#160;&#160;&#160;<a class="el" href="uart_8h.html#af523f4782c9768ba2e566b0f5fb61ec3">UART_BAUD_115200</a></td></tr>
 <tr class="separator:a67405a6e6e4427b2fb7ca73182212bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -263,19 +263,18 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>uart_rx_overflow</b> 
 <div class="line"><span class="keywordflow">if</span> (uart_recv_byte(&amp;b)) { <span class="comment">// process b }</span></div>
 <div class="line">uart_cleanup();</div>
 </div><!-- fragment --> </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ae001c4ee4541bab328df3876e73808ab" name="ae001c4ee4541bab328df3876e73808ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae001c4ee4541bab328df3876e73808ab">&#9670;&#160;</a></span>UART_BAUD_9600</h2>
+<a id="af523f4782c9768ba2e566b0f5fb61ec3" name="af523f4782c9768ba2e566b0f5fb61ec3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af523f4782c9768ba2e566b0f5fb61ec3">&#9670;&#160;</a></span>UART_BAUD_115200</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define UART_BAUD_9600&#160;&#160;&#160;12</td>
+          <td class="memname">#define UART_BAUD_115200&#160;&#160;&#160;1</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Divisor for 9600 baud. <br  />
- </p>
+<p>Divisor for 115200 baud (maximum speed) </p>
 
 </div>
 </div>

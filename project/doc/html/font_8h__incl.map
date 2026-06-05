@@ -1,9 +1,10 @@
 <map id="view/font.h" name="view/font.h">
-<area shape="rect" id="Node000001" title="Bitmap font rendering for the game HUD and menus." alt="" coords="96,5,191,31"/>
+<area shape="rect" id="Node000001" title="Bitmap font rendering for the game HUD and menus." alt="" coords="67,5,161,31"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,79,76,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,33,70,73,67,68,125,28"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="101,79,186,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="146,31,146,65,141,65,141,31"/>
-<area shape="rect" id="Node000004" href="$sprites_8h.html" title="Sprite loading, drawing, cursor management, and animated sprites." alt="" coords="211,79,289,104"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="162,28,223,69,220,73,159,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,33,64,71,61,67,100,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="110,152,195,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="120,30,149,138,143,139,115,32"/>
+<area shape="rect" id="Node000004" href="$sprites_8h.html" title="Sprite loading, drawing, cursor management, and animated sprites." alt="" coords="152,79,231,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="128,29,170,67,167,71,125,33"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="187,106,168,141,163,139,183,103"/>
 </map>

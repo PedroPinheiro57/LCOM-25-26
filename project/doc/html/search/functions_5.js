@@ -15,11 +15,13 @@ var searchData=
   ['game_5fsave_5fcursor_12',['game_save_cursor',['../game_8h.html#a0e7a4a92b0ddc1feeb5d18601cecc6e6',1,'game.c']]],
   ['get_5fanim_5fexplosion_13',['get_anim_explosion',['../renderer_8h.html#a3ec2bf7b5110378afaabb921f99b6f56',1,'renderer.c']]],
   ['get_5fanim_5fflame_14',['get_anim_flame',['../renderer_8h.html#a307dc3748d2225b04f9365d6e49fa34e',1,'renderer.c']]],
-  ['get_5fmouse_5fbuf_15',['get_mouse_buf',['../mouse_8h.html#ab6af0cc0bb82363c1d6beb9468129dbd',1,'mouse.c']]],
-  ['get_5fmouse_5fidx_16',['get_mouse_idx',['../mouse_8h.html#a2552022422e16579799b93b5f865c76e',1,'mouse.c']]],
-  ['get_5fmouse_5fpacket_5fready_17',['get_mouse_packet_ready',['../mouse_8h.html#afb0bae2367c5681e6f6e0c57fd574fd4',1,'mouse.c']]],
-  ['get_5fmouse_5fstate_18',['get_mouse_state',['../mouse_8h.html#a5a4618be4f1e994102fb98957059764c',1,'mouse.c']]],
-  ['get_5frx_5fstate_19',['get_rx_state',['../protocol_8h.html#aa509e5bca5a4e6ddaf6a0d4761bb9721',1,'handlers.c']]],
-  ['get_5fship_5fdead_5fsprite_20',['get_ship_dead_sprite',['../renderer_8h.html#a2730c683af15d3d381eec5f0bc4cd065',1,'renderer.c']]],
-  ['get_5fship_5fsprite_21',['get_ship_sprite',['../renderer_8h.html#aa14f367a20b2995c725254db615219cb',1,'renderer.c']]]
+  ['get_5flogo_5fsprite_15',['get_logo_sprite',['../renderer_8h.html#af16e19e17a7076238b1354dc23012e4c',1,'renderer.c']]],
+  ['get_5fmiss_5fsprite_16',['get_miss_sprite',['../renderer_8h.html#acb655c1c661542268df1693697a5d647',1,'renderer.c']]],
+  ['get_5fmouse_5fbuf_17',['get_mouse_buf',['../mouse_8h.html#ab6af0cc0bb82363c1d6beb9468129dbd',1,'mouse.c']]],
+  ['get_5fmouse_5fidx_18',['get_mouse_idx',['../mouse_8h.html#a2552022422e16579799b93b5f865c76e',1,'mouse.c']]],
+  ['get_5fmouse_5fpacket_5fready_19',['get_mouse_packet_ready',['../mouse_8h.html#afb0bae2367c5681e6f6e0c57fd574fd4',1,'mouse.c']]],
+  ['get_5fmouse_5fstate_20',['get_mouse_state',['../mouse_8h.html#a5a4618be4f1e994102fb98957059764c',1,'mouse.c']]],
+  ['get_5frx_5fstate_21',['get_rx_state',['../protocol_8h.html#aa509e5bca5a4e6ddaf6a0d4761bb9721',1,'handlers.c']]],
+  ['get_5fship_5fdead_5fsprite_22',['get_ship_dead_sprite',['../renderer_8h.html#a2730c683af15d3d381eec5f0bc4cd065',1,'renderer.c']]],
+  ['get_5fship_5fsprite_23',['get_ship_sprite',['../renderer_8h.html#aa14f367a20b2995c725254db615219cb',1,'renderer.c']]]
 ];

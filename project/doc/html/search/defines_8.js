@@ -11,7 +11,5 @@ var searchData=
   ['rtc_5freg_5fb_8',['RTC_REG_B',['../rtc_8h.html#a03954a63ead3f02b7790ce79e9877eea',1,'rtc.h']]],
   ['rtc_5fsec_9',['RTC_SEC',['../rtc_8h.html#a2507e650d4ccc8a2bdf3001800a3e743',1,'rtc.h']]],
   ['rtc_5fuip_10',['RTC_UIP',['../rtc_8h.html#a2ebe3d816d8b2e9f1be075554e4135b3',1,'rtc.h']]],
-  ['rtc_5fx_11',['RTC_X',['../renderer_8h.html#a6a9cbde91174035bb93240fa9396927d',1,'renderer.h']]],
-  ['rtc_5fy_12',['RTC_Y',['../renderer_8h.html#a26e353d01a6f6cb64c5ee78954b4c332',1,'renderer.h']]],
-  ['rtc_5fyear_13',['RTC_YEAR',['../rtc_8h.html#a1df5568e6774b73aa4c6e59fc40e9147',1,'rtc.h']]]
+  ['rtc_5fyear_11',['RTC_YEAR',['../rtc_8h.html#a1df5568e6774b73aa4c6e59fc40e9147',1,'rtc.h']]]
 ];

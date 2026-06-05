@@ -105,6 +105,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ab41913500cd7d4385b4d80935b3a69db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3d5487b180709a36c7f1778fac95e7c" id="r_af3d5487b180709a36c7f1778fac95e7c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#af3d5487b180709a36c7f1778fac95e7c">connected</a></td></tr>
 <tr class="separator:af3d5487b180709a36c7f1778fac95e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a928ec460c7031dde75fbbe0cdd88ebe0" id="r_a928ec460c7031dde75fbbe0cdd88ebe0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a928ec460c7031dde75fbbe0cdd88ebe0">remote_ready</a></td></tr>
+<tr class="separator:a928ec460c7031dde75fbbe0cdd88ebe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192b676f50595c9f621a3c6de885db2b" id="r_a192b676f50595c9f621a3c6de885db2b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a192b676f50595c9f621a3c6de885db2b">is_single_player</a></td></tr>
+<tr class="separator:a192b676f50595c9f621a3c6de885db2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6798db8714cce819613bfc4a41c6e61c" id="r_a6798db8714cce819613bfc4a41c6e61c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a6798db8714cce819613bfc4a41c6e61c">bot_timer</a></td></tr>
+<tr class="separator:a6798db8714cce819613bfc4a41c6e61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38190564a6e5a257baff7fff6c01b584" id="r_a38190564a6e5a257baff7fff6c01b584"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structboard__t.html">board_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a38190564a6e5a257baff7fff6c01b584">p1_board</a></td></tr>
 <tr class="separator:a38190564a6e5a257baff7fff6c01b584"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9854fcbd5921e9e66b825bad81efd24a" id="r_a9854fcbd5921e9e66b825bad81efd24a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structboard__t.html">board_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a9854fcbd5921e9e66b825bad81efd24a">p2_board</a></td></tr>
@@ -113,6 +119,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aab83776864b0a9ccee827fa0130c16ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f7672e07b1d9438c96d330e412a5ae8" id="r_a5f7672e07b1d9438c96d330e412a5ae8"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a5f7672e07b1d9438c96d330e412a5ae8">tick_count</a></td></tr>
 <tr class="separator:a5f7672e07b1d9438c96d330e412a5ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca46403d4446c3eb44e67c88efea45e" id="r_a5ca46403d4446c3eb44e67c88efea45e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a5ca46403d4446c3eb44e67c88efea45e">timer_seconds</a></td></tr>
+<tr class="separator:a5ca46403d4446c3eb44e67c88efea45e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f5e09b87b40832d55391c595e59ba12" id="r_a4f5e09b87b40832d55391c595e59ba12"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a4f5e09b87b40832d55391c595e59ba12">countdown_ticks</a></td></tr>
 <tr class="separator:a4f5e09b87b40832d55391c595e59ba12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57f0d40d2b1a17db99ed4999eced0401" id="r_a57f0d40d2b1a17db99ed4999eced0401"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structgame__t.html#a57f0d40d2b1a17db99ed4999eced0401">countdown_seconds</a></td></tr>
@@ -183,6 +191,21 @@ union {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
 <div class="textblock"><p>The complete game state. </p>
 <p>The <code>data</code> union carries per-state context — only the member that matches the current <code>tag</code> is valid. Never write to this struct directly; use the controller functions instead. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6798db8714cce819613bfc4a41c6e61c" name="a6798db8714cce819613bfc4a41c6e61c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6798db8714cce819613bfc4a41c6e61c">&#9670;&#160;</a></span>bot_timer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t game_t::bot_timer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Counter (in ticks) used to delay the bot's actions for pacing. </p>
+
+</div>
+</div>
 <a id="af3d5487b180709a36c7f1778fac95e7c" name="af3d5487b180709a36c7f1778fac95e7c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af3d5487b180709a36c7f1778fac95e7c">&#9670;&#160;</a></span>connected</h2>
 
@@ -276,6 +299,21 @@ union {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Index of the winning player (1 or 2). </p>
+
+</div>
+</div>
+<a id="a192b676f50595c9f621a3c6de885db2b" name="a192b676f50595c9f621a3c6de885db2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a192b676f50595c9f621a3c6de885db2b">&#9670;&#160;</a></span>is_single_player</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool game_t::is_single_player</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><code>true</code> if playing locally against the bot, <code>false</code> for multiplayer. </p>
 
 </div>
 </div>
@@ -439,6 +477,21 @@ union {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
 
 </div>
 </div>
+<a id="a928ec460c7031dde75fbbe0cdd88ebe0" name="a928ec460c7031dde75fbbe0cdd88ebe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a928ec460c7031dde75fbbe0cdd88ebe0">&#9670;&#160;</a></span>remote_ready</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool game_t::remote_ready</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><code>true</code> if the remote player has selected multiplayer and is waiting to start. </p>
+
+</div>
+</div>
 <a id="ab41913500cd7d4385b4d80935b3a69db" name="ab41913500cd7d4385b4d80935b3a69db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab41913500cd7d4385b4d80935b3a69db">&#9670;&#160;</a></span>role</h2>
 
@@ -515,6 +568,21 @@ union {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
 </div><div class="memdoc">
 <p>Total ticks elapsed since the game started. <br  />
  </p>
+
+</div>
+</div>
+<a id="a5ca46403d4446c3eb44e67c88efea45e" name="a5ca46403d4446c3eb44e67c88efea45e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ca46403d4446c3eb44e67c88efea45e">&#9670;&#160;</a></span>timer_seconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t game_t::timer_seconds</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Total seconds elapsed (used for the HUD stopwatch). </p>
 
 </div>
 </div>

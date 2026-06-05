@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['uart_5fbaud_5f9600_0',['UART_BAUD_9600',['../uart_8h.html#ae001c4ee4541bab328df3876e73808ab',1,'uart.h']]],
+  ['uart_5fbaud_5f115200_0',['UART_BAUD_115200',['../uart_8h.html#af523f4782c9768ba2e566b0f5fb61ec3',1,'uart.h']]],
   ['uart_5fcom1_5fbase_1',['UART_COM1_BASE',['../uart_8h.html#a5ffbb5f1d2742cab7bbc25b56be7171d',1,'uart.h']]],
   ['uart_5fcom1_5firq_2',['UART_COM1_IRQ',['../uart_8h.html#a9a9f956b13f320742556368e4df12d7c',1,'uart.h']]],
   ['uart_5fdefault_5flcr_3',['UART_DEFAULT_LCR',['../uart_8h.html#a65e1e19ecd921e0c6d47d5c1d7b2666e',1,'uart.h']]],

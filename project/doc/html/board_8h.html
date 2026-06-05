@@ -103,12 +103,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="board_8h__dep__incl.png" border="0" usemap="#amodel_2board_8hdep" alt=""/></div>
 <map name="amodel_2board_8hdep" id="amodel_2board_8hdep">
-<area shape="rect" title="Battleship game board: data model and grid logic." alt="" coords="69,5,185,31"/>
-<area shape="rect" href="game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="5,79,143,104"/>
-<area shape="poly" title=" " alt="" coords="113,43,85,80,81,77,108,40"/>
-<area shape="rect" href="renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="66,152,189,177"/>
-<area shape="poly" title=" " alt="" coords="145,42,157,71,159,88,158,105,149,131,137,153,132,150,144,129,153,103,154,88,151,73,140,44"/>
-<area shape="poly" title=" " alt="" coords="93,113,121,150,117,153,89,117"/>
+<area shape="rect" title="Battleship game board: data model and grid logic." alt="" coords="161,5,277,31"/>
+<area shape="rect" href="bot_8h.html" title="AI logic for the Single Player Bot." alt="" coords="5,79,127,104"/>
+<area shape="poly" title=" " alt="" coords="184,39,92,81,90,76,181,34"/>
+<area shape="rect" href="game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="151,79,288,104"/>
+<area shape="poly" title=" " alt="" coords="222,44,222,79,217,79,217,44"/>
+<area shape="rect" href="renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="211,152,334,177"/>
+<area shape="poly" title=" " alt="" coords="260,35,284,53,303,78,307,98,303,119,284,153,280,151,298,117,302,98,298,80,280,57,257,40"/>
+<area shape="poly" title=" " alt="" coords="238,113,266,150,262,153,234,117"/>
 </map>
 </div>
 </div>
@@ -138,7 +140,7 @@ Macros</h2></td></tr>
 <tr class="memdesc:a7a4127f14f16563da90eb3c836bc404f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Side length of a single cell in pixels. <br /></td></tr>
 <tr class="separator:a7a4127f14f16563da90eb3c836bc404f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2f84c36c2d0595ec55832062bd0ebf2" id="r_ab2f84c36c2d0595ec55832062bd0ebf2"><td class="memItemLeft" align="right" valign="top"><a id="ab2f84c36c2d0595ec55832062bd0ebf2" name="ab2f84c36c2d0595ec55832062bd0ebf2"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>BOARD_X</b>&#160;&#160;&#160;175</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>BOARD_X</b>&#160;&#160;&#160;290</td></tr>
 <tr class="memdesc:ab2f84c36c2d0595ec55832062bd0ebf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">X pixel coordinate of the grid's top-left corner. <br /></td></tr>
 <tr class="separator:ab2f84c36c2d0595ec55832062bd0ebf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22de5dc5f2b1c9d3dfedd2e9b5f83017" id="r_a22de5dc5f2b1c9d3dfedd2e9b5f83017"><td class="memItemLeft" align="right" valign="top"><a id="a22de5dc5f2b1c9d3dfedd2e9b5f83017" name="a22de5dc5f2b1c9d3dfedd2e9b5f83017"></a>
@@ -189,9 +191,9 @@ Functions</h2></td></tr>
 <tr class="memitem:acc078d565ee266b249e6cb534b6b67e0" id="r_acc078d565ee266b249e6cb534b6b67e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="board_8h.html#acc078d565ee266b249e6cb534b6b67e0">board_all_sunk</a> (<a class="el" href="structboard__t.html">board_t</a> *b)</td></tr>
 <tr class="memdesc:acc078d565ee266b249e6cb534b6b67e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>true</code> when every ship on the board has been sunk.  <br /></td></tr>
 <tr class="separator:acc078d565ee266b249e6cb534b6b67e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8946c22c8005ba5d3e521bec81bb21bb" id="r_a8946c22c8005ba5d3e521bec81bb21bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="board_8h.html#a8946c22c8005ba5d3e521bec81bb21bb">board_pixel_to_cell</a> (uint16_t px, uint16_t py, int *col, int *row)</td></tr>
-<tr class="memdesc:a8946c22c8005ba5d3e521bec81bb21bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a pixel coordinate to the corresponding grid cell.  <br /></td></tr>
-<tr class="separator:a8946c22c8005ba5d3e521bec81bb21bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a166d09ae22e89abd4c9630a024041847" id="r_a166d09ae22e89abd4c9630a024041847"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="board_8h.html#a166d09ae22e89abd4c9630a024041847">board_pixel_to_cell</a> (int16_t px, int16_t py, int *col, int *row)</td></tr>
+<tr class="memdesc:a166d09ae22e89abd4c9630a024041847"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a pixel coordinate to the corresponding grid cell.  <br /></td></tr>
+<tr class="separator:a166d09ae22e89abd4c9630a024041847"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a990d7e6e5f0e3cf0c4278266d47f6b3f" id="r_a990d7e6e5f0e3cf0c4278266d47f6b3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="board_8h.html#a990d7e6e5f0e3cf0c4278266d47f6b3f">board_cell_to_pixel</a> (uint8_t col, uint8_t row, uint16_t *px, uint16_t *py)</td></tr>
 <tr class="memdesc:a990d7e6e5f0e3cf0c4278266d47f6b3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a grid cell to the pixel coordinate of its top-left corner.  <br /></td></tr>
 <tr class="separator:a990d7e6e5f0e3cf0c4278266d47f6b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -565,8 +567,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8946c22c8005ba5d3e521bec81bb21bb" name="a8946c22c8005ba5d3e521bec81bb21bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8946c22c8005ba5d3e521bec81bb21bb">&#9670;&#160;</a></span>board_pixel_to_cell()</h2>
+<a id="a166d09ae22e89abd4c9630a024041847" name="a166d09ae22e89abd4c9630a024041847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a166d09ae22e89abd4c9630a024041847">&#9670;&#160;</a></span>board_pixel_to_cell()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -574,13 +576,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void board_pixel_to_cell </td>
           <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>px</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramtype">int16_t&#160;</td>
           <td class="paramname"><em>py</em>, </td>
         </tr>
         <tr>

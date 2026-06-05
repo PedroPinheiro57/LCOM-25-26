@@ -1,0 +1,26 @@
+\chapter{Battleship Project (LCOM)}
+\hypertarget{index}{}\label{index}\index{Battleship Project (LCOM)@{Battleship Project (LCOM)}}
+\hypertarget{index_intro_sec}{}\doxysection{\texorpdfstring{Introduction}{Introduction}}\label{index_intro_sec}
+This project implements the classic Battleship game, developed within the scope of the Computer Laboratory (LCOM) course. The system uses serial communication (UART) to enable real-\/time multiplayer mode between two computers and includes a "{}\+Hunt and Target"{} artificial intelligence algorithm for the Single Player mode.\hypertarget{index_arch_sec}{}\doxysection{\texorpdfstring{Architecture}{Architecture}}\label{index_arch_sec}
+The project follows a State Machine-\/based architecture, divided into three layers\+:
+\begin{DoxyItemize}
+\item {\bfseries{Model\+:}} Data structures, board logic, and real-\/time clock (RTC) management.
+\item {\bfseries{View\+:}} Graphical rendering (XPMs), menu management, and font handling.
+\item {\bfseries{Controller\+:}} Event handling (Keyboard, Mouse, Serial) and game/\+Bot logic.
+\end{DoxyItemize}\hypertarget{index_feature_sec}{}\doxysection{\texorpdfstring{Key Features}{Key Features}}\label{index_feature_sec}
+
+\begin{DoxyItemize}
+\item {\bfseries{Single Player Mode}}\+: Battle against an AI that learns from its hits.
+\item {\bfseries{Multiplayer Mode}}\+: Real-\/time synchronization between two clients via serial port.
+\item {\bfseries{Communication Protocol}}\+: Robust message definition for exchanging game states and actions.
+\item {\bfseries{Input Management}}\+: Full control via Keyboard and Mouse with conflict resolution.
+\end{DoxyItemize}
+
+\begin{DoxyAuthor}{Author}
+Pedro Pinheiro (up202405055) 
+
+Jorge Cunha (up202405044) 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+June 2026 
+\end{DoxyDate}

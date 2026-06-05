@@ -3,6 +3,14 @@
 #include "../model/board.h"
 
 /**
+ * @file bot.h
+ * @brief AI logic for the Single Player Bot.
+ *
+ * Contains the state machine and functions to make the bot place ships 
+ * and play the game using a "Hunt and Target" algorithm.
+ */
+
+/**
  * @brief Places all 5 ships randomly on the board for the bot.
  * @param b Pointer to the bot's board.
  */

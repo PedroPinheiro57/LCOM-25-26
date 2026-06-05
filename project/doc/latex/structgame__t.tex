@@ -11,8 +11,7 @@ The complete game state.
 
 
 
-Collaboration diagram for game\+\_\+t\+:
-\nopagebreak
+Collaboration diagram for game\+\_\+t\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -30,6 +29,12 @@ Collaboration diagram for game\+\_\+t\+:
 \item 
 bool \mbox{\hyperlink{structgame__t_af3d5487b180709a36c7f1778fac95e7c}{connected}}
 \item 
+bool \mbox{\hyperlink{structgame__t_a928ec460c7031dde75fbbe0cdd88ebe0}{remote\+\_\+ready}}
+\item 
+bool \mbox{\hyperlink{structgame__t_a192b676f50595c9f621a3c6de885db2b}{is\+\_\+single\+\_\+player}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structgame__t_a6798db8714cce819613bfc4a41c6e61c}{bot\+\_\+timer}}
+\item 
 \mbox{\hyperlink{structboard__t}{board\+\_\+t}} \mbox{\hyperlink{structgame__t_a38190564a6e5a257baff7fff6c01b584}{p1\+\_\+board}}
 \item 
 \mbox{\hyperlink{structboard__t}{board\+\_\+t}} \mbox{\hyperlink{structgame__t_a9854fcbd5921e9e66b825bad81efd24a}{p2\+\_\+board}}
@@ -37,6 +42,8 @@ bool \mbox{\hyperlink{structgame__t_af3d5487b180709a36c7f1778fac95e7c}{connected
 \mbox{\hyperlink{structrtc__time__t}{rtc\+\_\+time\+\_\+t}} \mbox{\hyperlink{structgame__t_aab83776864b0a9ccee827fa0130c16ba}{rtc}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structgame__t_a5f7672e07b1d9438c96d330e412a5ae8}{tick\+\_\+count}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structgame__t_a5ca46403d4446c3eb44e67c88efea45e}{timer\+\_\+seconds}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structgame__t_a4f5e09b87b40832d55391c595e59ba12}{countdown\+\_\+ticks}}
 \item 
@@ -85,7 +92,13 @@ The complete game state.
 The {\ttfamily data} union carries per-\/state context — only the member that matches the current {\ttfamily tag} is valid. Never write to this struct directly; use the controller functions instead. 
 
 \doxysubsection{Member Data Documentation}
-\Hypertarget{structgame__t_af3d5487b180709a36c7f1778fac95e7c}\label{structgame__t_af3d5487b180709a36c7f1778fac95e7c} 
+\Hypertarget{structgame__t_a6798db8714cce819613bfc4a41c6e61c}\label{structgame__t_a6798db8714cce819613bfc4a41c6e61c} 
+\index{game\_t@{game\_t}!bot\_timer@{bot\_timer}}
+\index{bot\_timer@{bot\_timer}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{bot\_timer}{bot\_timer}}
+{\footnotesize\ttfamily uint8\+\_\+t game\+\_\+t\+::bot\+\_\+timer}
+
+Counter (in ticks) used to delay the bot\textquotesingle{}s actions for pacing. \Hypertarget{structgame__t_af3d5487b180709a36c7f1778fac95e7c}\label{structgame__t_af3d5487b180709a36c7f1778fac95e7c} 
 \index{game\_t@{game\_t}!connected@{connected}}
 \index{connected@{connected}!game\_t@{game\_t}}
 \doxysubsubsection{\texorpdfstring{connected}{connected}}
@@ -129,7 +142,13 @@ Grid row the attack cursor is hovering over. ~\newline
 \doxysubsubsection{\texorpdfstring{[struct]}{[struct]}}
 {\footnotesize\ttfamily struct  \{ ... \}  game\+\_\+t\+::game\+\_\+over}
 
-Index of the winning player (1 or 2). \Hypertarget{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4}\label{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4} 
+Index of the winning player (1 or 2). \Hypertarget{structgame__t_a192b676f50595c9f621a3c6de885db2b}\label{structgame__t_a192b676f50595c9f621a3c6de885db2b} 
+\index{game\_t@{game\_t}!is\_single\_player@{is\_single\_player}}
+\index{is\_single\_player@{is\_single\_player}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{is\_single\_player}{is\_single\_player}}
+{\footnotesize\ttfamily bool game\+\_\+t\+::is\+\_\+single\+\_\+player}
+
+{\ttfamily true} if playing locally against the bot, {\ttfamily false} for multiplayer. \Hypertarget{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4}\label{structgame__t_a8e83879ca1aa19da5b6dc34b63aee6b4} 
 \index{game\_t@{game\_t}!last\_hit@{last\_hit}}
 \index{last\_hit@{last\_hit}!game\_t@{game\_t}}
 \doxysubsubsection{\texorpdfstring{last\_hit}{last\_hit}}
@@ -200,7 +219,13 @@ Column reported by the remote player\textquotesingle{}s cursor. \Hypertarget{str
 {\footnotesize\ttfamily int8\+\_\+t game\+\_\+t\+::remote\+\_\+cursor\+\_\+row}
 
 Row reported by the remote player\textquotesingle{}s cursor. ~\newline
- \Hypertarget{structgame__t_ab41913500cd7d4385b4d80935b3a69db}\label{structgame__t_ab41913500cd7d4385b4d80935b3a69db} 
+ \Hypertarget{structgame__t_a928ec460c7031dde75fbbe0cdd88ebe0}\label{structgame__t_a928ec460c7031dde75fbbe0cdd88ebe0} 
+\index{game\_t@{game\_t}!remote\_ready@{remote\_ready}}
+\index{remote\_ready@{remote\_ready}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{remote\_ready}{remote\_ready}}
+{\footnotesize\ttfamily bool game\+\_\+t\+::remote\+\_\+ready}
+
+{\ttfamily true} if the remote player has selected multiplayer and is waiting to start. \Hypertarget{structgame__t_ab41913500cd7d4385b4d80935b3a69db}\label{structgame__t_ab41913500cd7d4385b4d80935b3a69db} 
 \index{game\_t@{game\_t}!role@{role}}
 \index{role@{role}!game\_t@{game\_t}}
 \doxysubsubsection{\texorpdfstring{role}{role}}
@@ -234,7 +259,13 @@ Active state. ~\newline
 {\footnotesize\ttfamily uint32\+\_\+t game\+\_\+t\+::tick\+\_\+count}
 
 Total ticks elapsed since the game started. ~\newline
- 
+ \Hypertarget{structgame__t_a5ca46403d4446c3eb44e67c88efea45e}\label{structgame__t_a5ca46403d4446c3eb44e67c88efea45e} 
+\index{game\_t@{game\_t}!timer\_seconds@{timer\_seconds}}
+\index{timer\_seconds@{timer\_seconds}!game\_t@{game\_t}}
+\doxysubsubsection{\texorpdfstring{timer\_seconds}{timer\_seconds}}
+{\footnotesize\ttfamily uint32\+\_\+t game\+\_\+t\+::timer\+\_\+seconds}
+
+Total seconds elapsed (used for the HUD stopwatch). 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

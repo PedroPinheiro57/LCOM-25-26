@@ -21,12 +21,14 @@ var searchData=
   ['game_5ft_18',['game_t',['../structgame__t.html',1,'']]],
   ['get_5fanim_5fexplosion_19',['get_anim_explosion',['../renderer_8h.html#a3ec2bf7b5110378afaabb921f99b6f56',1,'renderer.c']]],
   ['get_5fanim_5fflame_20',['get_anim_flame',['../renderer_8h.html#a307dc3748d2225b04f9365d6e49fa34e',1,'renderer.c']]],
-  ['get_5fmouse_5fbuf_21',['get_mouse_buf',['../mouse_8h.html#ab6af0cc0bb82363c1d6beb9468129dbd',1,'mouse.c']]],
-  ['get_5fmouse_5fidx_22',['get_mouse_idx',['../mouse_8h.html#a2552022422e16579799b93b5f865c76e',1,'mouse.c']]],
-  ['get_5fmouse_5fpacket_5fready_23',['get_mouse_packet_ready',['../mouse_8h.html#afb0bae2367c5681e6f6e0c57fd574fd4',1,'mouse.c']]],
-  ['get_5fmouse_5fstate_24',['get_mouse_state',['../mouse_8h.html#a5a4618be4f1e994102fb98957059764c',1,'mouse.c']]],
-  ['get_5frx_5fstate_25',['get_rx_state',['../protocol_8h.html#aa509e5bca5a4e6ddaf6a0d4761bb9721',1,'handlers.c']]],
-  ['get_5fship_5fdead_5fsprite_26',['get_ship_dead_sprite',['../renderer_8h.html#a2730c683af15d3d381eec5f0bc4cd065',1,'renderer.c']]],
-  ['get_5fship_5fsprite_27',['get_ship_sprite',['../renderer_8h.html#aa14f367a20b2995c725254db615219cb',1,'renderer.c']]],
-  ['grid_28',['grid',['../structboard__t.html#a6f0e29937deccc7eaf6c8fb3792399c8',1,'board_t']]]
+  ['get_5flogo_5fsprite_21',['get_logo_sprite',['../renderer_8h.html#af16e19e17a7076238b1354dc23012e4c',1,'renderer.c']]],
+  ['get_5fmiss_5fsprite_22',['get_miss_sprite',['../renderer_8h.html#acb655c1c661542268df1693697a5d647',1,'renderer.c']]],
+  ['get_5fmouse_5fbuf_23',['get_mouse_buf',['../mouse_8h.html#ab6af0cc0bb82363c1d6beb9468129dbd',1,'mouse.c']]],
+  ['get_5fmouse_5fidx_24',['get_mouse_idx',['../mouse_8h.html#a2552022422e16579799b93b5f865c76e',1,'mouse.c']]],
+  ['get_5fmouse_5fpacket_5fready_25',['get_mouse_packet_ready',['../mouse_8h.html#afb0bae2367c5681e6f6e0c57fd574fd4',1,'mouse.c']]],
+  ['get_5fmouse_5fstate_26',['get_mouse_state',['../mouse_8h.html#a5a4618be4f1e994102fb98957059764c',1,'mouse.c']]],
+  ['get_5frx_5fstate_27',['get_rx_state',['../protocol_8h.html#aa509e5bca5a4e6ddaf6a0d4761bb9721',1,'handlers.c']]],
+  ['get_5fship_5fdead_5fsprite_28',['get_ship_dead_sprite',['../renderer_8h.html#a2730c683af15d3d381eec5f0bc4cd065',1,'renderer.c']]],
+  ['get_5fship_5fsprite_29',['get_ship_sprite',['../renderer_8h.html#aa14f367a20b2995c725254db615219cb',1,'renderer.c']]],
+  ['grid_30',['grid',['../structboard__t.html#a6f0e29937deccc7eaf6c8fb3792399c8',1,'board_t']]]
 ];

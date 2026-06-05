@@ -10,8 +10,7 @@ Board and HUD rendering, sprite management, and explosion effects.
 {\ttfamily \#include "{}../model/board.\+h"{}}\newline
 {\ttfamily \#include "{}../controller/game.\+h"{}}\newline
 {\ttfamily \#include "{}sprites.\+h"{}}\newline
-Include dependency graph for renderer.\+h\+:
-\nopagebreak
+Include dependency graph for renderer.\+h\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -22,11 +21,11 @@ Include dependency graph for renderer.\+h\+:
 \begin{DoxyCompactItemize}
 \item 
 \Hypertarget{renderer_8h_a6a9cbde91174035bb93240fa9396927d}\label{renderer_8h_a6a9cbde91174035bb93240fa9396927d} 
-\#define {\bfseries RTC\+\_\+X}~650
-\begin{DoxyCompactList}\small\item\em X pixel coordinate where the RTC clock string is drawn. \end{DoxyCompactList}\item 
+\#define {\bfseries RTC\+\_\+X}~30
+\item 
 \Hypertarget{renderer_8h_a26e353d01a6f6cb64c5ee78954b4c332}\label{renderer_8h_a26e353d01a6f6cb64c5ee78954b4c332} 
-\#define {\bfseries RTC\+\_\+Y}~20
-\begin{DoxyCompactList}\small\item\em Y pixel coordinate where the RTC clock string is drawn. \end{DoxyCompactList}\item 
+\#define {\bfseries RTC\+\_\+Y}~80
+\item 
 \Hypertarget{renderer_8h_af9a33fe770f8caec53c0c49716303103}\label{renderer_8h_af9a33fe770f8caec53c0c49716303103} 
 \#define {\bfseries C\+\_\+\+EMPTY}~0x1a3a5c
 \begin{DoxyCompactList}\small\item\em Cell fill colour for an empty (unattacked) water cell. \end{DoxyCompactList}\item 
@@ -57,6 +56,10 @@ Include dependency graph for renderer.\+h\+:
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_af16e19e17a7076238b1354dc23012e4c}{get\+\_\+logo\+\_\+sprite}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the logo sprite for the main menu. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_acb655c1c661542268df1693697a5d647}{get\+\_\+miss\+\_\+sprite}} (void)
+\begin{DoxyCompactList}\small\item\em Returns the sprite for a missed attack (water splash/miss). \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_aa14f367a20b2995c725254db615219cb}{get\+\_\+ship\+\_\+sprite}} (int index)
 \begin{DoxyCompactList}\small\item\em Returns the live-\/ship sprite for the given ship type index. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065}{get\+\_\+ship\+\_\+dead\+\_\+sprite}} (int index)
@@ -73,9 +76,9 @@ void \mbox{\hyperlink{renderer_8h_a038ec21e3b51095a9cb9e677e28f6bf6}{board\+\_\+
 \begin{DoxyCompactList}\small\item\em Highlights the cell under the local player\textquotesingle{}s attack cursor. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{renderer_8h_ae76e1824a9c915076a7628f0a1143ef0}{board\+\_\+highlight\+\_\+remote\+\_\+cursor}} (int col, int row)
 \begin{DoxyCompactList}\small\item\em Highlights the cell reported by the remote player\textquotesingle{}s cursor. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{renderer_8h_a82845a15625ea9d420e9bb9869a60c06}{draw\+\_\+hud\+\_\+place}} (int player, int ship\+\_\+idx)
+void \mbox{\hyperlink{renderer_8h_a54b55634e43ff6ab748c94d4468da718}{draw\+\_\+hud\+\_\+place}} (int player, int ship\+\_\+idx, uint32\+\_\+t timer\+\_\+seconds)
 \begin{DoxyCompactList}\small\item\em Draws the HUD overlay shown during the ship-\/placement phase. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab}{draw\+\_\+hud\+\_\+attack}} (int player, \mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}enemy)
+void \mbox{\hyperlink{renderer_8h_a1859e403a935e1fc8f36929b92dcb927}{draw\+\_\+hud\+\_\+attack}} (int player, \mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}enemy, uint32\+\_\+t timer\+\_\+seconds, bool is\+\_\+my\+\_\+turn)
 \begin{DoxyCompactList}\small\item\em Draws the HUD overlay shown during the attack phase. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{renderer_8h_a5c70121f01bc0632efb08a163aa24108}{init\+\_\+game\+\_\+sprites}} (void)
 \begin{DoxyCompactList}\small\item\em Loads all game sprite sheets from their XPM sources into memory. \end{DoxyCompactList}\item 
@@ -94,7 +97,9 @@ int \mbox{\hyperlink{renderer_8h_a59e730b6282be7a35362a3501df187e9}{renderer\+\_
 void \mbox{\hyperlink{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}{game\+\_\+draw}} (const \mbox{\hyperlink{structgame__t}{game\+\_\+t}} \texorpdfstring{$\ast$}{*}g)
 \begin{DoxyCompactList}\small\item\em Renders the complete game view for the current state. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{renderer_8h_a4e564d58f2fd8f83601a83e048c21f3f}{renderer\+\_\+reset}} (void)
-\begin{DoxyCompactList}\small\item\em Resets all renderer-\/side state to its initial values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Resets all renderer-\/side state to its initial values. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{renderer_8h_a2ef95a9a2a350c22e0793f02f62341c5}{draw\+\_\+stopwatch}} (uint32\+\_\+t total\+\_\+seconds, uint16\+\_\+t x, uint16\+\_\+t y)
+\begin{DoxyCompactList}\small\item\em Draws a formatted stopwatch (MM\+:SS) at the specified coordinates. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -187,17 +192,17 @@ Draws a \doxylink{renderer_8h_ab69359a5695d79dd274cdc4defb1a4ff}{C\+\_\+\+REMOTE
 {\em row} & Grid row of the remote cursor. \\
 \hline
 \end{DoxyParams}
-\Hypertarget{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab}\label{renderer_8h_a3ef5c20ea7f28a13cfc36188724ee9ab} 
+\Hypertarget{renderer_8h_a1859e403a935e1fc8f36929b92dcb927}\label{renderer_8h_a1859e403a935e1fc8f36929b92dcb927} 
 \index{renderer.h@{renderer.h}!draw\_hud\_attack@{draw\_hud\_attack}}
 \index{draw\_hud\_attack@{draw\_hud\_attack}!renderer.h@{renderer.h}}
 \doxysubsubsection{\texorpdfstring{draw\_hud\_attack()}{draw\_hud\_attack()}}
-{\footnotesize\ttfamily void draw\+\_\+hud\+\_\+attack (\begin{DoxyParamCaption}\item[{int}]{player,  }\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{enemy }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void draw\+\_\+hud\+\_\+attack (\begin{DoxyParamCaption}\item[{int}]{player,  }\item[{\mbox{\hyperlink{structboard__t}{board\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{enemy,  }\item[{uint32\+\_\+t}]{timer\+\_\+seconds,  }\item[{bool}]{is\+\_\+my\+\_\+turn }\end{DoxyParamCaption})}
 
 
 
 Draws the HUD overlay shown during the attack phase. 
 
-Displays the active player\textquotesingle{}s turn indicator together with hit and miss counters derived from the enemy board.
+Displays the active player\textquotesingle{}s turn indicator together with hit and miss counters derived from the enemy board, as well as the stopwatch timer.
 
 
 \begin{DoxyParams}{Parameters}
@@ -205,24 +210,51 @@ Displays the active player\textquotesingle{}s turn indicator together with hit a
 \hline
 {\em enemy} & Pointer to the opponent\textquotesingle{}s board (used to count hits/misses). \\
 \hline
+{\em timer\+\_\+seconds} & Total elapsed time in seconds to display on the stopwatch. \\
+\hline
+{\em is\+\_\+my\+\_\+turn} & {\ttfamily true} if it is the local player\textquotesingle{}s turn (displays "{}\+CLICK TO ATTACK"{} instruction), {\ttfamily false} otherwise. \\
+\hline
 \end{DoxyParams}
-\Hypertarget{renderer_8h_a82845a15625ea9d420e9bb9869a60c06}\label{renderer_8h_a82845a15625ea9d420e9bb9869a60c06} 
+\Hypertarget{renderer_8h_a54b55634e43ff6ab748c94d4468da718}\label{renderer_8h_a54b55634e43ff6ab748c94d4468da718} 
 \index{renderer.h@{renderer.h}!draw\_hud\_place@{draw\_hud\_place}}
 \index{draw\_hud\_place@{draw\_hud\_place}!renderer.h@{renderer.h}}
 \doxysubsubsection{\texorpdfstring{draw\_hud\_place()}{draw\_hud\_place()}}
-{\footnotesize\ttfamily void draw\+\_\+hud\+\_\+place (\begin{DoxyParamCaption}\item[{int}]{player,  }\item[{int}]{ship\+\_\+idx }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void draw\+\_\+hud\+\_\+place (\begin{DoxyParamCaption}\item[{int}]{player,  }\item[{int}]{ship\+\_\+idx,  }\item[{uint32\+\_\+t}]{timer\+\_\+seconds }\end{DoxyParamCaption})}
 
 
 
 Draws the HUD overlay shown during the ship-\/placement phase. 
 
-Displays which player is placing and which ship is currently being positioned (name and remaining ships).
+Displays which player is placing, the stopwatch timer, and an interactive "{}garage"{} list of the fleet. It highlights the currently selected ship and marks already placed ships as "{}\+PLACED"{}.
 
 
 \begin{DoxyParams}{Parameters}
 {\em player} & Active player index (1 or 2). \\
 \hline
-{\em ship\+\_\+idx} & Index of the ship being placed (0–\doxylink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS} − 1). \\
+{\em ship\+\_\+idx} & Index of the ship currently selected (0–\doxylink{board_8h_af9992741e35ee0a950cb076062d965c2}{NUM\+\_\+\+SHIPS} − 1). \\
+\hline
+{\em timer\+\_\+seconds} & Total elapsed time in seconds to display on the stopwatch. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{renderer_8h_a2ef95a9a2a350c22e0793f02f62341c5}\label{renderer_8h_a2ef95a9a2a350c22e0793f02f62341c5} 
+\index{renderer.h@{renderer.h}!draw\_stopwatch@{draw\_stopwatch}}
+\index{draw\_stopwatch@{draw\_stopwatch}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{draw\_stopwatch()}{draw\_stopwatch()}}
+{\footnotesize\ttfamily void draw\+\_\+stopwatch (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{total\+\_\+seconds,  }\item[{uint16\+\_\+t}]{x,  }\item[{uint16\+\_\+t}]{y }\end{DoxyParamCaption})}
+
+
+
+Draws a formatted stopwatch (MM\+:SS) at the specified coordinates. 
+
+Converts the total elapsed seconds into a minutes and seconds format and renders the text on the screen. Used by the HUD drawing functions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em total\+\_\+seconds} & Total elapsed time in seconds. \\
+\hline
+{\em x} & Pixel X coordinate of the text. \\
+\hline
+{\em y} & Pixel Y coordinate of the text. \\
 \hline
 \end{DoxyParams}
 \Hypertarget{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c}\label{renderer_8h_a6491bcc04031f5d74d7c05e5bd9aad1c} 
@@ -274,6 +306,32 @@ Returns the animated flame sprite used for burning ships.
 
 \begin{DoxyReturn}{Returns}
 Pointer to the shared \doxylink{structanimated__sprite__t}{animated\+\_\+sprite\+\_\+t}. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_af16e19e17a7076238b1354dc23012e4c}\label{renderer_8h_af16e19e17a7076238b1354dc23012e4c} 
+\index{renderer.h@{renderer.h}!get\_logo\_sprite@{get\_logo\_sprite}}
+\index{get\_logo\_sprite@{get\_logo\_sprite}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{get\_logo\_sprite()}{get\_logo\_sprite()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+logo\+\_\+sprite (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the logo sprite for the main menu. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the logo \doxylink{structsprite__t}{sprite\+\_\+t}, or NULL if not loaded. 
+\end{DoxyReturn}
+\Hypertarget{renderer_8h_acb655c1c661542268df1693697a5d647}\label{renderer_8h_acb655c1c661542268df1693697a5d647} 
+\index{renderer.h@{renderer.h}!get\_miss\_sprite@{get\_miss\_sprite}}
+\index{get\_miss\_sprite@{get\_miss\_sprite}!renderer.h@{renderer.h}}
+\doxysubsubsection{\texorpdfstring{get\_miss\_sprite()}{get\_miss\_sprite()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsprite__t}{sprite\+\_\+t}} \texorpdfstring{$\ast$}{*} get\+\_\+miss\+\_\+sprite (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Returns the sprite for a missed attack (water splash/miss). 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the miss \doxylink{structsprite__t}{sprite\+\_\+t}. 
 \end{DoxyReturn}
 \Hypertarget{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065}\label{renderer_8h_a2730c683af15d3d381eec5f0bc4cd065} 
 \index{renderer.h@{renderer.h}!get\_ship\_dead\_sprite@{get\_ship\_dead\_sprite}}

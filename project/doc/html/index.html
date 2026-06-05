@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCOM 2025/2026 PROJECT - BATALHA NAVAL: Main Page</title>
+<title>LCOM 2025/2026 PROJECT - BATALHA NAVAL: Battleship Project (LCOM)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -68,10 +68,33 @@ $(function() {
 </div>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">LCOM 2025/2026 PROJECT - BATALHA NAVAL Documentation</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title">Battleship Project (LCOM) </div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
+Introduction</h1>
+<p>This project implements the classic Battleship game, developed within the scope of the Computer Laboratory (LCOM) course. The system uses serial communication (UART) to enable real-time multiplayer mode between two computers and includes a "Hunt and Target" artificial intelligence algorithm for the Single Player mode.</p>
+<h1><a class="anchor" id="arch_sec"></a>
+Architecture</h1>
+<p>The project follows a State Machine-based architecture, divided into three layers:</p><ul>
+<li><b>Model:</b> Data structures, board logic, and real-time clock (RTC) management.</li>
+<li><b>View:</b> Graphical rendering (XPMs), menu management, and font handling.</li>
+<li><b>Controller:</b> Event handling (Keyboard, Mouse, Serial) and game/Bot logic.</li>
+</ul>
+<h1><a class="anchor" id="feature_sec"></a>
+Key Features</h1>
+<ul>
+<li><b>Single Player Mode</b>: Battle against an AI that learns from its hits.</li>
+<li><b>Multiplayer Mode</b>: Real-time synchronization between two clients via serial port.</li>
+<li><b>Communication Protocol</b>: Robust message definition for exchanging game states and actions.</li>
+<li><b>Input Management</b>: Full control via Keyboard and Mouse with conflict resolution.</li>
+</ul>
+<dl class="section author"><dt>Author</dt><dd>Pedro Pinheiro (up202405055) </dd>
+<dd>
+Jorge Cunha (up202405044) </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>June 2026 </dd></dl>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

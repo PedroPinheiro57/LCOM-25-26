@@ -84,6 +84,10 @@ typedef struct {
 
     game_role_t  role;     /**< Whether this instance is host or client.       */
     bool         connected;/**< @c true once the serial handshake is complete. */
+    bool remote_ready; /**< @c true if the remote player has selected multiplayer and is waiting to start. */
+
+    bool is_single_player; /**< @c true if playing locally against the bot, @c false for multiplayer. */
+    uint8_t bot_timer; /**< Counter (in ticks) used to delay the bot's actions for pacing. */
 
     board_t p1_board;      /**< Player 1's board (ships + attacks received).   */
     board_t p2_board;      /**< Player 2's board (ships + attacks received).   */

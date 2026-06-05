@@ -466,18 +466,21 @@ video_clear_screen();
             }
             break;
 
-        case STATE_PLACE_SHIPS_P2:
-            if (g->role == ROLE_CLIENT) {
+    case STATE_PLACE_SHIPS_P2:
+            if (g->is_single_player) {
+                draw_string("BOT IS PLACING SHIPS...", 200, 250, 0xFF4500, 3);
+                draw_string("PREPARE FOR BATTLE", 256, 320, 0x888888, 2);
+            } else if (g->role == ROLE_HOST) {
+                draw_string("PLAYER 2 IS", 268, 220, 0xFFD700, 3);
+                draw_string("PLACING SHIPS...", 208, 270, 0xFFD700, 3);
+                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
+            } else if (g->role == ROLE_CLIENT) {
                 board_draw((board_t *)&g->p2_board, false);
                 board_draw_preview((board_t *)&g->p2_board,
                     g->data.place.cursor_col, g->data.place.cursor_row,
                     SHIP_SIZES[g->data.place.ship_idx],
                     (orientation_t)g->data.place.orient);
                 draw_hud_place(2, g->data.place.ship_idx, g->timer_seconds);
-            } else {
-                draw_string("PLAYER 2 IS", 268, 220, 0xFFD700, 3);
-                draw_string("PLACING SHIPS...", 208, 270, 0xFFD700, 3);
-                draw_string("PLEASE WAIT", 312, 340, 0x888888, 2);
             }
             break;
 

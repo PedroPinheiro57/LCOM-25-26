@@ -6,7 +6,7 @@
 #include "renderer.h"
 
 
-static const char *options[] = { "PLAY", "INSTRUCTIONS", "EXIT" };
+static const char *options[] = { "SINGLE PLAYER", "MULTIPLAYER", "INSTRUCTIONS", "EXIT" };
 
 void menu_draw_main(int selected) {
   sprite_t *logo = get_logo_sprite();

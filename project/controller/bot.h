@@ -18,5 +18,12 @@ void bot_choose_attack(board_t *enemy, uint8_t *out_col, uint8_t *out_row);
 
 /**
  * @brief Informs the bot about the result of its last attack so it can plan the next one.
+ * @param is_hit  true if the last attack hit an enemy ship cell; false if it hit water (miss).
+ * @param is_sunk true if the last attack resulted in completely destroying a ship; false otherwise.
  */
 void bot_register_result(bool is_hit, bool is_sunk);
+
+/**
+ * @brief Resets the bot's memory (hunting state, coordinates) for a new game.
+ */
+void bot_reset(void);

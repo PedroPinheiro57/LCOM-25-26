@@ -339,6 +339,7 @@ void game_handle_keyboard(uint8_t scancode) {
                         board_init(&g.p1_board);
                         board_init(&g.p2_board);
                         renderer_reset();
+                        bot_reset();
 
                         g.is_single_player = (g.data.menu.selected == 0); 
                         g.timer_seconds = 0; 
@@ -441,7 +442,7 @@ void game_handle_keyboard(uint8_t scancode) {
             if (g.tag == STATE_TURN_P1 && g.role != ROLE_HOST)   break;
             if (g.tag == STATE_TURN_P2 && g.role != ROLE_CLIENT) break;
 
-            if (renderer_is_exploding()) break;
+            if (renderer_is_exploding() || waiting_post_attack) break;
 
             if (make && code == KEY_UP)
                 g.data.turn.cursor_row = (g.data.turn.cursor_row > 0) ?
@@ -605,6 +606,7 @@ void game_handle_mouse(mouse_state_t *ms) {
                         board_init(&g.p1_board);
                         board_init(&g.p2_board);
                         renderer_reset();
+                        bot_reset();
 
                         g.is_single_player = (hover == 0); 
                         g.timer_seconds = 0; 
@@ -691,7 +693,7 @@ void game_handle_mouse(mouse_state_t *ms) {
 
         case STATE_TURN_P1: {
             if (g.role != ROLE_HOST) break;
-            if (renderer_is_exploding()) break;
+            if (renderer_is_exploding() || waiting_post_attack) break;
 
             board_t *enemy = &g.p2_board;
 
@@ -719,7 +721,7 @@ void game_handle_mouse(mouse_state_t *ms) {
 
         case STATE_TURN_P2: {
             if (g.role != ROLE_CLIENT) break;
-            if (renderer_is_exploding()) break;
+            if (renderer_is_exploding() || waiting_post_attack) break;
 
             board_t *enemy = &g.p1_board;
 

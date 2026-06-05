@@ -1,11 +1,17 @@
 #include "bot.h"
 #include <stdlib.h>
 
-static bool hunting = false;
+typedef enum {
+    MODE_RANDOM,
+    MODE_SEARCH_DIR,
+    MODE_DESTROY
+} bot_mode_t;
+
+static bot_mode_t mode = MODE_RANDOM;
 static uint8_t first_hit_c = 0, first_hit_r = 0;
 static uint8_t curr_c = 0, curr_r = 0;
-static int hunt_dir = 0;
-static bool dir_locked = false;
+static int hunt_dir = 0; 
+static int search_dirs_tried = 0;
 
 void bot_place_ships(board_t *b) {
     for (int i = 0; i < NUM_SHIPS; i++) {
@@ -23,38 +29,54 @@ void bot_place_ships(board_t *b) {
     }
 }
 
+void bot_reset(void) {
+    mode = MODE_RANDOM;
+    search_dirs_tried = 0;
+    hunt_dir = 0;
+    first_hit_c = 0;
+    first_hit_r = 0;
+    curr_c = 0;
+    curr_r = 0;
+}
+
 void bot_register_result(bool is_hit, bool is_sunk) {
     if (is_sunk) {
-        hunting = false;    
-        dir_locked = false;
+        mode = MODE_RANDOM;
         return;
     }
 
-    if (hunting) {
+    if (mode == MODE_RANDOM) {
         if (is_hit) {
-            dir_locked = true;
+            mode = MODE_SEARCH_DIR;
+            first_hit_c = curr_c;
+            first_hit_r = curr_r;
+            hunt_dir = 0; 
+            search_dirs_tried = 0;
+        }
+    } else if (mode == MODE_SEARCH_DIR) {
+        if (is_hit) {
+            mode = MODE_DESTROY;
         } else {
-            if (dir_locked) {
-                hunt_dir = (hunt_dir + 2) % 4;
-                curr_c = first_hit_c;
-                curr_r = first_hit_r;
-            } else {
-                hunt_dir = (hunt_dir + 1) % 4;
-                curr_c = first_hit_c;
-                curr_r = first_hit_r;
+            hunt_dir = (hunt_dir + 1) % 4;
+            search_dirs_tried++;
+            curr_c = first_hit_c;
+            curr_r = first_hit_r;
+            
+            if (search_dirs_tried >= 4) {
+                mode = MODE_RANDOM;
             }
         }
-    } else if (is_hit) {
-        hunting = true; 
-        first_hit_c = curr_c;
-        first_hit_r = curr_r;
-        hunt_dir = 0; 
-        dir_locked = false;
+    } else if (mode == MODE_DESTROY) {
+        if (!is_hit) {
+            hunt_dir = (hunt_dir + 2) % 4;
+            curr_c = first_hit_c;
+            curr_r = first_hit_r;
+        }
     }
 }
 
 void bot_choose_attack(board_t *enemy, uint8_t *out_col, uint8_t *out_row) {
-    if (!hunting) {
+    if (mode == MODE_RANDOM) {
         bool valid = false;
         while (!valid) {
             curr_c = rand() % BOARD_COLS;
@@ -65,9 +87,9 @@ void bot_choose_attack(board_t *enemy, uint8_t *out_col, uint8_t *out_row) {
         }
     } else {
         bool valid = false;
-        int attempts = 0;
+        int fallback_attempts = 0;
 
-        while (!valid && attempts < 4) {
+        while (!valid && fallback_attempts < 4) {
             int8_t nc = curr_c;
             int8_t nr = curr_r;
 
@@ -76,32 +98,51 @@ void bot_choose_attack(board_t *enemy, uint8_t *out_col, uint8_t *out_row) {
             else if (hunt_dir == 2) nr++; 
             else if (hunt_dir == 3) nc--; 
 
-            if (nc >= 0 && nc < BOARD_COLS && nr >= 0 && nr < BOARD_ROWS &&
-                !board_already_attacked(enemy, (uint8_t)nc, (uint8_t)nr)) {
-                curr_c = (uint8_t)nc;
-                curr_r = (uint8_t)nr;
-                valid = true;
+            bool cell_blocked = false;
+
+            if (nc >= 0 && nc < BOARD_COLS && nr >= 0 && nr < BOARD_ROWS) {
+                if (!board_already_attacked(enemy, (uint8_t)nc, (uint8_t)nr)) {
+                    curr_c = (uint8_t)nc;
+                    curr_r = (uint8_t)nr;
+                    valid = true;
+                } else if (enemy->grid[nr][nc] == CELL_HIT) {
+                    curr_c = (uint8_t)nc;
+                    curr_r = (uint8_t)nr;
+                    continue; 
+                } else {
+                    cell_blocked = true;
+                }
             } else {
-                if (dir_locked) {
+                cell_blocked = true; 
+            }
+
+            if (cell_blocked) {
+                if (mode == MODE_SEARCH_DIR) {
+                    hunt_dir = (hunt_dir + 1) % 4;
+                    search_dirs_tried++;
+                    curr_c = first_hit_c;
+                    curr_r = first_hit_r;
+                    if (search_dirs_tried >= 4) {
+                        mode = MODE_RANDOM;
+                        bot_choose_attack(enemy, out_col, out_row);
+                        return;
+                    }
+                } else if (mode == MODE_DESTROY) {
                     hunt_dir = (hunt_dir + 2) % 4;
                     curr_c = first_hit_c;
                     curr_r = first_hit_r;
-                    attempts++;
-                } else {
-                    hunt_dir = (hunt_dir + 1) % 4;
-                    curr_c = first_hit_c;
-                    curr_r = first_hit_r;
-                    attempts++;
+                    fallback_attempts++;
                 }
             }
         }
 
         if (!valid) {
-            hunting = false;
+            mode = MODE_RANDOM;
             bot_choose_attack(enemy, out_col, out_row);
             return;
         }
     }
+    
     *out_col = curr_c;
     *out_row = curr_r;
 }

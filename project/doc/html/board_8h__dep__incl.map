@@ -1,10 +1,10 @@
-<map id="model/board.h" name="model/board.h">
-<area shape="rect" id="Node000001" title="Battleship game board: data model and grid logic." alt="" coords="161,5,277,31"/>
-<area shape="rect" id="Node000002" href="$bot_8h.html" title="AI logic for the Single Player Bot." alt="" coords="5,79,127,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,39,92,81,90,76,181,34"/>
-<area shape="rect" id="Node000003" href="$game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="151,79,288,104"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,44,222,79,217,79,217,44"/>
-<area shape="rect" id="Node000004" href="$renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="211,152,334,177"/>
-<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="260,35,284,53,303,78,307,98,303,119,284,153,280,151,298,117,302,98,298,80,280,57,257,40"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="238,113,266,150,262,153,234,117"/>
+<map id="src/model/board.h" name="src/model/board.h">
+<area shape="rect" id="Node000001" title="Battleship game board: data model and grid logic." alt="" coords="184,5,323,31"/>
+<area shape="rect" id="Node000002" href="$bot_8h.html" title="AI logic for the Single Player Bot." alt="" coords="5,79,149,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,38,107,81,105,76,211,33"/>
+<area shape="rect" id="Node000003" href="$game_8h.html" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="173,79,333,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,44,256,79,251,79,251,44"/>
+<area shape="rect" id="Node000004" href="$renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="239,152,385,177"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="300,35,326,52,348,77,352,98,347,120,325,153,320,151,342,117,347,98,343,80,323,56,297,39"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="274,113,305,150,300,154,270,116"/>
 </map>

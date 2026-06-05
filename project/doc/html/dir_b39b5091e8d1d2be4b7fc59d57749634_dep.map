@@ -1,0 +1,10 @@
+<map id="src/view" name="src/view">
+<area shape="rect" id="node1" href="dir_41ef5d8a90b9cc03a02949a5c062e6f0.html" title="controller" alt="" coords="27,125,111,151"/>
+<area shape="rect" id="node2" href="dir_5dd65160827af56e6353642206b80129.html" title="model" alt="" coords="135,125,198,151"/>
+<area shape="rect" id="node3" href="dir_b39b5091e8d1d2be4b7fc59d57749634.html" title="view" alt="" coords="91,52,144,77"/>
+<area shape="poly" id="edge1" href="dir_000004_000000.html" alt="" coords="112,79,87,116,82,113,107,76"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000004_000000.html" title="2" alt="" coords="90,108,99,122"/>
+<area shape="poly" id="edge2" href="dir_000004_000001.html" alt="" coords="128,76,153,113,149,116,123,79"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000004_000001.html" title="2" alt="" coords="151,98,160,113"/>
+<area shape="rect" id="clust1" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html" title="src" alt="" coords="16,16,209,161"/>
+</map>

@@ -1,5 +1,5 @@
-<map id="controller/game.h" name="controller/game.h">
-<area shape="rect" id="Node000001" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="5,5,143,31"/>
-<area shape="rect" id="Node000002" href="$renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="13,79,135,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,44,77,79,71,79,71,44"/>
+<map id="src/controller/game.h" name="src/controller/game.h">
+<area shape="rect" id="Node000001" title="Central game&#45;state machine: structs, state tags, and controller API." alt="" coords="5,5,165,31"/>
+<area shape="rect" id="Node000002" href="$renderer_8h.html" title="Board and HUD rendering, sprite management, and explosion effects." alt="" coords="12,79,159,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,44,88,79,83,79,83,44"/>
 </map>

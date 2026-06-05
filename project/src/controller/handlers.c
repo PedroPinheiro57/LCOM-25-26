@@ -1,11 +1,11 @@
 #include "handlers.h"
 #include "../model/mouse.h"
 #include <lcom/lcf.h>
-#include "../../pedro/lab3/kbc.h"
-#include "../../pedro/lab4/mouse.h"
+#include "../../../pedro/lab3/kbc.h"
+#include "../../../pedro/lab4/mouse.h"
 #include "../model/keyboard.h"
 #include "../model/mouse.h"
-#include "../../pedro/lab5/video.h"
+#include "../../../pedro/lab5/video.h"
 #include "../view/sprites.h"
 #include "../controller/game.h"
 #include "../serial/uart.h"
@@ -25,7 +25,7 @@ void handle_timer(void) {
     cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
     video_swap_buffers();
 
-    /* try connect the 2 VMs every second if initial attempt when switching states didnt work */
+    /* try connect the 2 VMs every second when player 2 is in STATE_WAITING_CONNECT */
     if (role_is_client() && game_is_waiting_connect()) {
         if (timer_get_counter() % 30 == 0) {
             proto_send_hello();

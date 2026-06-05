@@ -7,8 +7,8 @@
 #include "../view/sprites.h"
 #include "../model/rtc.h"
 #include "../serial/protocol.h"
-#include "../../pedro/lab5/video.h"
-#include "../../pedro/lab3/kbc.h"
+#include "../../../pedro/lab5/video.h"
+#include "../../../pedro/lab3/kbc.h"
 #include "bot.h"
 #include <stdlib.h>
 

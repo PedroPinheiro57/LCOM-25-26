@@ -1,5 +1,5 @@
-<map id="view/font.h" name="view/font.h">
-<area shape="rect" id="Node000001" title="Bitmap font rendering for the game HUD and menus." alt="" coords="67,5,161,31"/>
+<map id="src/view/font.h" name="src/view/font.h">
+<area shape="rect" id="Node000001" title="Bitmap font rendering for the game HUD and menus." alt="" coords="55,5,173,31"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,79,76,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,33,64,71,61,67,100,29"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="110,152,195,177"/>

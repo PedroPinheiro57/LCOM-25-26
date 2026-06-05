@@ -1,10 +1,10 @@
 #include <lcom/lcf.h>
 #include <lcom/timer.h>
 #include <string.h>
-#include "../pedro/lab2/i8254.h"
-#include "../pedro/lab3/kbc.h"
-#include "../pedro/lab4/mouse.h"
-#include "../pedro/lab5/video.h"
+#include "../../pedro/lab2/i8254.h"
+#include "../../pedro/lab3/kbc.h"
+#include "../../pedro/lab4/mouse.h"
+#include "../../pedro/lab5/video.h"
 #include "model/mouse.h"
 #include "controller/handlers.h"
 #include "controller/game.h"
@@ -66,7 +66,7 @@ static int devices_init(void) {
     return 0;
 }
 
-/* devices_cleanup                                                    */
+/* devices_cleanup */
 static int devices_cleanup(void) {
     uart_cleanup();
     if (mouse_disable_data_reporting() != 0)    return 1;

@@ -151,7 +151,7 @@ bool board_all_sunk(board_t *b);
  * @param col  Output column index.
  * @param row  Output row index.
  */
-void board_pixel_to_cell(uint16_t px, uint16_t py, int *col, int *row);
+void board_pixel_to_cell(int16_t px, int16_t py, int *col, int *row);
 
 /**
  * @brief Converts a grid cell to the pixel coordinate of its top-left corner.

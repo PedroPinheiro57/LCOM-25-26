@@ -91,9 +91,9 @@ bool board_all_sunk(board_t *b) {
   return b->ships_sunk >= NUM_SHIPS;
 }
 
-void board_pixel_to_cell(uint16_t px, uint16_t py, int *col, int *row) {
-  *col = ((int)px - BOARD_X) / CELL_SIZE;
-  *row = ((int)py - BOARD_Y) / CELL_SIZE;
+void board_pixel_to_cell(int16_t px, int16_t py, int *col, int *row) {
+    *col = ((int)px - BOARD_X) / CELL_SIZE;
+    *row = ((int)py - BOARD_Y) / CELL_SIZE;
 }
 
 void board_cell_to_pixel(uint8_t col, uint8_t row, uint16_t *px, uint16_t *py) {

@@ -25,11 +25,11 @@ void handle_timer(void) {
     cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
     video_swap_buffers();
 
-    /* try connect the 2 VMs every second */
+    /* try connect the 2 VMs every second if initial attempt when switching states didnt work */
     if (role_is_client() && game_is_waiting_connect()) {
         if (timer_get_counter() % 30 == 0) {
             proto_send_hello();
-            printf("Client sending MSG_HELLO...\n");
+            printf("Client sending MSG_HELLO\n");
         }
     }
 }

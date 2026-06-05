@@ -37,9 +37,7 @@ void game_save_cursor(int16_t x, int16_t y) {
     prev_cy = y;
 }
 
-/* ------------------------------------------------------------------ */
-/* Internal helpers                                                   */
-/* ------------------------------------------------------------------ */
+/* Internal helpers */
 
 static void transition(game_state_t next) {
     g.prev = g.tag;
@@ -50,9 +48,7 @@ static void transition(game_state_t next) {
     get_mouse_state()->moved    = false;
 }
 
-/* ------------------------------------------------------------------ */
-/* game_init                                                          */
-/* ------------------------------------------------------------------ */
+/* game_init */
 void game_init(game_role_t role) {
     memset(&g, 0, sizeof(g));
 
@@ -75,9 +71,7 @@ void game_init(game_role_t role) {
     waiting_post_attack = false;
 }
 
-/* ------------------------------------------------------------------ */
-/* game_handle_timer  (HOST only for logic; both sides call it)       */
-/* ------------------------------------------------------------------ */
+/* game_handle_timer  (HOST only for logic; both sides call it) */
 void game_handle_timer(void) {
 
     g.tick_count++;
@@ -229,9 +223,7 @@ void game_handle_timer(void) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* game_handle_keyboard                                               */
-/* ------------------------------------------------------------------ */
+/* game_handle_keyboard */
 void game_handle_keyboard(uint8_t scancode) {
 
     uint8_t code = key_get_code(scancode);
@@ -277,28 +269,29 @@ void game_handle_keyboard(uint8_t scancode) {
             if (!make && code == KEY_ESC) { if (g.role == ROLE_CLIENT) proto_send_client_quit(); over = true; }
             if (make && code == KEY_ENTER) {
                 switch (g.data.menu.selected) {
-                    case 0: 
-                    case 1: 
+                    case 0: // Single Player - only HOST
+                        if (g.role != ROLE_HOST) break;
                         board_init(&g.p1_board); board_init(&g.p2_board); renderer_reset(); bot_reset();
-                        g.is_single_player = (g.data.menu.selected == 0); 
+                        g.is_single_player = true;
                         g.timer_seconds = 0; 
                         g.data.place.player = 1; g.data.place.ship_idx = 0; g.data.place.orient = HORIZONTAL;
                         g.data.place.cursor_col = 0; g.data.place.cursor_row = 0;
-                        
-                        if (g.is_single_player) {
-                            transition(STATE_PLACE_SHIPS_P1);
-                        } else {
-                            transition(STATE_WAITING_CONNECT);
-                            if (g.role == ROLE_CLIENT) {
-                                proto_send_key(0xFF); 
-                            } else {
-                                if (g.remote_ready) {
-                                    transition(STATE_PLACE_SHIPS_P1);
-                                    proto_send_state(STATE_PLACE_SHIPS_P1);
-                                }
-                            }
-                        }
+                        transition(STATE_PLACE_SHIPS_P1);
                         break;
+                case 1: /* Multiplayer */
+                    board_init(&g.p1_board); board_init(&g.p2_board); renderer_reset(); bot_reset();
+                    g.is_single_player = false;
+                    g.timer_seconds = 0; 
+                    g.data.place.player = 1; g.data.place.ship_idx = 0; g.data.place.orient = HORIZONTAL;
+                    g.data.place.cursor_col = 0; g.data.place.cursor_row = 0;
+                    transition(STATE_WAITING_CONNECT);
+                    if (g.role == ROLE_HOST) {
+                        if (g.remote_ready) {
+                            transition(STATE_PLACE_SHIPS_P1);
+                            proto_send_state(STATE_PLACE_SHIPS_P1);
+                        }
+                    }
+                    break;      
                     case 2: transition(STATE_INSTRUCTIONS); break;
                     case 3: if (g.role == ROLE_CLIENT) proto_send_client_quit(); over = true; break;
                 }
@@ -449,9 +442,7 @@ void game_handle_keyboard(uint8_t scancode) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* game_handle_mouse                                                  */
-/* ------------------------------------------------------------------ */
+/* game_handle_mouse */
 void game_handle_mouse(mouse_state_t *ms) {
 
     if (g.role == ROLE_CLIENT) {
@@ -493,34 +484,35 @@ void game_handle_mouse(mouse_state_t *ms) {
             if (ms->moved && hover >= 0 && hover != g.data.menu.selected) g.data.menu.selected = hover;
             if (ms->clicked && hover >= 0) {
                 switch (hover) {
-                    case 0:
-                    case 1:
+                    case 0: // Single Player - only HOST
+                        if (g.role != ROLE_HOST) break;
                         board_init(&g.p1_board); board_init(&g.p2_board); renderer_reset(); bot_reset();
-                        g.is_single_player = (hover == 0); g.timer_seconds = 0; 
+                        g.is_single_player = true;
+                        g.timer_seconds = 0; 
                         g.data.place.player = 1; g.data.place.ship_idx = 0; g.data.place.orient = HORIZONTAL;
                         g.data.place.cursor_col = 0; g.data.place.cursor_row = 0;
-                        
-                        if (g.is_single_player) {
-                            transition(STATE_PLACE_SHIPS_P1);
-                        } else {
-                            transition(STATE_WAITING_CONNECT);
-                            if (g.role == ROLE_CLIENT) {
-                                proto_send_key(0xFF);
-                            } else {
-                                if (g.remote_ready) {
-                                    transition(STATE_PLACE_SHIPS_P1);
-                                    proto_send_state(STATE_PLACE_SHIPS_P1);
-                                }
-                            }
-                        }
+                        transition(STATE_PLACE_SHIPS_P1);
                         break;
+                case 1: // Multiplayer
+                    board_init(&g.p1_board); board_init(&g.p2_board); renderer_reset(); bot_reset();
+                    g.is_single_player = false;
+                    g.timer_seconds = 0; 
+                    g.data.place.player = 1; g.data.place.ship_idx = 0; g.data.place.orient = HORIZONTAL;
+                    g.data.place.cursor_col = 0; g.data.place.cursor_row = 0;
+                    transition(STATE_WAITING_CONNECT);
+                    if (g.role == ROLE_HOST) {
+                        if (g.remote_ready) {
+                            transition(STATE_PLACE_SHIPS_P1);
+                            proto_send_state(STATE_PLACE_SHIPS_P1);
+                        }
+                    }
+                    break;
                     case 2: transition(STATE_INSTRUCTIONS); break;
                     case 3: if (g.role == ROLE_CLIENT) proto_send_client_quit(); over = true; break;
                 }
             }
             break;
         }
-        
         case STATE_INSTRUCTIONS:
             if (ms->clicked) transition(STATE_MAIN_MENU);
             break;
@@ -653,24 +645,27 @@ void game_handle_mouse(mouse_state_t *ms) {
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* game_handle_serial_msg                                             */
-/* ------------------------------------------------------------------ */
+/* game_handle_serial_msg */
 void game_handle_serial_msg(const serial_msg_t *msg) {
 
     /* ---- HOST ---- */
     if (g.role == ROLE_HOST) {
         switch (msg->type) {
 
-            case MSG_HELLO:
-                if (!g.connected) {
-                    g.connected = true;
-                    proto_send_hello_ack();
-                    g.data.menu.selected = 0;
-                    transition(STATE_MAIN_MENU);
-                    proto_send_state(STATE_MAIN_MENU);
+        case MSG_HELLO:
+            if (!g.connected) {
+                g.connected = true;
+                proto_send_hello_ack();
+                printf("recognized hello");
+                
+                if (g.tag == STATE_WAITING_CONNECT) {
+                    transition(STATE_PLACE_SHIPS_P1);
+                    proto_send_state(STATE_PLACE_SHIPS_P1);
+                } else {
+                    g.remote_ready = true;
                 }
-                break;
+            }
+            break;
 
             case MSG_DONE_PLACING:
                 if (g.tag == STATE_PLACE_SHIPS_WAITING) {
@@ -701,16 +696,6 @@ void game_handle_serial_msg(const serial_msg_t *msg) {
             }
 
             case MSG_KEY:
-                if (msg->payload.key.scancode == 0xFF) {
-                    if (g.tag == STATE_WAITING_CONNECT) {
-                        transition(STATE_PLACE_SHIPS_P1);
-                        proto_send_state(STATE_PLACE_SHIPS_P1);
-                    } else {
-                        g.remote_ready = true; 
-                    }
-                    break;
-                }
-
                 if (g.tag == STATE_TURN_P2) {
                     game_role_t saved = g.role;
                     g.role = ROLE_HOST;        

@@ -21,7 +21,6 @@ void handle_timer(void) {
     game_handle_timer();
 
     update_animations();
-    video_clear_screen();
     game_draw(game_get_state());
     cursor_draw(get_mouse_state()->x, get_mouse_state()->y);
     video_swap_buffers();

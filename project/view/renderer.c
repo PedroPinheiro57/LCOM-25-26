@@ -417,7 +417,7 @@ void draw_stopwatch(uint32_t total_seconds, uint16_t x, uint16_t y) {
 }
 
 void game_draw(const game_t *g) {
-video_clear_screen();
+    video_clear_screen();
 
     bool usar_background = (g->tag != STATE_MAIN_MENU && 
                             g->tag != STATE_INSTRUCTIONS && 

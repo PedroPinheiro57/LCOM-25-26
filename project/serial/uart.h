@@ -101,14 +101,6 @@
 #define UART_FCR_INIT  (UART_FCR_ENABLE | UART_FCR_RXRST | UART_FCR_TXRST | UART_FCR_TRIG_4)
 /** @} */
 
-/**
- * @name MCR – Modem Control Register bits
- * @{
- */
-#define UART_MCR_OUT2  BIT(3)      /**< Gates UART IRQ through the PIC — must be set. */
-/** @brief Default MCR: only OUT2 asserted. */
-#define UART_MCR_INIT  UART_MCR_OUT2
-/** @} */
 
 /**
  * @name LSR – Line Status Register bits

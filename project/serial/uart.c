@@ -62,13 +62,11 @@ static void uart_configure_fifo(void) {
     /* (página 14 da folha da porta de série dos powerpoints) */
     if ((uart_read_reg(UART_IIR) & UART_IIR_FIFO_EN) != UART_IIR_FIFO_EN) {
         /* disable fifos */
+        printf("FIFOS NOT ENABLED");
         uart_write_reg(UART_FCR, 0x00);
     }
 }
 
-static void uart_enable_out2(void) {
-    uart_write_reg(UART_MCR, UART_MCR_INIT);
-}
 
 static void uart_flush_rx(void) {
     uint8_t lsr = uart_read_reg(UART_LSR);
@@ -97,8 +95,7 @@ int uart_init(uint8_t *bit_no) {
 
     uart_set_baud_rate();       
     uart_set_line_control();   
-    uart_configure_fifo();     
-    uart_enable_out2();        
+    uart_configure_fifo();        
     uart_flush_rx();            
     uart_enable_interrupts(); 
 

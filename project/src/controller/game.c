@@ -282,6 +282,8 @@ void game_handle_keyboard(uint8_t scancode) {
                     board_init(&g.p1_board); board_init(&g.p2_board); renderer_reset(); bot_reset();
                     g.is_single_player = false;
                     g.timer_seconds = 0; 
+                    g.connected = false;      // to play again after
+                    g.remote_ready = false;   // to play again after
                     g.data.place.player = 1; g.data.place.ship_idx = 0; g.data.place.orient = HORIZONTAL;
                     g.data.place.cursor_col = 0; g.data.place.cursor_row = 0;
                     transition(STATE_WAITING_CONNECT);
@@ -497,6 +499,8 @@ void game_handle_mouse(mouse_state_t *ms) {
                     board_init(&g.p1_board); board_init(&g.p2_board); renderer_reset(); bot_reset();
                     g.is_single_player = false;
                     g.timer_seconds = 0; 
+                    g.connected = false;      // to play again after
+                    g.remote_ready = false;   // to play again after
                     g.data.place.player = 1; g.data.place.ship_idx = 0; g.data.place.orient = HORIZONTAL;
                     g.data.place.cursor_col = 0; g.data.place.cursor_row = 0;
                     transition(STATE_WAITING_CONNECT);

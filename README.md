@@ -1,6 +1,6 @@
 # Battleship — LCOM Project (2025/26)
 
-A two-player Battleship game built for the **LCOM** (Laboratório de Computadores) course, on top of the course's `lcf` framework (`lcom/lcf.h`) with hand-rolled drivers for VBE video, the keyboard/mouse controller, the 8254 timer, and a 16550 UART. Two ways to play:
+A two-player Battleship game built for the **LCOM** (Laboratório de Computadores) course. It's a real **MINIX 3** user-space driver, not just an application running on one — hand-rolled code talking directly to VBE video, the keyboard/mouse controller, the 8254 timer, and a 16550 UART, all wired together through MINIX's message-passing IPC and the course's `lcf` framework (`lcom/lcf.h`). Two ways to play:
 
 - **Single player** — against a "Hunt and Target" AI bot, run locally.
 - **Multiplayer** — two VM instances connected over a serial cable, one launched as **host** (runs the authoritative game logic) and one as **client** (forwards input, mirrors state back).
@@ -12,14 +12,15 @@ A two-player Battleship game built for the **LCOM** (Laboratório de Computadore
 
 1. [Overview](#overview)
 2. [Architecture](#architecture)
-3. [Project layout](#project-layout)
-4. [Game flow](#game-flow)
-5. [Single-player AI](#single-player-ai)
-6. [Multiplayer and serial protocol](#multiplayer-and-serial-protocol)
-7. [Controls](#controls)
-8. [Key constants](#key-constants)
-9. [Dependencies and environment](#dependencies-and-environment)
-10. [Notes to self](#notes-to-self)
+3. [Under the hood](#under-the-hood)
+4. [Project layout](#project-layout)
+5. [Game flow](#game-flow)
+6. [Single-player AI](#single-player-ai)
+7. [Multiplayer and serial protocol](#multiplayer-and-serial-protocol)
+8. [Controls](#controls)
+9. [Key constants](#key-constants)
+10. [Dependencies and environment](#dependencies-and-environment)
+11. [Notes to self](#notes-to-self)
 
 ## Overview
 
@@ -43,6 +44,21 @@ Classic MVC split:
 | **Serial** | `serial/protocol.*`, `serial/uart.*` | Message framing, 16550 UART driver (COM1 / IRQ4) |
 
 `game.c` is the hub. Every input source — timer, keyboard, mouse, serial — funnels into a `game_handle_*` function, which mutates the single `game_t g` and calls `transition()` to move between states. `game_draw()` reads that same struct read-only, once per tick.
+
+That's the game's own layering — see [Under the hood](#under-the-hood) for how it actually talks to the hardware underneath.
+
+## Under the hood
+
+This is a **MINIX 3** user-space driver. MINIX is a microkernel OS — drivers run as ordinary user processes that talk to the kernel through message-passing IPC rather than code loaded into kernel space, which shapes almost every low-level choice in this codebase:
+
+- **The event loop is MINIX IPC, not a signal handler.** `proj_main_loop` blocks on `driver_receive(ANY, &msg, &ipc_status)`, checks `is_ipc_notify(ipc_status)` and `_ENDPOINT_P(msg.m_source) == HARDWARE`, then reads `msg.m_notify.interrupts` as a bitmask and dispatches to `handle_timer` / `handle_keyboard` / `handle_mouse` / `handle_serial` accordingly.
+- **IRQ lines are claimed through the kernel, not hardware directly.** The UART driver (and the KBC/mouse/timer modules from earlier labs) call `sys_irqsetpolicy(IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id)` to subscribe, and `sys_irqrmpolicy()` to release on shutdown. `IRQ_EXCLUSIVE` has MINIX enforce that no other driver can grab the same line.
+- **No `in`/`out` instructions anywhere.** Every port access goes through `sys_outb()` / `util_sys_inb()` — the syscalls MINIX exposes so an unprivileged user process can still reach hardware ports, gated by the kernel each time.
+- **`main()` hands off to the framework rather than running the loop itself.** It sets up `lcf` (language, call-tracing to `trace.txt`, log output to `output.txt`), then calls `lcf_start(argc, argv)` — which is what actually invokes `proj_main_loop()`, the real entry point where role parsing and the event loop live.
+- **The RTC driver (`model/rtc.c`) does real CMOS chip programming**: it busy-polls Register A's UIP (Update-In-Progress) bit before reading hours/minutes/seconds, so it never catches the clock mid-tick, then checks Register B's DM bit to see whether the chip is handing back BCD or binary and converts by hand (`bcd_to_bin`).
+- **The UART (`serial/uart.c`) is a genuine 16550 driver**: it programs the baud-rate divisor through the DLAB dance, configures the FIFOs and *verifies* they actually turned on (falling back to disabling them if `UART_IIR_FIFO_EN` isn't set), and prioritizes interrupt causes by hand in `uart_ih()` — Receiver Line Status before Received-Data-Available/Character-Timeout, matching the 16550's own priority order — draining the hardware FIFO into a software ring buffer so nothing is left sitting in hardware mid-ISR.
+- **The PS/2 mouse decoder (`model/mouse.c`) parses the raw 3-byte packet by hand**: a bitfield union over byte 0 for the button/sign/overflow bits, and manual two's-complement sign-extension (`buf[1] | 0xFF00`) to turn 9-bit signed deltas into a proper `int16_t`.
+- **Video is set once and then it's pixels all the way down.** `video_init(0x115)` picks a VBE mode at startup; after that, every sprite, glyph and cell is blitted one pixel at a time through `vg_draw_pixel_project()` (see `sprite_draw`, `draw_char`), with `video_swap_buffers()` doing the actual page flip each tick.
 
 ## Project layout
 
@@ -193,16 +209,6 @@ Messages are framed as **1 type byte + a fixed-length payload** (`serial/protoco
 
 - Reuses driver code from an individual lab folder rather than duplicating it into the project — includes like `../../../pedro/lab5/video.h` (from `controller/game.c`) or `../../pedro/lab2/i8254.h` (from `main.c`) all resolve to a `pedro/labN/` tree that sits *next to* the project's own root folder, not inside it. Moving the project without that sibling folder will break the build.
 - `main()` hardcodes trace/log output paths (`/home/lcom/labs/grupo_2leic01_5/project/{trace,output}.txt`) — update these if the project ends up somewhere else.
-- No build file was in what I analyzed here, so fill in the real steps once you've got them:
-
-```sh
-  # build
-  TODO
-
-  # run — two terminals / two VM instances
-  lcom_run proj "host"
-  lcom_run proj "client"
-```
 
 ## Notes to self
 
